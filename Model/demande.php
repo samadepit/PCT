@@ -11,18 +11,16 @@ class Demande
         $this->con = $db->getConnection();
     }
 
-    public function creer($type_acte, $localiter, $statut = "en_attente") {
+    public function creer($localiter) {
         $code_demande = uniqid('DEM-');
 
         $stmt = $this->con->prepare("
-            INSERT INTO demande (code_demande, type_acte, statut, localiter, date_creation)
-            VALUES (:code_demande, :type_acte, :statut, :localiter, NOW())
+            INSERT INTO demande (code_demande, statut, localiter, date_creation)
+            VALUES (:code_demande, 'en_attente', :localiter, NOW())
         ");
 
         $stmt->execute([
             ':code_demande' => $code_demande,
-            ':type_acte' => $type_acte,
-            ':statut' => $statut,
             ':localiter' => $localiter
         ]);
 

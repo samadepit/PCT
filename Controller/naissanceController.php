@@ -13,13 +13,13 @@ class NaissanceController
         $this->naissanceModel = new Naissance();
     }
 
-    public function creerActeNaissance(array $data)
+    public function creerActeNaissance($code_demande,array $data)
     {
         try {
-            $success = $this->naissanceModel->demande_acte_naissance($data);
-            return $success ? true : false;
+            $success = $this->naissanceModel->demande_acte_naissance($code_demande,$data);
+            return $success;
         } catch (Exception $e) {
-            error_log("Erreur: " . $e->getMessage());
+            error_log("Erreur by sam: " . $e->getMessage());
             return false;
         }
 

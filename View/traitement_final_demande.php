@@ -29,14 +29,22 @@ foreach ($donnees_actes as $type => $acte) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $code_demande = $demandeController->creer_demande($_SESSION['localiter']);
-        $donnees_demandeur['code_demande'] = $code_demande;
-        $demandeur = $demandeurController->creerDemandeur($code_demande, $donnees_demandeur);
+        $demandeur=$demandeurController->creerDemandeur($code_demande,$donnees_demandeur);
+        // $id_acte = $naissanceController->creerActeNaissance($acte,$code_demande);
+        // $traitementController->acte_demande($code_demande, $type, $id_acte);
+
+
+        // try {
+        //     $id_acte = $naissanceController->creerActeNaissance($acte);
+        // } catch (Exception $e) {
+        //     $erreurs[] = $e->getMessage();
+        // }
         foreach ($donnees_actes as $type => $actes) {
             foreach ($actes as $acte) {
                 // var_dump($actes);
                 switch ($type) {
                     case 'naissance':
-                        $id_acte = $naissanceController->creerActeNaissance($acte);
+                        $id_acte = $naissanceController->creerActeNaissance($code_demande,$acte);
                         break;
                     case 'mariage':
                         $id_acte = $mariageController->creerActeMariage($acte);
@@ -56,8 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $message = "Toutes les demandes ont été enregistrées avec succès.";
         unset($_SESSION['donnees_actes']);
-        $_SESSION['code_demande'] = $code_demande;
-
+        
     } catch (Exception $e) {
         $erreurs[] = $e->getMessage();
         error_log("Erreur traitement: " . $e->getMessage());
@@ -84,11 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </fieldset>
     <?php endif; ?>
     <?php foreach ($donnees_actes as $type => $actes): ?>
-    <?php 
-                echo "<pre>";
-                var_dump($acte);
-                echo "</pre>";
-    ?>
         <h3><?= ucfirst($type) ?></h3>
         <?php foreach ($actes as $i => $acte): ?>
             <fieldset>

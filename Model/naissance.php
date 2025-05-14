@@ -12,8 +12,8 @@ class Naissance
         $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    public function demande_acte_naissance(array $data) {
-        $required = ['code_demande', 'nom_beneficiaire', 'prenom_beneficiaire', 'date_naissance', 'lieu_naissance'];
+    public function demande_acte_naissance($code_demande,array $data) {
+        $required = ['nom_beneficiaire', 'prenom_beneficiaire', 'date_naissance', 'lieu_naissance'];
         foreach ($required as $field) {
             if (empty($data[$field])) {
                 throw new InvalidArgumentException("le champ $field est obligatoire");
@@ -44,7 +44,32 @@ class Naissance
                 :date_deces, :lieu_deces, NOW()
             )
         ");
+        $params = [
+            'code_demande' => $code_demande,
+            'nom_beneficiaire' => $data['nom_beneficiaire'] ,
+            'prenom_beneficiaire' => $data['prenom_beneficiaire'] ,
+            'date_naissance' => $data['date_naissance'] ,
+            'lieu_naissance' => $data['lieu_naissance'] ,
+            'nom_pere' => $data['nom_pere'] ,
+            'prenom_pere' => $data['prenom_pere'] ,
+            'profession_pere' => $data['profession_pere'] ,
+            'nom_mere' => $data['nom_mere'] ,
+            'prenom_mere' => $data['prenom_mere'] ,
+            'profession_mere' => $data['profession_mere'] ,
+            'date_mariage' => $data['date_mariage'] ?? null,
+            'lieu_mariage' => $data['lieu_mariage'] ?? null,
+            'statut_mariage' => $data['statut_mariage'] ?? null,
+            'date_deces' => $data['date_deces'] ?? null,
+            'lieu_deces' => $data['lieu_deces'] ?? null
+        ];
 
-        return $stmt->execute($data);
+        try {
+            $stmt->execute($params);
+            return $this->con->lastInsertId();
+        } catch (Exception $e) {
+            error_log("Erreur insertion naissance : " . $e->getMessage());
+            return false;
+        }
     }
 }
+

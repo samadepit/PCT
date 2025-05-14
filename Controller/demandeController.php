@@ -11,9 +11,9 @@ class DemandeController
         $this->demandeModel = new Demande();
     }
 
-    public function creer_demande($type_acte,$localiter)
+    public function creer_demande($localiter)
     {
-        $code = $this->demandeModel->creer($type_acte, $localiter);
+        $code = $this->demandeModel->creer($localiter);
         return $code;
     }
 
