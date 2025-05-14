@@ -12,7 +12,7 @@ class Naissance
         $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    public function demande_acte_naissance($code_demande,array $data) {
+    public function demande_acte_naissance(array $data) {
         $required = ['nom_beneficiaire', 'prenom_beneficiaire', 'date_naissance', 'lieu_naissance'];
         foreach ($required as $field) {
             if (empty($data[$field])) {
@@ -31,13 +31,15 @@ class Naissance
 
         $stmt = $this->con->prepare("
             INSERT INTO naissance (
-                code_demande, nom_beneficiaire, prenom_beneficiaire, date_naissance, lieu_naissance,
+                nom_beneficiaire, prenom_beneficiaire, date_naissance,
+                lieu_naissance,heure_naissance,genre,
                 nom_pere, prenom_pere, profession_pere,
                 nom_mere, prenom_mere, profession_mere,
                 date_mariage, lieu_mariage, statut_mariage,
                 date_deces, lieu_deces, date_creation
             ) VALUES (
-                :code_demande, :nom_beneficiaire, :prenom_beneficiaire, :date_naissance, :lieu_naissance,
+                :nom_beneficiaire, :prenom_beneficiaire, :date_naissance,
+                :lieu_naissance,:heure_naissance,:genre,
                 :nom_pere, :prenom_pere, :profession_pere,
                 :nom_mere, :prenom_mere, :profession_mere,
                 :date_mariage, :lieu_mariage, :statut_mariage,
@@ -45,10 +47,11 @@ class Naissance
             )
         ");
         $params = [
-            'code_demande' => $code_demande,
             'nom_beneficiaire' => $data['nom_beneficiaire'] ,
             'prenom_beneficiaire' => $data['prenom_beneficiaire'] ,
             'date_naissance' => $data['date_naissance'] ,
+            'heure_naissance' => $data['heure_naissance'] ,
+            'genre' => $data['genre'] ,
             'lieu_naissance' => $data['lieu_naissance'] ,
             'nom_pere' => $data['nom_pere'] ,
             'prenom_pere' => $data['prenom_pere'] ,
@@ -71,5 +74,32 @@ class Naissance
             return false;
         }
     }
-}
 
+    function recuperation_idNaissance(array $data) {
+        $stmt = $pdo->prepare("
+        SELECT id_naissance FROM acte_naissance
+                WHERE nom_beneficiaire = :nom
+                AND prenom_beneficiaire = :prenom
+                AND date_naissance = :date_naissance
+                AND lieu_naissance = :lieu_naissance
+                AND genre =:genre
+                LIMIT 1");
+        $params = [
+            ':nom' => $data['nom_beneficiaire'],
+            ':prenom' => $data['prenom_beneficiaire'],
+            ':date_naissance' => $data['date_naissance'],
+            ':lieu_naissance' => $data['lieu_naissance'],
+            ':genre' => $data['genre']
+                ];
+            
+        try {
+            $stmt->execute($params);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ? $result['id_naissance'] : null;
+        } catch (Exception $e) {
+            error_log("Erreur récupération id_naissance : " . $e->getMessage());
+            return false;
+        }
+
+    }
+}

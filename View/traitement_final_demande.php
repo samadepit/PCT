@@ -40,17 +40,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //     $erreurs[] = $e->getMessage();
         // }
         foreach ($donnees_actes as $type => $actes) {
+            $id_naissance='';
             foreach ($actes as $acte) {
                 // var_dump($actes);
                 switch ($type) {
                     case 'naissance':
-                        $id_acte = $naissanceController->creerActeNaissance($code_demande,$acte);
+                        $id_acte= $naissanceController->creerActeNaissance($acte);
+                        $id_naissance= $id_acte;
                         break;
                     case 'mariage':
                         $id_acte = $mariageController->creerActeMariage($acte);
                         break;
                     case 'deces':
-                        $id_acte = $decesController->creerActeDeces($acte);
+                        $id_acte = $decesController->creerActeDeces($acte,$id_naissance);
                         break;
                 }
                 try {
@@ -63,12 +65,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         $message = "Toutes les demandes ont été enregistrées avec succès.";
-        unset($_SESSION['donnees_actes']);
+        $_SESSION['code_demande'] = $code_demande;
+        $_SESSION['donnees_actes'] = $donnees_actes;
+
+        unset($_SESSION['demandeur'], $_SESSION['localiter']);
+
+        header('Location: code_suivie.php');
+        exit;
+        // unset($_SESSION['donnees_actes']);
         
     } catch (Exception $e) {
         $erreurs[] = $e->getMessage();
         error_log("Erreur traitement: " . $e->getMessage());
     }
+
 }
 ?>
 

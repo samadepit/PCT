@@ -8,3 +8,4 @@ config
 Controller
 Model
 View
+*:Zone.Identifier
