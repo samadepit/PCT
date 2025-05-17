@@ -16,13 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     switch ($premier_acte) {
         case 'naissance':
-            header('Location: demande_naissance.php');
+            header('Location: demand_birth_certificate.php');
             break;
         case 'mariage':
-            header('Location: demande_acte_mariage.php');
+            header('Location: demand_acte_mariage.php');
             break;
         case 'deces':
-            header('Location: demande_acte_deces.php');
+            header('Location: demand_death_certificate.php');
             break;
     }
     exit;

@@ -3,7 +3,13 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['localiter'] = $_POST['localiter'];
     $_SESSION['actes'] = $_POST['actes'];
-    
+    $actes_selectionnes = $_POST['actes'];
+    $donnees_existantes = $_SESSION['donnees_actes'] ?? [];
+    foreach ($donnees_existantes as $type => $data) {
+        if (!in_array($type, $actes_selectionnes)) {
+            unset($_SESSION['donnees_actes'][$type]);
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -28,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <option value="parent">Parent</option>
         <option value="conjoint">Conjoint</option>
         <option value="tuteur">Tuteur</option>
-        <option value="autre">Moi même</option>
+        <option value="demandeur">Moi même</option>
         <option value="autre">Autre</option>
     </select>
     </label>

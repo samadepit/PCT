@@ -27,10 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         switch ($acte_suivant) {
             case 'mariage':
-                header('Location: demande_mariage.php');
+                header('Location: demand_marriage.php');
                 exit;
             case 'deces':
-                header('Location: demande_deces.php');
+                header('Location: demand_death_certificate.php');
                 exit;
         }
     }

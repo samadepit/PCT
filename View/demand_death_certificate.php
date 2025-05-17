@@ -5,6 +5,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['donnees_actes']['deces'] = [
         'nom_defunt' => $_POST['nom_defunt'],
         'prenom_defunt' => $_POST['prenom_defunt'],
+        'date_naissance'=>$_POST['date_naissance'],
+        'lieu_naissance'=>$_POST['lieu_naissance'],
+        'genre'=>$_POST['genre'],
         'date_deces' => $_POST['date_deces'],
         'lieu_deces' => $_POST['lieu_deces'],
         'cause'=> $_POST['cause'],
@@ -16,10 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         switch ($acte_suivant) {
             case 'naissance':
-                header('Location: demande_naissance.php');
+                header('Location: demand_birth_certificate.php');
                 exit;
             case 'mariage':
-                header('Location: demande_mariage.php');
+                header('Location: demand_marriage.php');
                 exit;
         }
     }
@@ -32,11 +35,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h3>Informations sur le défunt</h3>
     <label>Nom : <input type="text" name="nom_defunt" required></label><br>
     <label>Prénom : <input type="text" name="prenom_defunt" required></label><br>
-    <label>Date de naissance : <input type="date" name="date_naissance_defunt" required></label><br>
-    <label>Lieu de naissance : <input type="text" name="lieu_naissance_defunt" required></label><br>
+    <label>genre :
+        <select name="genre" required>
+            <option value="">-- Sélectionner --</option>
+            <option value="Masculin">Masculin</option>
+            <option value="Féminin">Féminin</option>
+            <option value="Autre">Autre</option>
+        </select>
+    </label><br>
+    <label>Date de naissance : <input type="date" name="date_naissance" required></label><br>
+    <label>Lieu de naissance : <input type="text" name="lieu_naissance" required></label><br>
     <label>Date de décès : <input type="date" name="date_deces" required></label><br>
     <label>Lieu de décès : <input type="text" name="lieu_deces" required></label><br>
-    <label>Lieu de décès : <input type="text" name="profession" required></label><br>
+    <label>Profession : <input type="text" name="profession" required></label><br>
     <label>Cause du décès : <input type="text" name="cause" required></label><br>
     <button type="submit">Passer à l'acte suivant</button>
 </form>

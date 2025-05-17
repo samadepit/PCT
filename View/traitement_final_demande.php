@@ -1,78 +1,81 @@
 <?php
 session_start();
-require_once __DIR__ . '/../Controller/naissanceController.php';
-require_once __DIR__ . '/../Controller/mariageController.php';
-require_once __DIR__ . '/../Controller/decesController.php';
-require_once __DIR__ . '/../Controller/demandeController.php';
-require_once __DIR__ . '/../Controller/actedemandeController.php';
-require_once __DIR__ . '/../Controller/demandeurController.php';
+require_once __DIR__ . '/../Controller/birthController.php';
+require_once __DIR__ . '/../Controller/marriageController.php';
+require_once __DIR__ . '/../Controller/deathController.php';
+require_once __DIR__ . '/../Controller/demandController.php';
+require_once __DIR__ . '/../Controller/certificatedemandController.php';
+require_once __DIR__ . '/../Controller/requestroController.php';
 
-$naissanceController = new NaissanceController();
-$mariageController = new MariageController();
-$decesController = new DecesController();
-$demandeController = new DemandeController();
-$traitementController = new ActeDemandeController();
-$demandeurController=new DemandeurController();
+$birthController = new NaissanceController();
+$marriageController = new MarriageController();
+$deathController = new DecesController();
+$demandController = new DemandeController();
+$certificate_demandController = new ActeDemandeController();
+$requestroController=new DemandeurController();
 
-$donnees_actes = $_SESSION['donnees_actes'] ?? [];
-$donnees_demandeur=$_SESSION['demandeur'] ?? [];
-// var_dump($donnees_demandeur);
+$data_certificate = $_SESSION['donnees_actes'] ?? [];
+$requestor_data=$_SESSION['demandeur'] ?? [];
+// var_dump($requestro_data);
 
-foreach ($donnees_actes as $type => $acte) {
-    if (!is_array($acte) || array_keys($acte) === range(0, count($acte) - 1)) {
+foreach ($data_certificate as $type => $certificate) {
+    if (!is_array($certificate) || array_keys($certificate) === range(0, count($certificate) - 1)) {
         continue;
     }
 
-    $donnees_actes[$type] = [$acte];
+    $data_certificate[$type] = [$certificate];
 }
 // var_dump($donnees);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        $code_demande = $demandeController->creer_demande($_SESSION['localiter']);
-        $demandeur=$demandeurController->creerDemandeur($code_demande,$donnees_demandeur);
-        // $id_acte = $naissanceController->creerActeNaissance($acte,$code_demande);
-        // $traitementController->acte_demande($code_demande, $type, $id_acte);
-
-
-        // try {
-        //     $id_acte = $naissanceController->creerActeNaissance($acte);
-        // } catch (Exception $e) {
-        //     $erreurs[] = $e->getMessage();
-        // }
-        foreach ($donnees_actes as $type => $actes) {
-            $id_naissance='';
-            foreach ($actes as $acte) {
-                // var_dump($actes);
+        
+        foreach ($data_certificate as $type => $certificates) {
+            // $birth_id='';
+            foreach ($certificates as $certificate) {
+                // var_dump($certificates);
                 switch ($type) {
                     case 'naissance':
-                        $id_acte= $naissanceController->creerActeNaissance($acte);
-                        $id_naissance= $id_acte;
+                        $certificate_id = $birthController->create_birth_certificate($certificate);
+                        if (!$certificate_id) throw new Exception("Erreur dans l'acte de naissance.");
                         break;
+
                     case 'mariage':
-                        $id_acte = $mariageController->creerActeMariage($acte);
+                        $certificate_id = $marriageController->create_marriage_certificate($certificate);
+                        if (!$certificate_id) throw new Exception("Erreur dans l'acte de mariage.");
                         break;
+
                     case 'deces':
-                        $id_acte = $decesController->creerActeDeces($acte,$id_naissance);
+                        $birth_id = $birthController->get_existing_birth_id($certificate);
+                        if (!$birth_id) throw new Exception("ID naissance introuvable pour décès.");
+                        $certificate_id = $deathController->create_death_certificate($certificate, $birth_id);
+                        if (!$certificate_id) throw new Exception("Erreur dans l'acte de décès.");
                         break;
                 }
-                try {
-                    if ($id_acte) {
-                        $traitementController->acte_demande($code_demande, $type, $id_acte);
-                    }
-                } catch (Exception $e) {
-                    $erreurs[] = $e->getMessage();
-                }
+                $certificat_ids[] = ['type' => $type, 'id' => $certificate_id];
+                // try {
+                //     if ($certificate_id) {
+                //         $certificate_demandController->certificate_demand($code_demand, $type, $certificate_id);
+                //     }
+                // } catch (Exception $e) {
+                //     $erreurs[] = $e->getMessage();
+                // }
             }
         }
-        $message = "Toutes les demandes ont été enregistrées avec succès.";
-        $_SESSION['code_demande'] = $code_demande;
-        $_SESSION['donnees_actes'] = $donnees_actes;
+        $code_demand = $demandController->create_demand($_SESSION['localiter']);
+        $demandeur=$requestroController->create_requestor($code_demand,$requestor_data);
+        
+        foreach ($certificat_ids as $certif) {
+            $certificate_demandController->certificate_demand($code_demand, $certif['type'], $certif['id']);
+        }
+        $message = "Toutes les demandes ont été enregistrées avec succès";
+        $_SESSION['code_demande'] = $code_demand;
+        $_SESSION['donnees_actes'] = $data_certificate;
 
         unset($_SESSION['demandeur'], $_SESSION['localiter']);
 
-        header('Location: code_suivie.php');
+        header('Location:code_suivie.php');
         exit;
-        // unset($_SESSION['donnees_actes']);
         
     } catch (Exception $e) {
         $erreurs[] = $e->getMessage();
@@ -82,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<?php if (!empty($donnees_actes)): ?>
+<?php if (!empty($data_certificate)): ?>
     <h2>Vérifiez les informations avant soumission :</h2>
     <?php if (!empty($_SESSION['localiter'])): ?>
     <h2>La localite à laquelle vous faites la demande :</h2>
@@ -90,23 +93,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <li><strong>Localité :</strong> <?= htmlspecialchars($_SESSION['localiter']) ?></li>
     </ul>
     <?php endif; ?>
-    <?php if (!empty($donnees_demandeur)): ?>
+    <?php if (!empty($requestro_data)): ?>
     <h2>Informations sur le demandeur</h2>
     <fieldset>
         <ul>
-            <?php foreach ($donnees_demandeur as $cle => $val): ?>
+            <?php foreach ($requestro_data as $cle => $val): ?>
                 <li><strong><?= htmlspecialchars($cle) ?>:</strong> <?= htmlspecialchars($val) ?></li>
             <?php endforeach; ?>
         </ul>
     </fieldset>
     <?php endif; ?>
-    <?php foreach ($donnees_actes as $type => $actes): ?>
+    <?php foreach ($data_certificate as $type => $certificates): ?>
         <h3><?= ucfirst($type) ?></h3>
-        <?php foreach ($actes as $i => $acte): ?>
+        <?php foreach ($certificates as $i => $certificate): ?>
             <fieldset>
                 <legend><?= ucfirst($type) ?> #<?= (int)$i + 1 ?></legend>
                 <ul>
-                    <?php foreach ($acte as $cle => $val): ?>
+                    <?php foreach ($certificate as $cle => $val): ?>
                         <li><strong><?= htmlspecialchars($cle) ?>:</strong> <?= htmlspecialchars($val) ?></li>
                     <?php endforeach; ?>
                 </ul>

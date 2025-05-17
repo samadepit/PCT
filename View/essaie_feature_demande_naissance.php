@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         throw new Exception("Échec de la création de la demande principale");
     }
 
-    $id_acte = $naissanceController->creerActeNaissance([
+    $id_acte = $naissanceController->create_birth_certificate([
             'code_demande' => $code_demande,
             'nom_beneficiaire' => $_POST['nom_beneficiaire'],
             'prenom_beneficiaire' => $_POST['prenom_beneficiaire'],
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = 'Demande enregistrée avec succès!<br>'
                       .'Votre numéro de suivi: <strong>'.$code_demande.'</strong>'
                       .'<br>Conservez-le précieusement.';
-            $acte_demande = $traitementController->acte_demande($code_demande,$type_acte,$id_acte);
+            $certificate_demand = $traitementController->certificate_demand($code_demande,$type_acte,$id_acte);
         } else {
             throw new Exception("Erreur lors de l'enregistrement de l'acte");
         }
