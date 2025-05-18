@@ -1,7 +1,9 @@
 <?php
-require_once __DIR__ . '/../Controller/naissanceController.php';
-require_once __DIR__ . '/../Controller/demandeController.php';
-require_once __DIR__ . '/../Controller/actedemandeController.php';
+session_start();
+
+require_once __DIR__ . '/../Controller/birthController.php';
+require_once __DIR__ . '/../Controller/demandController.php';
+require_once __DIR__ . '/../Controller/certificatedemandController.php';
 
 $naissanceController = new NaissanceController();
 $demandeController = new DemandeController();
@@ -10,24 +12,42 @@ $traitementController = new ActeDemandeController();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
-    if (!$code_demande) {
-        throw new Exception("Échec de la création de la demande principale");
-    }
+    $husband_info = [
+        'nom' => $_POST['husband_lastname'],
+        'prenom' => $_POST['husband_firstname'],
+        'lieu_naissance' => $_POST['husband_birth_place'],
+        'date_naissance' => $_POST['husband_birth_date'],
+        'genre' => 'Masculin'
+    ];
 
-    $id_acte = $naissanceController->create_birth_certificate([
-        'husband_firstname'=> $_POST['husband_firstname'],
-        'husband_lastname'=> $_POST['husband_lastname'],
-        'husband_birth_place'=> $_POST['husband_birth_place'],
-        'husband_birth_date'=> $_POST['husband_birth_date'],
-        'wife_firstname'=> $_POST['wife_firstname'],
-        'wife_lastname'=> $_POST['wife_lastname'],
-        'wife_birth_place'=> $_POST['wife_birth_place'],
-        'wife_birth_date'=> $_POST['wife_birth_date'],
-        'marriage_date'=> $_POST['marriage_date'],
-        'marriage_place'=> $_POST['marriage_place'],
-        'number_children'=> $_POST['nom_pere'],
-        'registration_number'=> $_POST['prenom_pere']
-        ]);
+    $wife_info = [
+        'nom' => $_POST['wife_lastname'],
+        'prenom' => $_POST['wife_firstname'],
+        'lieu_naissance' => $_POST['wife_birth_place'],
+        'date_naissance' => $_POST['wife_birth_date'],
+        'genre' => 'Féminin'
+    ];
+
+
+    $husband_birth_id = $naissanceController->get_existing_birth_id($husband_info);
+    $wife_birth_id = $naissanceController->get_existing_birth_id($wife_info);
+
+    if($husband_birth_id && $wife_birth_id){
+        $_SESSION['donnees_actes']['mariage'] = [
+            'husband_birth_id'=> $husband_birth_id,
+            'wife_birth_id'=> $wife_birth_id,
+            'marriage_date'=> $_POST['marriage_date'],
+            'marriage_place'=> $_POST['marriage_place'],
+            'number_children'=> $_POST['number_children']
+        ];
+    }else {
+        if (!$husband_birth_id) {
+            throw new Exception("Acte de naissance du mari introuvable");
+        }
+        if (!$wife_birth_id) {
+            throw new Exception("Acte de naissance de la femme introuvable");
+        }
+    }
 
     if (!empty($_SESSION['actes_restants'])) {
         $acte_suivant = array_shift($_SESSION['actes_restants']);
@@ -50,21 +70,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <form method="post" class="form-container">
     <h3>Informations sur le mari</h3>
-    <label>Identifiant acte de naissance :
-        <input type="text" name="husband_birth_id" required>
+    <label>Nom :
+        <input type="text" name="husband_lastname" required>
     </label>
-
+    <label>Prenom :
+        <input type="text" name="husband_firstname" required>
+    </label>
+    <label>Date de naissance :
+        <input type="date" name="husband_birth_date" required>
+    </label>
+    <label>Lieu de naissance:
+        <input type="text" name="husband_birth_place" required>
+    </label>
     <h3>Informations sur la femme</h3>
-    <label>Identifiant acte de naissance :
-        <input type="text" name="wife_birth_id" required>
+    <label>Nom :
+        <input type="text" name="wife_lastname" required>
     </label>
-
+    <label>Prenom :
+        <input type="text" name="wife_firstname" required>
+    </label>
+    <label>Date de naissance :
+        <input type="date" name="wife_birth_date" required>
+    </label>
+    <label>Lieu de naissance :
+        <input type="text" name="wife_birth_place" required>
+    </label>
     <h3>Détails du mariage</h3>
     <label>Date du mariage :
         <input type="date" name="marriage_date" required>
     </label>
     <label>Lieu du mariage :
         <input type="text" name="marriage_place" required>
+    </label>
+    <label>Nombre d'enfant :
+        <input type="number" name="number_children" required>
     </label>
 
     <button type="submit">Soumettre la demande</button>
@@ -103,6 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     input[type="text"],
+    input[type="number"],
     input[type="date"] {
         width: 100%;
         padding: 10px;

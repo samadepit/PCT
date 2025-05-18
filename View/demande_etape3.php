@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: demand_birth_certificate.php');
             break;
         case 'mariage':
-            header('Location: demand_acte_mariage.php');
+            header('Location: demand_marriage.php');
             break;
         case 'deces':
             header('Location: demand_death_certificate.php');

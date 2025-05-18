@@ -3,8 +3,8 @@ session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['donnees_actes']['naissance'] = [
-        'nom_beneficiaire' => $_POST['nom_beneficiaire'],
-        'prenom_beneficiaire' => $_POST['prenom_beneficiaire'],
+        'nom' => $_POST['nom_beneficiaire'],
+        'prenom' => $_POST['prenom_beneficiaire'],
         'date_naissance' => $_POST['date_naissance'],
         'heure_naissance' => $_POST['heure_naissance'],
         'genre' => $_POST['genre'],

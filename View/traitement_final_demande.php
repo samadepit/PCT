@@ -25,7 +25,7 @@ foreach ($data_certificate as $type => $certificate) {
 
     $data_certificate[$type] = [$certificate];
 }
-// var_dump($donnees);
+// var_dump($data_certificate);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -36,10 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // var_dump($certificates);
                 switch ($type) {
                     case 'naissance':
-                        $certificate_id = $birthController->create_birth_certificate($certificate);
-                        if (!$certificate_id) throw new Exception("Erreur dans l'acte de naissance.");
-                        break;
-
+                        $birth_id = $birthController->get_existing_birth_id($certificate);
+                        if (!$birth_id){
+                            $certificate_id = $birthController->create_birth_certificate($certificate);
+                            if (!$certificate_id) throw new Exception("Erreur dans l'acte de naissance.");
+                            break;
+                        }
+                        
                     case 'mariage':
                         $certificate_id = $marriageController->create_marriage_certificate($certificate);
                         if (!$certificate_id) throw new Exception("Erreur dans l'acte de mariage.");
