@@ -46,12 +46,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     case 'mariage':
                         $certificate_id = $marriageController->create_marriage_certificate($certificate);
                         if (!$certificate_id) throw new Exception("Erreur dans l'acte de mariage.");
+                        $birthController->addMarriageInbirthcertificate($certificate);
                         break;
 
                     case 'deces':
                         $birth_id = $birthController->get_existing_birth_id($certificate);
                         if (!$birth_id) throw new Exception("ID naissance introuvable pour décès.");
                         $certificate_id = $deathController->create_death_certificate($certificate, $birth_id);
+                        $birthController->addDeathInbirthcertificate($certificate,$birth_id);                       
                         if (!$certificate_id) throw new Exception("Erreur dans l'acte de décès.");
                         break;
                 }

@@ -38,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'wife_birth_id'=> $wife_birth_id,
             'marriage_date'=> $_POST['marriage_date'],
             'marriage_place'=> $_POST['marriage_place'],
-            'number_children'=> $_POST['number_children']
+            'number_children'=> $_POST['number_children'],
+            'statut_marriage' => $_POST['statut_marriage']
         ];
     }else {
         if (!$husband_birth_id) {
@@ -101,6 +102,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </label>
     <label>Lieu du mariage :
         <input type="text" name="marriage_place" required>
+    </label>
+    <label>Etat du mariage :
+        <input type="text" name="statut_marriage" required>
     </label>
     <label>Nombre d'enfant :
         <input type="number" name="number_children" required>
