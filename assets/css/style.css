@@ -1,0 +1,110 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css");
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
+:root {
+  --primary-color: #0056b3;
+  --secondary-color: #6c757d;
+  --orange-color: #f77f00;
+}
+
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+.bg-orange {
+  background-color: var(--orange-color);
+}
+.text-color{
+    color: var(--orange-color) !important;
+}
+
+.hero-section {
+  background: linear-gradient(rgba(0, 86, 179, 0.7), rgba(0, 86, 179, 0.9));
+  color: white;
+  padding: 7rem 0;
+  margin-bottom: 3rem;
+}
+
+.news-section {
+  background-color: #f8f9fa;
+  padding: 4rem 0;
+  margin: 3rem 0;
+}
+
+.section-title {
+  position: relative;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.section-title:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100px;
+  height: 4px;
+  background-color: var(--primary-color);
+}
+
+.card {
+  border: 1px solid black !important;
+  transition: transform 0.3s ease;
+  margin-bottom: 2rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+}
+
+.quick-links {
+  padding: 2rem 0;
+}
+
+.quick-link-item {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+  height: 100%;
+  transition: transform 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid black;
+}
+
+.quick-link-item:hover {
+  transform: translateY(-5px);
+   background-color: var(--orange-color);
+   color: white;
+   border: 1px solid white;
+
+}
+
+.quick-link-icon {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+footer {
+  background-color: #343a40;
+  color: white;
+  padding: 3rem 0;
+}
+
+.footer-title {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}

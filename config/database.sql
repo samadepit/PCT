@@ -1,0 +1,94 @@
+-- Base de données
+CREATE DATABASE IF NOT EXISTS PCT;
+USE PCT;
+
+CREATE TABLE IF NOT EXISTS demande (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code_demande VARCHAR(50) UNIQUE NOT NULL,
+    statut ENUM('en_attente','valider','est_signer') DEFAULT 'en_attente' NOT NULL,
+    localiter VARCHAR(100) NOT NULL,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS naissance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom_beneficiaire VARCHAR(100) NOT NULL,
+    prenom_beneficiaire VARCHAR(100) NOT NULL,
+    date_naissance DATE NOT NULL,
+    heure_naissance TIME DEFAULT NULL,
+    lieu_naissance VARCHAR(100) NOT NULL,
+    nom_pere VARCHAR(100) NOT NULL,
+    prenom_pere VARCHAR(100) NOT NULL,
+    profession_pere VARCHAR(100) NOT NULL,
+    nom_mere VARCHAR(100) NOT NULL,
+    prenom_mere VARCHAR(100) NOT NULL,
+    profession_mere VARCHAR(100) NOT NULL,
+    date_mariage DATE NULL DEFAULT NULL,
+    lieu_mariage VARCHAR(100) DEFAULT NULL,
+    statut_mariage VARCHAR(50) DEFAULT NULL,
+    date_deces DATE NULL DEFAULT NULL,
+    lieu_deces VARCHAR(100) DEFAULT NULL,
+    genre VARCHAR(10) DEFAULT NULL,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS mariage (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_naissance_mari INT,
+    id_naissance_femme INT,
+    date_mariage DATE NOT NULL,
+    lieu_mariage VARCHAR(100) NOT NULL,
+    nombre_enfant INT,
+    numero_registre INT NOT NULL,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_naissance_mari) REFERENCES naissance(id) ON DELETE SET NULL,
+    FOREIGN KEY (id_naissance_femme) REFERENCES naissance(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS deces (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_naissance INT,
+    date_deces DATE NOT NULL,
+    lieu_deces VARCHAR(100) NOT NULL,
+    cause VARCHAR(255),
+    genre VARCHAR(10) DEFAULT NULL,
+    profession VARCHAR(100) NOT NULL,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_naissance) REFERENCES naissance(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS demandeur (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code_demande VARCHAR(50) UNIQUE,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    numero_telephone VARCHAR(15),
+    email VARCHAR(100),
+    relation_avec_beneficiaire VARCHAR(255),
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (code_demande) REFERENCES demande(code_demande) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS administration (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code_demande VARCHAR(50) UNIQUE,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    numero_telephone VARCHAR(15),
+    profession VARCHAR(100),
+    role ENUM('agent', 'officier') NOT NULL,
+    mot_de_passe VARCHAR(255) NOT NULL,
+    statut ENUM('actif', 'inactif') DEFAULT 'actif',
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (code_demande) REFERENCES demande(code_demande) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS actes_demande (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code_demande VARCHAR(50) UNIQUE,
+    type_acte ENUM('naissance', 'mariage', 'deces') NOT NULL,
+    id_acte INT NOT NULL,
+    est_signer BOOLEAN,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (code_demande) REFERENCES demande(code_demande)
+);
