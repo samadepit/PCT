@@ -6,7 +6,7 @@
     <div class="button-container">
         <a href="demande_etape1.php" class="button">Faire une demande</a>
         <a href="consulter_demande.php" class="button">Suivre une demande</a>
-        <a href="faire_duplicata.php" class="button">Faire un duplicata</a>
+        <a href="faire_un_duplicata.php" class="button">Faire un duplicata</a>
     </div>
     <footer>
         &copy; 2025 Portail de l'État Civil - Tous droits réservés

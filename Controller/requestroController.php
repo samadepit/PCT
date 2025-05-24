@@ -1,29 +1,29 @@
 <?php
 
-require_once __DIR__ . '/../Model/demandeur.php';
+require_once __DIR__ . '/../Model/requestor.php';
 
 class DemandeurController
 {
-    private $demandeurModel;
+    private $requestorModel;
 
     public function __construct()
     {
-        $this->demandeurModel = new Demandeur();
+        $this->requestorModel = new Demandeur();
     }
 
-    public function creerDemandeur($code_demande,array $data)
+    public function create_requestor($code_demand,array $data)
     {
         try {
-            return $this->demandeurModel->creerDemandeur($code_demande,$data);
+            return $this->requestorModel->insert_data_requestor($code_demand,$data);
         } catch (Exception $e) {
             error_log("erreur dans la création d'un demandeur : " . $e->getMessage());
             return false;
         }
     }
-    public function getDemandeurById($id)
+    public function get_requestor_ById($id)
     {
         try {
-            return $this->demandeurModel->getDemandeurById($id);
+            return $this->requestorModel->get_requestor_ById($id);
         } catch (Exception $e) {
             error_log("erreur lors de la récupération du demandeur : " . $e->getMessage());
             return null;

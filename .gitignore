@@ -1,8 +1,8 @@
 # View/demande_naissance.php
-# Model/acte_demande.php
+# Model/certificate_demand.php
 # Model/deces.php
 # Model/mariage.php
-# Model/acte_demande.php
+# Model/certificate_demand.php
 # Model/demandeur.php
 # config
 # Controller

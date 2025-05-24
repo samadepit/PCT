@@ -13,7 +13,7 @@ class Demandeur
         $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    public function creerDemandeur($code_demande,array $data)
+    public function insert_data_requestor($code_demande,array $data)
     {
         $required = ['nom', 'prenom','relation_avec_beneficiaire'];
         foreach ($required as $field) {
@@ -44,7 +44,7 @@ class Demandeur
         return false;
     }
 
-    public function getDemandeurById($id)
+    public function get_requestor_ById($id)
     {
         $stmt = $this->con->prepare("
         SELECT * FROM demandeur WHERE id = :id

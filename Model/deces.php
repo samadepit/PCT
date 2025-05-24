@@ -11,7 +11,7 @@ class Deces
         $this->con = $db->getConnection();
     }
 
-    public function acte_deces(array $data,$id_naissance) {
+    public function insert_data_death_certificate(array $data,$birth_id) {
         $stmt = $this->con->prepare("
             INSERT INTO deces (
                 id_naissance,
@@ -27,26 +27,53 @@ class Deces
                 :lieu_deces,
                 :cause,
                 :genre,
-                :profession
+                :profession,
                 NOW()
             )
         ");
         $params = [
-            'id_naissance' => $id_naissance ,
+            'id_naissance' => $birth_id ,
             'date_deces' => $data['date_deces'] ,
             'lieu_deces' => $data['lieu_deces'] ,
-            'lieu_naissance' => $data['lieu_naissance'] ,
             'cause' => $data['cause'] ?? null,
             'genre' => $data['genre'],
             'profession' => $data['profession']
-
         ];
 
         try {
             $stmt->execute($params);
-            return "succes";
+            return  $this->con->lastInsertId();
         } catch (Exception $e) {
-            error_log("Erreur insertion naissance : " . $e->getMessage());
+            error_log("Erreur insertion dans deces : " . $e->getMessage());
+            return false;
+        }
+    }
+    public function getCertificateDeathDuplicate($number_registre,$death_date){
+        $stmt = $this->con->prepare("
+        SELECT 
+            n.nom_beneficiaire,
+            n.prenom_beneficiaire,
+            n.date_naissance,
+            d.date_deces,
+            d.lieu_deces,
+            d.numero_registre
+        FROM naissance n
+        INNER JOIN deces d ON n.id = d.id_naissance
+        INNER JOIN actes_demande ad ON d.id = ad.id_acte
+        WHERE 
+            ad.est_signer = FALSE  
+            AND d.numero_registre = :numero_registre  
+            AND d.date_deces = :evenement_date;
+        ");
+        $params=[
+            'numero_registre'=>$number_registre,
+            'evenement_date'=>$death_date
+        ];
+        try {
+            $stmt->execute($params);
+            return  $stmt->fetch(PDO::FETCH_ASSOC);;
+        } catch (Exception $e) {
+            error_log("Erreur de duplicata dans deces : " . $e->getMessage());
             return false;
         }
     }

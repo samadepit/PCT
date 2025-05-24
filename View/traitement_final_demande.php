@@ -29,59 +29,10 @@ foreach ($data_certificate as $type => $certificate) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        
-        foreach ($data_certificate as $type => $certificates) {
-            // $birth_id='';
-            foreach ($certificates as $certificate) {
-                // var_dump($certificates);
-                switch ($type) {
-                    case 'naissance':
-                        $birth_id = $birthController->get_existing_birth_id($certificate);
-                        if (!$birth_id){
-                            $certificate_id = $birthController->create_birth_certificate($certificate);
-                            if (!$certificate_id) throw new Exception("Erreur dans l'acte de naissance.");
-                            break;
-                        }
-                        
-                    case 'mariage':
-                        $certificate_id = $marriageController->create_marriage_certificate($certificate);
-                        if (!$certificate_id) throw new Exception("Erreur dans l'acte de mariage.");
-                        $birthController->addMarriageInbirthcertificate($certificate);
-                        break;
 
-                    case 'deces':
-                        $birth_id = $birthController->get_existing_birth_id($certificate);
-                        if (!$birth_id) throw new Exception("ID naissance introuvable pour décès.");
-                        $certificate_id = $deathController->create_death_certificate($certificate, $birth_id);
-                        $birthController->addDeathInbirthcertificate($certificate,$birth_id);                       
-                        if (!$certificate_id) throw new Exception("Erreur dans l'acte de décès.");
-                        break;
-                }
-                $certificat_ids[] = ['type' => $type, 'id' => $certificate_id];
-                // try {
-                //     if ($certificate_id) {
-                //         $certificate_demandController->certificate_demand($code_demand, $type, $certificate_id);
-                //     }
-                // } catch (Exception $e) {
-                //     $erreurs[] = $e->getMessage();
-                // }
-            }
-        }
-        $code_demand = $demandController->create_demand($_SESSION['localiter']);
-        $demandeur=$requestroController->create_requestor($code_demand,$requestor_data);
-        
-        foreach ($certificat_ids as $certif) {
-            $certificate_demandController->certificate_demand($code_demand, $certif['type'], $certif['id']);
-        }
-        $message = "Toutes les demandes ont été enregistrées avec succès";
-        $_SESSION['code_demande'] = $code_demand;
-        $_SESSION['donnees_actes'] = $data_certificate;
-
-        unset($_SESSION['demandeur'], $_SESSION['localiter']);
-
-        header('Location:code_suivie.php');
+        header('Location:paiement.php');
         exit;
-        
+
     } catch (Exception $e) {
         $erreurs[] = $e->getMessage();
         error_log("Erreur traitement: " . $e->getMessage());
@@ -122,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endforeach; ?>
     <?php endforeach; ?>
     <form method="post">
-        <button type="submit">✅ Confirmer et envoyer toutes les demandes</button>
+        <button type="submit">✅ Confirmer et passez au paiement</button>
     </form>
  
 <?php endif; ?>

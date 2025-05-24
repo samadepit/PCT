@@ -11,8 +11,8 @@ class Demande
         $this->con = $db->getConnection();
     }
 
-    public function creer($localiter) {
-        $code_demande = uniqid('DEM-');
+    public function insert_data_demand($localization) {
+        $code_demand = uniqid('DEM-');
 
         $stmt = $this->con->prepare("
             INSERT INTO demande (code_demande, statut, localiter, date_creation)
@@ -20,10 +20,10 @@ class Demande
         ");
 
         $stmt->execute([
-            ':code_demande' => $code_demande,
-            ':localiter' => $localiter
+            ':code_demande' => $code_demand,
+            ':localiter' => $localization
         ]);
 
-        return $code_demande;
+        return $code_demand;
     }
 }

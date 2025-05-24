@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS naissance (
     date_deces DATE NULL DEFAULT NULL,
     lieu_deces VARCHAR(100) DEFAULT NULL,
     genre VARCHAR(10) DEFAULT NULL,
+    numero_registre INT  DEFAULT NULL,
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -39,7 +40,8 @@ CREATE TABLE IF NOT EXISTS mariage (
     date_mariage DATE NOT NULL,
     lieu_mariage VARCHAR(100) NOT NULL,
     nombre_enfant INT,
-    numero_registre INT NOT NULL,
+    numero_registre INT  DEFAULT NULL,
+    statut_mariage ENUM('Marier','Celibataire','Divorcé') DEFAULT 'Celibataire'
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_naissance_mari) REFERENCES naissance(id) ON DELETE SET NULL,
     FOREIGN KEY (id_naissance_femme) REFERENCES naissance(id) ON DELETE SET NULL
@@ -53,6 +55,7 @@ CREATE TABLE IF NOT EXISTS deces (
     cause VARCHAR(255),
     genre VARCHAR(10) DEFAULT NULL,
     profession VARCHAR(100) NOT NULL,
+    numero_registre INT  DEFAULT NULL,
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_naissance) REFERENCES naissance(id) ON DELETE SET NULL
 );
@@ -85,10 +88,19 @@ CREATE TABLE IF NOT EXISTS administration (
 
 CREATE TABLE IF NOT EXISTS actes_demande (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    code_demande VARCHAR(50) UNIQUE,
+    code_demande VARCHAR(50),
     type_acte ENUM('naissance', 'mariage', 'deces') NOT NULL,
     id_acte INT NOT NULL,
     est_signer BOOLEAN,
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (code_demande) REFERENCES demande(code_demande)
+);
+
+CREATE TABLE paiement (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  code_demande VARCHAR(50),
+  numero VARCHAR(20),
+  code_paiement VARCHAR(8),
+  date_creation DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (code_demande) REFERENCES demande(code_demande)
 );
