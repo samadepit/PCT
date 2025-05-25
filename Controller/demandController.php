@@ -21,4 +21,8 @@ class DemandeController
     {
         return $this->demandModel->getAll();
     }
+
+    public function updateStatut($code_demand, $status, $motif = null) {
+        return $this->demandModel->updateStatut($code_demand, $status, $motif);
+    }
 }
