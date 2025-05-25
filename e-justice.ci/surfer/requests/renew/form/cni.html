@@ -1,0 +1,1149 @@
+<!doctype html>
+<html>
+
+<!-- Mirrored from e-justice.ci/surfer/requests/renew/form/cni by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 04 May 2025 23:05:35 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+  <meta charset="utf-8">
+  <meta name="csrf-token" content="be7ShSA5yIbm1HNgPxI6I2NLZxI7LHAVFisVAgi8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Title -->
+  <title>Plateforme de Digitalisation et de Sécurisation des Actes de Justice de Côte d&#039;Ivoire</title>
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="../../../../favicons/favicon.ico" />
+
+  <link rel="apple-touch-icon" sizes="180x180" href="../../../../favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../../../favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../../../favicons/favicon-16x16.png">
+
+  <link rel="preload" href="../../../../assets/gif/loading.gif" as="image">
+
+
+  <link rel="manifest" href="../../../../favicons/site.webmanifest">
+
+  <link rel="preload" as="style" href="../../../../build/assets/app-BPa9f_7R.css" /><link rel="stylesheet" href="../../../../build/assets/app-BPa9f_7R.css" />  <link rel="stylesheet" href="../../../../librairies/loading-modal/css/jquery.loadingModal.css" />
+  <link href="../../../../../cdn.jsdelivr.net/npm/select2%404.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet">
+  <link href="../../../../../fonts.cdnfonts.com/css/sf-pro-display.css" rel="stylesheet">
+</head>
+<body class="">
+
+<style>
+  *{
+  color: #000;
+}
+
+.swal2-icon.swal2-info.swal2-icon-show{
+    border-color: #F77F00 !important;
+}
+
+.swal2-icon-content{
+    color: #F77F00 !important;
+}
+
+.swal2-title{
+    color: black !important;
+}
+
+a{
+  cursor: pointer;
+}
+
+#card_cni{
+  opacity: 0;
+}
+
+#card_cni_parent{
+  opacity: 0;
+}
+
+input:focus {
+    outline: 2px solid #F77F00;  /* Ajoute un outline orange d'épaisseur 2px */
+}
+
+li.select2-results__option--selected[aria-selected="true"]::after {
+    content: "✔"; /* Le caractère de check, vous pouvez le remplacer par une autre icône ou une image */
+    color: #fff; /* Couleur du check */
+    margin-left: 8px; /* Espacement entre le check et le texte */
+    font-size: 1rem; /* Ajustez la taille du check selon vos besoins */
+    display: inline-block; /* Assure que le check est en ligne avec le texte */
+}
+
+.square_orange{
+  margin: 3.5px 0;
+  right: 2%;
+  position: absolute;
+  background-color: #F77F00;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  box-shadow: 0px 4px 20px 0px #FF98111A
+}
+
+#card_nni{
+  opacity: 0;
+}
+
+#card_nni_parent{
+  opacity: 0;
+}
+    @keyframes zoomIn {
+      from {
+        transform: scale(1);
+      }
+      to {
+        transform: scale(1.1);
+      }
+    }
+
+    #card-piece .type_piece:hover h5{
+      font-size: 23px !important;
+      font-weight: 700 !important;
+      animation: zoomIn 0.3s forwards;
+    }
+
+    #card-piece-parent .type_piece:hover h5{
+      font-size: 23px !important;
+      font-weight: 700 !important;
+      animation: zoomIn 0.3s forwards;
+    }
+
+    input[type="checkbox"] {
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+    background-color: #D9D9D9;
+    outline: none;
+    appearance:none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+}
+
+
+input[type="number"]#applicant_nni, input[type="text"]#applicant_cni{
+  background: rgb(255 255 255) !important;
+  border: 1px solid #F77F00;
+  height: 45px;
+}
+
+input[type="checkbox"]:before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  bottom: 2px;
+  left: 2px;
+  border-radius: 100%;
+}
+
+input[type="checkbox"]#radio_orange:checked:before{
+  background-color: orange;
+}
+
+input[type="checkbox"]#radio_vert:checked:before{
+  background-color: green;
+}
+
+input[type="checkbox"]#radio_orange_parent:checked:before{
+  background-color: orange;
+}
+
+input[type="checkbox"]#radio_vert_parent:checked:before{
+  background-color: green;
+}
+
+
+  label{
+    color: #000;
+  }
+
+  input:focus{
+    box-shadow: none !important;
+  }
+
+  .content-space-lg-3{
+    padding-top: 6.8rem !important
+  }
+
+  input[type=radio]{
+        background-image: none !important;
+    }
+    input[name="id_type_cni"][value="orange"].form-check-input:checked {
+        background-color: #f6a001 !important;
+        border: 3px solid #d1d1d1 !important;
+    }
+    input[name="id_type_cni"][value="green"].form-check-input:checked {
+        background-color: green !important;
+        border: 3px solid #d1d1d1 !important;
+    }
+    input[name="id_type_cni_parent"][value="orange"].form-check-input:checked {
+        background-color: #f6a001 !important;
+        border: 3px solid #d1d1d1 !important;
+    }
+    input[name="id_type_cni_parent"][value="green"].form-check-input:checked {
+        background-color: green !important;
+        border: 3px solid #d1d1d1 !important;
+    }
+    input[name="have_cni"][value="0"]:checked {
+        background-color: #f6a001 !important;
+        border: 3px solid #d1d1d1 !important;
+    }
+    input[name="have_cni"][value="1"]:checked {
+        background-color: green !important;
+        border: 3px solid #d1d1d1 !important;
+    }
+    input[name="parent_have_cni"][value="0"]:checked {
+        background-color: #f6a001 !important;
+        border: 3px solid #d1d1d1 !important;
+    }
+    input[name="parent_have_cni"][value="1"]:checked {
+        background-color: green !important;
+        border: 3px solid #d1d1d1 !important;
+    }
+    .form-check-input {
+        background-color: #d1d1d1 !important;
+    }
+    .form-check-input {
+        width: 12px !important;
+        height: 12px !important;
+    }
+
+.nav-pills .nav-link:hover, .nav-pills .nav-link.active:hover{
+  background: none
+}
+
+
+.nav-pills .nav-link{
+  font-size: 20px
+}
+
+  .nav .nav-item button.active {
+  background-color: transparent;
+  color: #F6A001 !important;
+}
+
+
+.nav.nav-pills{
+  border-bottom: none !important;
+}
+.nav .nav-item button.active::after {
+  content: "";
+  border-bottom: 3px solid #F77F00;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  border-radius: 5px 5px 0 0;
+  transition: width 0.3s ease-out, left 0.3s ease-out;
+}
+
+.nav-pills .nav-link:hover {
+  color: #bdc5d1;
+}
+
+.select2-container--default .select2-selection--single {
+            position: relative !important;
+            padding: 1.5rem 1rem !important; /* Correspond à px-4 py-[0.4rem] */
+            margin: 0.5rem 0 !important; /* Correspond à my-2 */
+            display: flex !important;
+            align-items: center !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            background-color: #FFF1DA !important; /* Correspond à bg-white */
+            border: none !important; /* Correspond à border-[#F77F00] */
+            border-radius: 0.5rem !important; /* Correspond à rounded-lg */
+            color: #000000 !important; /* Couleur du texte */
+            font-size: 0.875rem !important; /* Correspond à text-sm */
+            cursor: pointer !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #000000 !important; /* Couleur du texte */
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            position: absolute !important;
+            right: 0.5rem !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 1 !important;
+        }
+
+        .select2-container--default .select2-results__option {
+            padding: 0.5rem 1rem !important; /* Padding similaire à Tailwind */
+
+        }
+
+        .select2-container--default .select2-selection--single:before {
+            content: '' !important;
+            position: absolute !important;
+            inset: 0 !important;
+            z-index: 1 !important;
+        }
+
+        .select2-dropdown.select2-dropdown--below{
+            background: #F1F2FA;
+            box-shadow: 1px 3px 10px #0000004d !important;
+            border: none !important;
+        }
+
+        .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+            background-color: #F77F00 !important;
+        }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            background: #fff;
+            border: 1px solid #ced0de  !important;
+        }
+        .select2-container--default .select2-search--dropdown .select2-search__field:focus,
+        .select2-container--default .select2-search--dropdown .select2-search__field:focus-visible {
+            outline: none !important; /* Enlever le contour de focus */
+            box-shadow: none !important; /* Enlever la ombre de focus, si nécessaire */
+        }
+
+
+        .select2-container--default.select2-container--open .select2-dropdown {
+            top: 100% !important;
+            bottom: auto !important;
+        }
+</style>
+
+<div id="loader" class="fixed inset-0 flex items-center justify-center bg-white z-50">
+    <div class="relative">
+        <img src="../../../../assets/gif/loading.gif" alt="" class="w-auto h-[15rem] md:h-[15rem]">
+    </div>
+</div>
+
+<section class="relative md:m-auto h-full md:py-[1rem]">
+    <a onclick="close_form()" class="flex right-0 mx-4 md:m-8 fixed justify-end cursor-pointer">
+        <svg class="size-4 md:size-8" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="20" fill="#EDEDED"/>
+            <path d="M14.4 27L13 25.6L18.6 20L13 14.4L14.4 13L20 18.6L25.6 13L27 14.4L21.4 20L27 25.6L25.6 27L20 21.4L14.4 27Z" fill="#79747E"/>
+        </svg>
+    </a>
+    <div class="text-center">
+        <div class="text-center font-bold text-lg md:text-lg lg:text-2xl 2xl:text-3xl my-4 md:my-6">Demande de duplicata</div>
+        <div class="text-center text-[#C8C8CF] font-medium text-sm md:text-sm lg:text-lg 2xl:text-xl mb-4 md:mb-6">Certificat de Nationalité</div>
+        <div name="sh_nationality_reason_label" id="sh_nationality_reason_label" class="text-center text-[#C8C8CF] font-medium text-sm md:text-sm lg:text-lg 2xl:text-xl mb-4 md:mb-6"></div>
+    </div>
+        <div class="flex flex-col max-w-full md:max-w-[1400px] px-0 sm:px-6 lg:px-12 2xl:px-0 md:flex-row m-auto justify-center">
+            <div id="section-form-data" class="w-full md:w-12/12 lg:w-12/12 xl:w-9/12 2xl:w-9/12 p-8 md:p-4 lg:py-8 justify-center md:rounded-r-lg overflow-hidden z-10">
+                <div id="tabs-content-step">
+                    <div class=" tab-step-cni md:max-w-[550px] lg:max-w-[650px] xl:max-w-[700px] m-auto"
+                    id="tab-step-1"
+                    >
+                        <div class="flex flex-col my-4">
+    <div class="pb-10 font-bold text-lg md:text-xl text-center">Veuillez saisir le numéro du certificat de nationalité</div>
+    <div class="flex flex-col md:flex-row gap-6 md:gap-10">
+        <div class="flex flex-col md:w-[60rem] xl:w-[70rem] gap-8">
+            <div class="flex flex-col gap-3 md:gap-2 lg:gap-4 my-1 md:my-2">
+                <div class="flex-col w-full">
+                    <input type="text" name="order_no" id="order_no" class="bg-[#F1F2FA] w-full px-4 py-[1rem] md:py-[0.6rem] lg:py-[1rem] my-[0.36rem] rounded-md text-left" placeholder="Numéro d'ordre" autocomplete="off"/>
+                    <input type="text" name="birth_date" id="birth_date" class="bg-[#F1F2FA] w-full px-4 py-[1rem] md:py-[0.6rem] lg:py-[1rem] my-[0.36rem] rounded-md text-left" placeholder="Date de naissance" autocomplete="off"/>
+                </div>
+                <button id="btn-search" class="next-step items-center gap-1 bg-[#F77F00] px-8 py-[1rem] md:px-4 md:py-[0.6rem] lg:py-3 text-sm md:text-lg rounded-md text-white text-center opacity-50" data-btn="0" disabled>
+                    Rechercher
+                </button>
+            </div>
+            <div>
+                <p class="mb-2 lg:mb-3 text-sm lg:text-base">
+                    À l’issue de la demande de duplicata, <span class="text-[#F77F00]">une copie électronique du duplicata sera générée</span>. Cette version numérique possède la même valeur juridique que le duplicata physique. Si besoin, la quantité de duplicatas demandée pourra être retirée <span class="text-[#F77F00]">gratuitement</span> dans la juridiction choisie.
+                </p>
+            </div>
+        </div>
+
+        <svg id="Calque_2" class=" w-48 md:w-[35rem] xl:w-[35rem] md:h-auto lg:h-auto xl:h-auto m-auto rotate-12" data-name="Calque 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 286.85 405.59">
+            <defs>
+                <style>
+                .cls-1 {
+                    stroke: #f3dec6;
+                    stroke-width: 7px;
+                }
+
+                .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9 {
+                    fill: none;
+                }
+
+                .cls-1, .cls-5, .cls-6, .cls-7, .cls-8 {
+                    stroke-linecap: round;
+                    stroke-linejoin: round;
+                }
+
+                .cls-2 {
+                    stroke: #d47c3a;
+                }
+
+                .cls-2, .cls-3, .cls-4 {
+                    stroke-miterlimit: 10;
+                }
+
+                .cls-3 {
+                    stroke: #fff;
+                }
+
+                .cls-10 {
+                    fill: #f4f4f4;
+                }
+
+                .cls-4 {
+                    stroke: #518d41;
+                }
+
+                .cls-11 {
+                    fill: #fdf7eb;
+                }
+
+                .cls-5 {
+                    stroke-width: 4px;
+                }
+
+                .cls-5, .cls-6, .cls-8 {
+                    stroke: #c2c2c2;
+                }
+
+                .cls-6 {
+                    stroke-width: 5px;
+                }
+
+                .cls-12 {
+                    fill: #e7e7e7;
+                }
+
+                .cls-7 {
+                    stroke: #ecdbcc;
+                }
+
+                .cls-7, .cls-8 {
+                    stroke-width: 2px;
+                }
+
+                .cls-9 {
+                    stroke: #d37c3a;
+                    stroke-miterlimit: 8;
+                }
+
+                .cls-13 {
+                    fill: #cbcbcb;
+                }
+                </style>
+            </defs>
+            <g id="OBJECTS">
+                <g>
+                <g>
+                    <path class="cls-10" d="M286.85,45.03v360.56H0V0h241.82c17.58,17.59,27.44,27.45,45.03,45.03Z"/>
+                    <path class="cls-13" d="M286.85,45.03v1.15h-45.03V0c17.58,17.59,27.44,27.45,45.03,45.03Z"/>
+                </g>
+                <rect class="cls-11" x="20.88" y="98.61" width="245.08" height="207.43"/>
+                <line class="cls-8" x1="27.61" y1="18.84" x2="116.23" y2="18.84"/>
+                <line class="cls-5" x1="176.74" y1="349.19" x2="264.46" y2="349.19"/>
+                <line class="cls-8" x1="194.77" y1="18.84" x2="243.75" y2="18.84"/>
+                <line class="cls-6" x1="62.67" y1="56.82" x2="224.18" y2="56.82"/>
+                <line class="cls-1" x1="42.3" y1="130.98" x2="154.41" y2="130.98"/>
+                <line class="cls-1" x1="42.3" y1="155.31" x2="244.55" y2="155.31"/>
+                <line class="cls-1" x1="42.3" y1="179.64" x2="244.55" y2="179.64"/>
+                <line class="cls-1" x1="42.3" y1="202.79" x2="101.21" y2="202.79"/>
+                <line class="cls-1" x1="171.95" y1="268.25" x2="244.55" y2="268.25"/>
+                <line class="cls-7" x1="105.21" y1="73.1" x2="181.64" y2="73.1"/>
+                <g>
+                    <line class="cls-3" x1="59.43" y1="26.46" x2="80.74" y2="26.46"/>
+                    <line class="cls-4" x1="80.74" y1="26.46" x2="102.06" y2="26.46"/>
+                    <line class="cls-2" x1="38.11" y1="26.46" x2="59.43" y2="26.46"/>
+                </g>
+                <line class="cls-5" x1="30.37" y1="378.43" x2="79.87" y2="378.43"/>
+                <line class="cls-8" x1="34.98" y1="387.41" x2="75.26" y2="387.41"/>
+                <rect class="cls-9" x="25.61" y="314.38" width="8" height="8"/>
+                <rect class="cls-9" x="76.54" y="313.92" width="8" height="8"/>
+                <rect class="cls-9" x="25.78" y="364.17" width="8" height="8"/>
+                <rect class="cls-9" x="76.62" y="364.03" width="8" height="8"/>
+                <rect class="cls-12" x="33.73" y="321.66" width="42.78" height="42.78"/>
+                </g>
+            </g>
+        </svg>
+    </div>
+</div>
+                    </div>
+                    <div class="hidden tab-step-cni"
+                    id="tab-step-2"
+                    >
+                    <fieldset id="d-parent-person" class=" d-parent-person my-8 bg-[#FFFCF8] p-8 rounded-mg">
+    <h5 class="text-lg md:text-xl lg:text-2xl font-semibold text-[#F77F00]">Informations provenant du demandeur</h5>
+    <div class="md:flex gap-2 my-2">
+        <div class="flex-col w-full md:w-3/6 my-2 md:my-4">
+            <label class="pb-10 text-xs md:text-base" for="sh_order_no">Numéro d'ordre</label>
+            <input type="text" class="w-full px-4 py-[0.7rem] md:py-[0.7rem] lg:py-[0.7rem] my-2 bg-[#FFF1DA] rounded-md  text-sm " name="sh_order_no" id="sh_order_no" readonly />
+        </div>
+        <div class="flex-col w-full my-2 md:my-4">
+            <label class="pb-10 text-xs md:text-base" for="sh_jurisdiction">Juridiction</label>
+            <input type="text" class="w-full px-4 py-[0.7rem] md:py-[0.7rem] lg:py-[0.7rem] my-2 bg-[#FFF1DA] rounded-md  text-sm " name="sh_jurisdiction" id="sh_jurisdiction" readonly />
+        </div>
+    </div>
+    <div class="md:flex gap-2 my-2">
+        <div class="flex-col w-full md:w-3/6 my-2 md:my-4">
+            <label class="pb-10 text-xs md:text-base" for="sh_last_name">Nom</label>
+            <input type="text" class="w-full px-4 py-[0.7rem] md:py-[0.7rem] lg:py-[0.7rem] my-2 bg-[#FFF1DA] rounded-md  text-sm " name="sh_last_name" id="sh_last_name" readonly />
+        </div>
+        <div class="flex-col w-full my-2 md:my-4">
+            <label class="pb-10 text-xs md:text-base" for="sh_first_name">Prénoms</label>
+            <input type="text" class="w-full px-4 py-[0.7rem] md:py-[0.7rem] lg:py-[0.7rem] my-2 bg-[#FFF1DA] rounded-md  text-sm " name="sh_first_name" id="sh_first_name" readonly />
+        </div>
+    </div>
+    <div class="md:flex gap-2">
+        <div class="flex-col w-full my-2 md:my-4">
+            <label class="pb-10 text-xs md:text-base" for="sh_birth_date">Date de naissance</label>
+            <input type="text" class="w-full px-4 py-[0.7rem] md:py-[0.7rem] lg:py-[0.7rem] my-2 bg-[#FFF1DA] rounded-md  text-sm " name="sh_birth_date" id="sh_birth_date" placeholder="jj/mm/aaaa" readonly />
+        </div>
+        <div class="flex-col w-full my-2 md:my-4">
+            <label class="pb-10 text-xs md:text-base" for="sh_birth_place">Lieu de naissance</label>
+            <input type="text" class="w-full px-4 py-[0.7rem] md:py-[0.7rem] lg:py-[0.7rem] my-2 bg-[#FFF1DA] rounded-md  text-sm " name="sh_birth_place" id="sh_birth_place" readonly />
+        </div>
+        <div id="col-id-type" class="flex-col w-full my-2 md:my-4">
+            <label id="sh_id_type" class="pb-10 text-xs md:text-base" for="sh_id_number"></label>
+            <input type="text" class="w-full px-4 py-[0.7rem] md:py-[0.7rem] lg:py-[0.7rem] my-2 bg-[#FFF1DA] rounded-md  text-sm " name="sh_id_number" id="sh_id_number" readonly />
+        </div>
+    </div>
+</fieldset>
+<fieldset id="d-parent-person" class=" d-parent-person my-8 bg-[#FFFCF8] p-8 rounded-mg">
+    <div class="lg:flex gap-2 my-2">
+        <div id="field_motif" class="flex-col w-full md:w-3/5 my-2 md:my-4">
+            <label class="pb-10 text-xs md:text-base" for="sh_withdrawal_jurisdiction">Dans quelle juridiction souhaitez-vous retirer le duplicata ?<sup class="text-red-500">*</sup></label>
+            <select name="sh_withdrawal_jurisdiction" id="sh_withdrawal_jurisdiction" class="w-full select-jurisdiction hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative px-4 py-[0.4rem] md:py-[0.6rem] my-2 flex text-nowrap cursor-pointer bg-white border border-[#F77F00] rounded-lg text-start text-sm before:absolute before:inset-0 before:z-[1]">
+                <option value="">Sélectionnez un élément</option>
+                                    <option value="679b258c39bd739a47010c07">Yopougon</option>
+                                    <option value="679b258c39bd739a47010c08">Dabou</option>
+                            </select>
+        </div>
+    </div>
+</fieldset>
+
+<div id="footer-step-2" class=" flex items-center justify-center gap-2">
+    <a class="flex items-center gap-1 px-2 md:px-[4rem] py-2 text-sm md:text-lg rounded-md text-slate-400" onclick="_prev_step(1)">
+        < Précédent
+    </a>
+    <a id="next-step-2" class="next-step hidden items-center gap-1 bg-[#F77F00] px-2 md:px-[4rem] py-2 text-sm md:text-lg rounded-md text-white" onclick="_next_step(3)">
+        Suivant
+    </a>
+</div>
+
+                    </div>
+                    <div class="hidden tab-step-cni"
+                    id="tab-step-3"
+                    >
+                    <fieldset id="d-parent-person" class=" d-parent-person my-8 bg-[#FFFCF8] p-8 rounded-mg">
+    <h5 class="text-lg md:text-xl lg:text-2xl font-semibold text-[#F77F00]">Notification demandeur</h5>
+    <div class="md:flex gap-2 my-2">
+        <div class="flex-col w-full w-2/6 my-2 md:my-4">
+            <label class="pb-10 text-xs md:text-base" for="sh_mobile">Mobile<sup class="text-red-500">*</sup></label>
+            <div class="flex rounded-md shadow-sm bg-[#FFF1DA] my-2 focus-within:ring-2 focus-within:ring-[#F77F00]">
+                <span class="px-1 inline-flex items-center rounded-l-md bg-[#FFF1DA] text-md text-black">+225</span>
+                <input type="text" id="sh_mobile" name="sh_mobile" class="px-4 py-[0.7rem] md:py-[0.7rem] lg:py-[0.7rem] block w-full rounded-e-md focus:outline-none focus-visible:border-[#F77F00] bg-[#FFF1DA]  text-base focus:z-10 disabled:opacity-50 disabled:pointer-events-none" placeholder="XXXXXXXXXX" required autocomplete="off" />
+            </div>
+        </div>
+        <div class="flex-col w-full w-2/6  my-2 md:my-4">
+            <label class="pb-10 text-xs md:text-base" for="email">Email</label>
+            <input type="text" class="w-full px-4 py-[0.7rem] md:py-[0.7rem] lg:py-[0.7rem] my-2 bg-[#FFF1DA] rounded-md  text-base " name="sh_email" id="sh_email" autocomplete="off" />
+        </div>
+    </div>
+</fieldset>
+<fieldset class="grid grid-cols-1 lg:grid-cols-12 gap-2 p-4 md:p-6 lg:p-8 items-center mb-8 rounded-lg bg-[#FFFCF8]">
+        <div class=" md:col-span-7">
+            <h5 class="text-lg md:text-xl lg:text-2xl font-semibold text-[#F77F00] mb-4">Paiement</h5>
+            <div class="mb-5">
+                <h5 class="text-sm md:text-lg xl:text-xl">Tarif Certificat de Nationalité</h5>
+                <p class="font-bold text-sm md:text-lg xl:text-xl">
+                    2 500 FCFA
+                </p>
+            </div>
+            <div class="mb-5">
+                <h5 class="text-sm md:text-lg xl:text-xl">Frais de service</h5>
+                <p class="font-bold text-sm md:text-lg xl:text-xl">
+                    500 FCFA
+                </p>
+            </div>
+            <h5 class="text-lg md:text-xl lg:text-2xl font-semibold text-[#F77F00] mb-4">Nombre de copies</h5>
+            <div class="flex items-center space-x-4 mb-5">
+                <button id="decrement" class="w-8 h-8 text-sm md:text-lg xl:text-xl bg-[#f77f00] text-white rounded-lg transition">
+                    -
+                </button>
+                <div id="counter" class="text-sm md:text-lg xl:text-xl font-bold text-[#F77F00]">1</div>
+                <button id="increment" class="w-8 h-8 text-sm md:text-lg xl:text-xl bg-[#F77F00] text-white rounded-lg transition">
+                    +
+                </button>
+            </div>
+            <div class="mb-5">
+                <h5 class="text-sm md:text-lg xl:text-xl text-[#F77F00]">Montant total à payer</h5>
+                <p name="total_price" data-price="3000" class="font-bold text-lg md:text-xl xl:text-3xl text-[#F77F00] pl-3 border-l border-[#F77F00]">
+                    3 000 FCFA
+                </p>
+            </div>
+        </div>
+        <div class="md:col-span-5 mt-3 mb-8">
+                            <img src="../../../../assets/img/payment/paynah.png" class="m-auto w-[15rem] md:w-[15rem] lg:w-[15rem] xl:w-[22rem] h-auto border border-[#F77F00] rounded-xl" alt="">
+                
+                    </div>
+    </fieldset>
+
+
+
+<form id="form-store-request" class="h-auto grow" method="post" action="https://e-justice.ci/surfer/requests/renew/store/cni" enctype="multipart/form-data" autocomplete="off">
+    <div id="footer-step-3" class=" flex items-center justify-center gap-2">
+        <a class="flex items-center gap-1 px-2 md:px-[4rem] py-2 text-sm md:text-lg rounded-md text-slate-400" onclick="_prev_step(2)">
+            < Précédent
+        </a>
+        <button type="submit" id="next-step-3" class="next-step-3 hidden items-center gap-1 bg-[#F77F00] px-2 md:px-[4rem] py-2 text-sm md:text-lg rounded-md text-white">
+            Valider et procéder au paiement
+        </button>
+
+        <input type="hidden" name="sh_id" id="sh_id" value="">
+        <input type="hidden" name="email" id="email" value="">
+        <input type="hidden" name="mobile" id="mobile" value="">
+        <input type="hidden" name="residence" id="residence" value="">
+        <input type="hidden" name="withdrawal_jurisdiction" id="withdrawal_jurisdiction" value="">
+        <input type="hidden" name="quantity" id="quantity" value="1">
+        <input type="hidden" name="validation_submit" id="validation_submit" value="0">
+
+        <input type="hidden" name="payment_method" id="payment_method" value="paynah">
+    </div>
+</form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+
+
+
+
+<script src="../../../../assets/vendor/jquery/dist/jquery.min.js"></script>
+
+<script src="../../../../../cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+<script src="../../../../assets/vendor/hs-step-form/dist/hs-step-form.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var images = $('img');
+        var totalImages = images?.length ?? 0;
+        var imagesLoaded = 0;
+
+        images.each(function () {
+            var img = $(this);
+
+
+
+            // Ajouter un événement 'load' à chaque image
+            img.on('load', function () {
+                imagesLoaded++;
+                if (imagesLoaded == totalImages) {
+                    $('#loader').fadeOut('slow', function () {
+                        $('.content').fadeIn('slow');
+                    });
+                }
+            });
+
+            // Si l'image est déjà complètement chargée (parfois se produit si l'image est en cache)
+            if (img[0].complete) {
+                img.trigger('load');
+            }
+        });
+
+        if(totalImages == 0){
+            $('#loader').fadeOut('slow', function () {
+                $('.content').fadeIn('slow');
+            });
+        }
+    });
+</script>
+
+
+    <!-- JS Global Compulsory  -->
+    <script src="../../../../assets/vendor/jquery-migrate/dist/jquery-migrate.min.js"></script>
+<script src="../../../../../cdn.jsdelivr.net/npm/select2%404.1.0-beta.1/dist/js/select2.min.js"></script>
+
+
+    <script src="../../../../../cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.16.1/sweetalert2.all.js"></script>
+<script src="../../../../librairies/loading-modal/js/jquery.loadingModal.js"></script>
+<script src="../../../../assets/generalities2.js"></script>
+<script>
+    var notif_wait = "Patientez s'il vous plaît";
+
+    const url_search_data_document = "../../../surfer/postman/search/document-by-identifiant.html";
+
+    const url_return =  "../../../../index.html";
+
+    let totalPrice = parseInt($("[name='total_price']").data("price"));
+
+    function formatPrice(price) {
+        return new Intl.NumberFormat('fr-FR', { useGrouping: true }).format(price);
+    }
+
+    $(document).ready(function() {
+        let count = 1;
+
+        function updateButtons() {
+            $("#increment").prop("disabled", count >= 5).toggleClass("opacity-50 cursor-not-allowed", count >= 5);
+            $("#decrement").prop("disabled", count <= 1).toggleClass("opacity-50 cursor-not-allowed", count <= 1);
+        }
+
+        $("#increment").click(function() {
+            if (count < 5) {
+                count++;
+                $("#counter").text(count);
+                $("#quantity").val(count);
+                $("[name='total_price']").text(formatPrice(count*totalPrice)+" FCFA");
+            }
+            updateButtons();
+        });
+
+        $("#decrement").click(function() {
+            if (count > 1) {
+                count--;
+                $("#counter").text(count);
+                $("#quantity").val(count);
+                $("[name='total_price']").text(formatPrice(count*totalPrice)+" FCFA");
+            }
+            updateButtons();
+        });
+
+        updateButtons();
+    });
+
+    $('.select-jurisdiction').select2({
+        placeholder: "Sélectionnez un élément",
+        width: '100%',
+        dropdownParent: $('.select-jurisdiction').parent() // S'assurer que le dropdown reste sous l'élément
+    });
+
+    $('.select-jurisdiction').on('select2:open', function () {
+        setTimeout(function () {
+            $('.select2-search__field').attr('placeholder', 'Tapez pour rechercher...');
+        }, 0);
+    });
+
+    $("#btn-search").on('click',function(){
+        if ($(this).attr("disabled")) {
+            event.preventDefault(); // Empêche l'exécution du lien
+            return;
+        }
+
+        let order_no = $("#order_no").val();
+        let birth_date = $("#birth_date").val();
+        let data_btn = $("#btn-search").attr("data-btn");
+
+        if (order_no !== "" && birth_date !== "" && data_btn != 1) {
+            sendRequestDataDocument(order_no, birth_date);
+        } else {
+            isIdentifiantValid(false);
+        }
+    });
+
+    function sendRequestDataDocument(order_no, birth_date){
+        showLoadingModal(notif_wait);
+        $.ajax({
+            headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+            type: "get",
+            url: url_search_data_document,
+            data: {
+                order_no: order_no,
+                birth_date: birth_date,
+            },
+            success: function (result) {
+
+                if(result.action == true)
+                {
+                    isIdentifiantValid(true);
+                    const arrays = Object.keys(result.data);
+                    if (arrays.length > 0) {
+                        arrays.forEach((key) => {
+
+                            if(['nationality_reason_label', 'id_type'].includes(key))
+                            {
+                                $("#col-id-type").toggleClass('hidden', false);
+                                if(result.data['id_type'] == '' || result.data['id_type'] == null){
+                                    $("#col-id-type").toggleClass('hidden', true);
+                                }
+                                $("#sh_"+key).text(result.data[key]);
+                            }
+
+                            $("#sh_"+key).val(result.data[key]);
+                        });
+                    }
+                    $('.tab-step-cni').toggleClass('hidden',true);
+                    $('#tab-step-2').toggleClass('hidden',false);
+                    _validateFormStep(2);
+
+                    _next_step(2);
+
+                }else{
+                    isIdentifiantValid(false);
+                    Toast.fire({
+                        icon: "error",
+                        title: result.message,
+                    });
+
+                }
+
+                hideLoadingModal();
+
+
+            },
+            error: (e) => {
+                isIdentifiantValid(false);
+                /* console.log(e);
+                console.log(e.responseJSON); */
+                hideLoadingModal();
+            },
+        });
+    }
+
+
+    function isIdentifiantValid(status) {
+        if (status) {
+            $('#sh_withdrawal_jurisdiction').val(null).trigger('change');
+            $('#btn-search').toggleClass('hidden',true);
+            $("#order_no").attr("readonly", true);
+            $("#birth_date").attr("readonly", true);
+
+            $("#btn-search").attr("data-btn", 1);
+        } else {
+            $('#btn-search').toggleClass('hidden',false);
+            $("#order_no").removeAttr("readonly");
+            $("#birth_date").removeAttr("readonly");
+
+            $("#btn-search").attr("data-btn", 0);
+
+            $("#h_id_request").val("");
+            $('#tab-step-2 input').val('');
+
+        }
+    }
+
+
+    $("#form-store-request").on("submit", function (e) {
+        e.preventDefault();
+
+        var valid_form = $("#validation_submit").val();
+        if(valid_form == '1'){
+
+            var $form = $(this);
+            var formdata = window.FormData ? new FormData($form[0]) : null;
+
+            var data = formdata !== null ? formdata : $form.serialize();
+
+            var method = $(this).attr("method");
+            var action = $(this).attr("action");
+
+            Swal.fire({
+                title: "Validation de la demande" ,
+                text: "Êtes-vous sûr d'effectuer cette action ?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#0B9D47",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Oui",
+                cancelButtonText: "Non",
+                showClass: {
+                    popup: "animate__animated animate__tada",
+                },
+                customClass: {
+                    confirmButton: "border-[#F77F00] bg-[#F77F00] text-white mx-1 rounded-md px-[3rem] py-4 text-2xl",
+                    cancelButton: "border border-[#F77F00] bg-white text-[#F77F00] mx-1 rounded-md px-[3rem] py-4 text-2xl",
+                    title: "text-black"
+                },
+                buttonsStyling: false,
+            }).then(function (result) {
+                if(result.value){
+                    showLoadingModal(notif_wait);
+                    $("#btn-valid").prop("disabled", true);
+
+                    $.ajax({
+                        processData: false,
+                        contentType: false,
+                        headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
+                        data: data,
+                        type: method,
+                        url: action,
+                        success: function (result) {
+                            if (result.action == true) {
+
+                                if (result.url == '') {
+                                    hideLoadingModal();
+                                    _resetFormStore(result.message);
+                                } else {
+
+                                    window.location.href = result.url;
+                                }
+
+                            } else {
+                                $("#btn-valid").prop("disabled", false);
+                                hideLoadingModal();
+                                Toast.fire({
+                                    icon: "error",
+                                    title: result.message,
+                                });
+                            }
+                        },
+                        error: (e) => {
+                            hideLoadingModal();
+                            $("#btn-valid").prop("disabled", false);
+                            /* console.log(e);
+                            console.log(e.responseJSON); */
+                        },
+                    });
+                }
+            });
+        }
+    });
+
+    function _next_step(event){
+        _validateFormStep(event);
+        $('.tab-step-cni').addClass('hidden');
+        $('#tab-step-'+event).removeClass('hidden');
+    }
+
+    function _prev_step(event){
+        _validateFormStep(event);
+        $('.tab-step-cni').addClass('hidden');
+        $('#tab-step-'+event).removeClass('hidden');
+        if(event == 1){
+            isIdentifiantValid(false);
+        }
+
+    }
+
+    function _resetFormStore(ref){
+        $('#form-store-request').trigger('reset')
+    }
+
+    $('#sh_residence').on('input', function () {
+        var maxLength = 70;
+        var value = $(this).val();
+
+        if (value.length > maxLength) {
+            $(this).val(value.substring(0, maxLength));
+        }
+    });
+
+    function close_form(){
+        Swal.fire({
+            title: "Fermeture du formulaire" ,
+            html: "<b>Cette action annulera le processus de demande de duplicata du certificat de nationalité</b><br/>Êtes-vous sûr d'effectuer cette action?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#0B9D47",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Oui",
+            cancelButtonText: "Non",
+            showClass: {
+                popup: "animate__animated animate__tada",
+            },
+            customClass: {
+                confirmButton: "border-[#F77F00] bg-[#F77F00] text-white mx-1 rounded-md px-[3rem] py-4 text-2xl focus:outline-none",
+                cancelButton: "border border-[#F77F00] bg-white text-[#F77F00] mx-1 rounded-md px-[3rem] py-4 text-2xl focus:outline-none",
+                title: "text-black"
+            },
+            buttonsStyling: false,
+        }).then(function (result) {
+            if(result.value){
+                window.location.href = url_return;
+            }
+        });
+    }
+
+    function _formatted_date(el) {
+    var input = el.val().replace(/\D/g, ''); // Supprime tout sauf les chiffres
+    var formattedDate = '';
+
+    if (input.length > 2) {
+        formattedDate += input.substring(0, 2) + '/';
+    } else {
+        formattedDate += input;
+    }
+
+    if (input.length > 4) {
+        formattedDate += input.substring(2, 4) + '/';
+        formattedDate += input.substring(4, 8);
+    } else if (input.length > 2) {
+        formattedDate += input.substring(2, 4);
+    }
+
+    el.val(formattedDate);
+
+    // Vérifier la validité de la date uniquement si elle est complète (10 caractères)
+    if (formattedDate.length === 10) {
+        var date = moment(formattedDate, "DD/MM/YYYY", true); // true = strict mode
+
+        if (!date.isValid()) {
+            Toast.fire({
+                icon: "error",
+                title: "Date invalide",
+            });
+            el.val(""); // Réinitialise
+            return;
+        }
+
+        // Vérifier que la date ne dépasse pas aujourd'hui
+        var today = moment().startOf("day"); // Date actuelle sans heure
+        if (date.isAfter(today)) {
+            Toast.fire({
+                icon: "error",
+                title: "La date ne peut pas dépasser aujourd’hui.",
+            });
+            el.val(""); // Réinitialise
+        }
+    }
+}
+
+
+    $("#sh_mobile").on('input', function(){
+      // Enlever les caractères non numériques
+      let phone = $(this).val().replace(/\D/g, '');
+
+        // Vérifier si le numéro commence par un indicatif de pays (par exemple +33 pour la France)
+        if (phone.startsWith('225')) {
+            phone = phone.substring(3); // Enlever l'indicatif +33
+        }
+
+        // Limiter à 10 chiffres
+        $(this).val(phone.substring(0, 10));
+    });
+
+$("#birth_date").on('input', function() {
+    var el = $(this);
+    _formatted_date(el);
+    validation_form();
+});
+
+$("#order_no").on('input', function() {
+    $(this).val($(this).val().replace(/\D/g,''));
+    validation_form();
+});
+
+function validation_form(){
+    let order_no  = $("#order_no").val();
+    let birth_date = $("#birth_date").val();
+
+    if(order_no != '' && /^\d{2}\/\d{2}\/\d{4}$/.test(birth_date) ){
+        $("#btn-search").removeClass('opacity-50');
+        $("#btn-search").prop('disabled',false);
+    }else{
+        $("#btn-search").addClass('opacity-50');
+        $("#btn-search").prop('disabled',true);
+    }
+}
+
+
+    function select_payment(payment_method){
+        $("[name='payment_method']").val(payment_method);
+
+        $(".payment_method a").removeClass('border-[#F77F00]').addClass('border-[#CECECE]');
+        $(".payment_method a>div").removeClass('bg-[#F77F00]').addClass('bg-[#D9D9D9]');
+        $(".payment_method svg").toggleClass('hidden', true);
+
+        $(`.${payment_method}_method`).removeClass('border-[#CECECE]').addClass('border-[#F77F00]');
+        $(`.payment_method a.${payment_method}_method div`).removeClass('bg-[#D9D9D9]').addClass('bg-[#F77F00]');
+        $(`.payment_method a.${payment_method}_method svg`).toggleClass('hidden', false);
+
+        if(payment_method == 'tresormoney' ){
+            $(".mode_paiement").text('TrésorMoney');
+        }else{
+            $(".mode_paiement").text('Paynah');
+        }
+    }
+
+</script>
+<script>
+
+    var _validateFormStep = function (step) {
+    	var state = false;
+
+        if(step == '2')
+    	{
+    		state = veryInputValueStepTwo();
+
+        }else if(step == '3')
+    	{
+    		state = veryInputValueStepThree();
+        }
+
+        if (state == true) {
+            enabled_button_step(step);
+        } else {
+            disabled_button_step(step);
+        }
+
+
+    };
+
+    var disabled_button_step = function (step) {
+        $('#next-step-'+step).toggleClass('hidden',true);
+
+    };
+
+    var enabled_button_step = function (step) {
+        $("#next-step-"+step).toggleClass('hidden',false);
+    };
+
+
+    var veryInputValueStepTwo = function () {
+        $("#validation_submit").val(0);
+
+        //var residence = $('[name="sh_residence"]').val();
+
+        var withdrawal_jurisdiction = $('[name="sh_withdrawal_jurisdiction"]').val();
+
+        if (/* residence == "" || */ withdrawal_jurisdiction == "") {
+            return false;
+        }
+
+        return true;
+    };
+
+    var veryInputValueStepThree = function () {
+        $("#validation_submit").val(0);
+
+
+
+        var mobile = $('[name="sh_mobile"]').val();
+
+
+        if (((mobile == "") || (mobile.length < 10) )) {
+            return false;
+        }
+
+        if($("#sh_withdrawal_jurisdiction").val() != ''){
+            $("#mobile").val(mobile);
+            $("#withdrawal_jurisdiction").val($('#sh_withdrawal_jurisdiction').val());
+        }
+
+        $("#validation_submit").val(1);
+
+
+        return true;
+    };
+
+    $(document).on("keyup", '[name="sh_mobile"]', function () {
+        _validateFormStep(3);
+    });
+
+    /* $(document).on("keyup", '[name="sh_residence"]', function () {
+        _validateFormStep(2);
+    }); */
+
+    $(document).on("change", '[name="sh_withdrawal_jurisdiction"]', function () {
+        _validateFormStep(2);
+    });
+
+    $(document).on("keyup", '[name="sh_email"]', function () {
+        $("#email").val($(this).val());
+    });
+
+
+</script>
+
+<link rel="modulepreload" href="../../../../build/assets/app-l0sNRNKZ.js" /><script type="module" src="../../../../build/assets/app-l0sNRNKZ.js"></script></body>
+
+<!-- Mirrored from e-justice.ci/surfer/requests/renew/form/cni by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 04 May 2025 23:05:40 GMT -->
+</html>
