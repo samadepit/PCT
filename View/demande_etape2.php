@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['localiter'] = $_POST['localiter'];
     $_SESSION['actes'] = $_POST['actes'];
@@ -16,31 +16,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html>
 <head>
     <title>Demande - Étape 2</title>
-    <style>
-        body { font-family: Arial; max-width: 700px; margin: auto; padding: 20px; background: #f4f4f4; }
-        form { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        label { display: block; margin: 10px 0; }
-        button { margin-top: 15px; padding: 10px 15px; background: #2ecc71; color: white; border: none; border-radius: 5px; }
-    </style>
+    <link rel="stylesheet" href="./assets/css/etape.css">
 </head>
 <body>
-<h2>Étape 2 : Informations sur le demandeur</h2>
-<form method="post" action="demande_etape3.php">
-    <label>Nom : <input type="text" name="nom" required></label>
-    <label>Prénom : <input type="text" name="prenom" required></label>
-    <label>Relation avec le bénéficiaire : 
-    <select name="relation_avec_beneficiaire" required>
-        <option value="">-- Sélectionner --</option>
-        <option value="parent">Parent</option>
-        <option value="conjoint">Conjoint</option>
-        <option value="tuteur">Tuteur</option>
-        <option value="demandeur">Moi même</option>
-        <option value="autre">Autre</option>
-    </select>
-    </label>
-    <label>Téléphone : <input type="tel" name="numero_telephone"></label>
-    <label>Email : <input type="email" name="email"></label>
-    <button type="submit">Suivant</button>
-</form>
+ <div class="container stepper-container mt-4">
+    <!-- Stepper -->
+    <ul class="list-group list-group-horizontal mb-4 justify-content-center">
+        <li class="list-group-item">Étape 1 : Choix des Actes</li>
+        <li class="list-group-item active bg-primary text-white">Étape 2 : Demandeur</li>
+        <li class="list-group-item">Étape 3 : Confirmation</li>
+    </ul>
+
+    <h1 class="text-center mb-4">Étape 2 : Informations sur le Demandeur</h1>
+    <form method="POST" action="index.php?controller=demande&action=create_step3" class="needs-validation" novalidate>
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label for="nom" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="nom" name="nom" required>
+                <div class="invalid-feedback">Veuillez entrer votre nom.</div>
+            </div>
+            <div class="col-12 col-md-6">
+                <label for="prenom" class="form-label">Prénom</label>
+                <input type="text" class="form-control" id="prenom" name="prenom" required>
+                <div class="invalid-feedback">Veuillez entrer votre prénom.</div>
+            </div>
+            <div class="col-12">
+                <label for="relation_avec_beneficiaire" class="form-label">Relation avec le bénéficiaire</label>
+                <select class="form-select" id="relation_avec_beneficiaire" name="relation_avec_beneficiaire" required>
+                    <option value="">-- Sélectionner --</option>
+                    <option value="parent">Parent</option>
+                    <option value="conjoint">Conjoint</option>
+                    <option value="tuteur">Tuteur</option>
+                    <option value="demandeur">Moi même</option>
+                    <option value="autre">Autre</option>
+                </select>
+                <div class="invalid-feedback">Veuillez sélectionner une relation.</div>
+            </div>
+            <div class="col-12 col-md-6">
+                <label for="numero_telephone" class="form-label">Téléphone</label>
+                <input type="tel" class="form-control" id="numero_telephone" name="numero_telephone">
+            </div>
+            <div class="col-12 col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email">
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Suivant</button>
+                <a href="index.php?controller=demande&action=create" class="btn btn-secondary ms-2">Précédent</a>
+                <a href="index.php?controller=demande&action=demander" class="btn btn-secondary ms-2">Annuler</a>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        (function () {
+            'use strict';
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
+</div>
 </body>
 </html>

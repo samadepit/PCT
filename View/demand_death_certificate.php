@@ -1,133 +1,133 @@
 <?php
-session_start();
+require_once __DIR__ . '/../Controller/decescontroller.php';
+require_once __DIR__ . '/../Controller/naissancecontroller.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $_SESSION['donnees_actes']['deces'] = [
-        'nom' => $_POST['nom_defunt'],
-        'prenom' => $_POST['prenom_defunt'],
-        'date_naissance'=>$_POST['date_naissance'],
-        'lieu_naissance'=>$_POST['lieu_naissance'],
-        'genre'=>$_POST['genre'],
-        'date_deces' => $_POST['date_deces'],
-        'lieu_deces' => $_POST['lieu_deces'],
-        'cause'=> $_POST['cause'],
-        'profession'=>$_POST['profession']
+$title = "Demande d'Acte de Décès";
+$error = '';
+
+// Récupérer l'id_naissance (par exemple, à partir des données de naissance précédentes)
+$naissanceController = new NaissanceController();
+$naissance_data = $_SESSION['donnees_actes']['naissance'] ?? null;
+
+if (!$naissance_data) {
+    $error = "Erreur : Aucune donnée de naissance trouvée. Veuillez d'abord remplir l'acte de naissance.";
+} else {
+    // Récupérer l'id_naissance en utilisant NaissanceController
+    $id_naissance = $naissanceController->get_existing_birth_id($naissance_data);
+    if (!$id_naissance) {
+        $error = "Erreur : Impossible de récupérer l'ID de naissance. Assurez-vous que l'acte de naissance est correctement enregistré.";
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($error)) {
+    $decesController = new DecesController();
+
+    $data = [
+        'date_deces' => $_POST['date_deces'] ?? '',
+        'lieu_deces' => $_POST['lieu_deces'] ?? '',
+        'cause' => $_POST['cause'] ?? null,
+        'genre' => $_POST['genre'] ?? '',
+        'profession' => $_POST['profession'] ?? ''
     ];
 
-    if (!empty($_SESSION['actes_restants'])) {
-        $acte_suivant = array_shift($_SESSION['actes_restants']);
+    $success = $decesController->creerActeDeces($data, $id_naissance);
+    if ($success) {
+        // Sauvegarder les données dans la session
+        $_SESSION['donnees_actes']['deces'] = $data;
 
-        switch ($acte_suivant) {
-            case 'naissance':
-                header('Location: demand_birth_certificate.php');
-                exit;
-            case 'mariage':
-                header('Location: demand_marriage.php');
-                exit;
+        // Rediriger vers l'acte suivant ou finaliser
+        if (!empty($_SESSION['actes_restants'])) {
+            $acte_suivant = array_shift($_SESSION['actes_restants']);
+            switch ($acte_suivant) {
+                case 'mariage':
+                    header('Location: index.php?controller=demande&action=marriage');
+                    exit;
+                case 'deces':
+                    header('Location: index.php?controller=demande&action=death_certificate');
+                    exit;
+            }
+        } else {
+            header('Location: index.php?controller=demande&action=final_process');
+            exit;
         }
+    } else {
+        $error = "Erreur lors de l'enregistrement de l'acte de décès.";
     }
-    header('Location: traitement_final_demande.php');
-    exit;
 }
 ?>
 
-<form method="post">
-    <h3>Informations sur le défunt</h3>
-    <label>Nom : <input type="text" name="nom_defunt" required></label><br>
-    <label>Prénom : <input type="text" name="prenom_defunt" required></label><br>
-    <label>genre :
-        <select name="genre" required>
-            <option value="">-- Sélectionner --</option>
-            <option value="Masculin">Masculin</option>
-            <option value="Féminin">Féminin</option>
-            <option value="Autre">Autre</option>
-        </select>
-    </label><br>
-    <label>Date de naissance : <input type="date" name="date_naissance" required></label><br>
-    <label>Lieu de naissance : <input type="text" name="lieu_naissance" required></label><br>
-    <label>Date de décès : <input type="date" name="date_deces" required></label><br>
-    <label>Lieu de décès : <input type="text" name="lieu_deces" required></label><br>
-    <label>Profession : <input type="text" name="profession" required></label><br>
-    <label>Cause du décès : <input type="text" name="cause" required></label><br>
-    <button type="submit">Passer à l'acte suivant</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container mt-4">
+    <ul class="list-group list-group-horizontal mb-4 justify-content-center">
+        <li class="list-group-item">Étape 1 : Choix des Actes</li>
+        <li class="list-group-item">Étape 2 : Demandeur</li>
+        <li class="list-group-item active bg-primary text-white">
+            Étape 3 : <?php echo htmlspecialchars(implode(', ', $_SESSION['actes_restants'] ?? ['Actes restants'])); ?>
+        </li>
+    </ul>
 
-<style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 1.6;
-        color: #333;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #f9f9f9;
-    }
+    <h1 class="text-center mb-4">Demande d'Acte de Décès</h1>
+    <?php if ($error): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+    <?php endif; ?>
+    <form method="POST" action="" class="needs-validation" novalidate>
+        <h3>Informations sur le décès</h3>
+        <div class="mb-3">
+            <label for="date_deces" class="form-label">Date de décès</label>
+            <input type="date" class="form-control" id="date_deces" name="date_deces" required>
+            <div class="invalid-feedback">Veuillez entrer la date de décès.</div>
+        </div>
+        <div class="mb-3">
+            <label for="lieu_deces" class="form-label">Lieu de décès</label>
+            <input type="text" class="form-control" id="lieu_deces" name="lieu_deces" required>
+            <div class="invalid-feedback">Veuillez entrer le lieu de décès.</div>
+        </div>
+        <div class="mb-3">
+            <label for="cause" class="form-label">Cause du décès (optionnel)</label>
+            <input type="text" class="form-control" id="cause" name="cause">
+        </div>
+        <div class="mb-3">
+            <label for="genre" class="form-label">Genre</label>
+            <select class="form-select" id="genre" name="genre" required>
+                <option value="">-- Sélectionner --</option>
+                <option value="Masculin">Masculin</option>
+                <option value="Féminin">Féminin</option>
+                <option value="Autre">Autre</option>
+            </select>
+            <div class="invalid-feedback">Veuillez sélectionner un genre.</div>
+        </div>
+        <div class="mb-3">
+            <label for="profession" class="form-label">Profession</label>
+            <input type="text" class="form-control" id="profession" name="profession" required>
+            <div class="invalid-feedback">Veuillez entrer la profession.</div>
+        </div>
 
-    form {
-        background-color: white;
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    }
+        <button type="submit" class="btn btn-primary">Passer à l'acte suivant</button>
+        <a href="index.php?controller=demande&action=create_step3" class="btn btn-secondary ms-2">Précédent</a>
+    </form>
 
-    h3 {
-        color: #2c3e50;
-        margin-top: 25px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #eee;
-    }
+    <script>
+        (function () {
+            'use strict';
+            var form = document.querySelector('.needs-validation');
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        })();
+    </script>
+</div>
+</body>
+</html>
 
-    label {
-        display: block;
-        margin-bottom: 15px;
-        font-weight: 500;
-    }
 
-    input[type="text"],
-    input[type="date"] {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        box-sizing: border-box;
-        font-size: 16px;
-    }
-
-    input[type="text"]:focus,
-    input[type="date"]:focus {
-        border-color: #3498db;
-        outline: none;
-        box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
-    }
-
-    button[type="submit"] {
-        background-color: #3498db;
-        color: white;
-        border: none;
-        padding: 12px 25px;
-        font-size: 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-top: 20px;
-        transition: background-color 0.3s;
-    }
-
-    button[type="submit"]:hover {
-        background-color: #2980b9;
-    }
-
-    @media (min-width: 600px) {
-        label {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            align-items: center;
-            gap: 15px;
-        }
-
-        input[type="text"],
-        input[type="date"] {
-            margin-top: 0;
-        }
-    }
-</style>

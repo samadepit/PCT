@@ -1,206 +1,194 @@
 <?php
-session_start();
+require_once __DIR__ . '/../Controller/birthcontroller.php'; // Inclure le contrôleur
+
+$title = "Demande d'Acte de Naissance";
+$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $_SESSION['donnees_actes']['naissance'] = [
-        'nom' => $_POST['nom_beneficiaire'],
-        'prenom' => $_POST['prenom_beneficiaire'],
-        'date_naissance' => $_POST['date_naissance'],
-        'heure_naissance' => $_POST['heure_naissance'],
-        'genre' => $_POST['genre'],
-        'lieu_naissance' => $_POST['lieu_naissance'],
-        'nom_pere' => $_POST['nom_pere'],
-        'prenom_pere' => $_POST['prenom_pere'],
-        'profession_pere' => $_POST['profession_pere'],
-        'nom_mere' => $_POST['nom_mere'],
-        'prenom_mere' => $_POST['prenom_mere'],
-        'profession_mere' => $_POST['profession_mere'],
-        'date_mariage' => $_POST['date_mariage'] ?: null,
-        'lieu_mariage' => $_POST['lieu_mariage'] ?: null,
-        'statut_mariage' => $_POST['statut_mariage'] ?: null,
-        'date_deces' => $_POST['date_deces'] ?: null,
-        'lieu_deces' => $_POST['lieu_deces'] ?: null,
+    $naissanceController = new NaissanceController();
+
+    $data = [
+        'nom_beneficiaire' => $_POST['nom_beneficiaire'] ?? '',
+        'prenom_beneficiaire' => $_POST['prenom_beneficiaire'] ?? '',
+        'date_naissance' => $_POST['date_naissance'] ?? '',
+        'heure_naissance' => $_POST['heure_naissance'] ?? '',
+        'genre' => $_POST['genre'] ?? '',
+        'lieu_naissance' => $_POST['lieu_naissance'] ?? '',
+        'nom_pere' => $_POST['nom_pere'] ?? '',
+        'prenom_pere' => $_POST['prenom_pere'] ?? '',
+        'profession_pere' => $_POST['profession_pere'] ?? '',
+        'nom_mere' => $_POST['nom_mere'] ?? '',
+        'prenom_mere' => $_POST['prenom_mere'] ?? '',
+        'profession_mere' => $_POST['profession_mere'] ?? '',
+        'date_mariage' => $_POST['date_mariage'] ?? null,
+        'lieu_mariage' => $_POST['lieu_mariage'] ?? null,
+        'statut_mariage' => $_POST['statut_mariage'] ?? null,
+        'date_deces' => $_POST['date_deces'] ?? null,
+        'lieu_deces' => $_POST['lieu_deces'] ?? null,
     ];
 
-    if (!empty($_SESSION['actes_restants'])) {
-        $acte_suivant = array_shift($_SESSION['actes_restants']);
+    $naissance_id = $naissanceController->creerActeNaissance($data);
+    if ($naissance_id) {
+        $_SESSION['donnees_actes']['naissance'] = $data;
 
-        switch ($acte_suivant) {
-            case 'mariage':
-                header('Location: demand_marriage.php');
-                exit;
-            case 'deces':
-                header('Location: demand_death_certificate.php');
-                exit;
+        if (!empty($_SESSION['actes_restants'])) {
+            $acte_suivant = array_shift($_SESSION['actes_restants']);
+            switch ($acte_suivant) {
+                case 'mariage':
+                    header('Location: index.php?controller=demande&action=marriage');
+                    exit;
+                case 'deces':
+                    header('Location: index.php?controller=demande&action=death_certificate');
+                    exit;
+            }
+        } else {
+            header('Location: index.php?controller=demande&action=final_process');
+            exit;
         }
+    } else {
+        $error = "Erreur lors de l'enregistrement de l'acte de naissance.";
     }
-    header('Location: traitement_final_demande.php');
-    exit;
 }
 ?>
-<form method="post">
-    <h3>Bénéficiaire</h3>
-    <label>Nom :
-        <input type="text" name="nom_beneficiaire" required>
-    </label><br>
 
-    <label>Prénom :
-        <input type="text" name="prenom_beneficiaire" required>
-    </label><br>
+<!DOCTYPE html>
+<html lang="en">
 
-    <label>Date de naissance :
-        <input type="date" name="date_naissance" required>
-    </label><br>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo htmlspecialchars($title); ?></title>
+    <link rel="stylesheet" href="./assets/css/etape.css">
+</head>
 
-    <label>Heure de naissance :
-        <input type="time" name="heure_naissance" required>
-    </label><br>
+<body>
+    <div class="container stepper-container mt-4">
+        <ul class="list-group list-group-horizontal mb-4 justify-content-center">
+            <li class="list-group-item">Étape 1 : Choix des Actes</li>
+            <li class="list-group-item">Étape 2 : Demandeur</li>
+            <li class="list-group-item active bg-primary text-white">
+                Étape 3 :
+                <?php echo htmlspecialchars(implode(', ', $_SESSION['actes_restants'] ?? ['Actes restants'])); ?>
+            </li>
+        </ul>
 
-    <label>Lieu de naissance :
-        <input type="text" name="lieu_naissance" required>
-    </label><br>
+        <h1 class="text-center mb-4">Demande d'Acte de Naissance</h1>
+        <?php if ($error): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+        <?php endif; ?>
+        <form method="POST" action="" class="needs-validation" novalidate>
+            <h3>Bénéficiaire</h3>
+            <div class="mb-3">
+                <label for="nom_beneficiaire" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="nom_beneficiaire" name="nom_beneficiaire" required>
+                <div class="invalid-feedback">Veuillez entrer le nom.</div>
+            </div>
+            <div class="mb-3">
+                <label for="prenom_beneficiaire" class="form-label">Prénom</label>
+                <input type="text" class="form-control" id="prenom_beneficiaire" name="prenom_beneficiaire" required>
+                <div class="invalid-feedback">Veuillez entrer le prénom.</div>
+            </div>
+            <div class="mb-3">
+                <label for="date_naissance" class="form-label">Date de naissance</label>
+                <input type="date" class="form-control" id="date_naissance" name="date_naissance" required>
+                <div class="invalid-feedback">Veuillez entrer la date de naissance.</div>
+            </div>
+            <div class="mb-3">
+                <label for="heure_naissance" class="form-label">Heure de naissance</label>
+                <input type="time" class="form-control" id="heure_naissance" name="heure_naissance" required>
+                <div class="invalid-feedback">Veuillez entrer l'heure de naissance.</div>
+            </div>
+            <div class="mb-3">
+                <label for="lieu_naissance" class="form-label">Lieu de naissance</label>
+                <input type="text" class="form-control" id="lieu_naissance" name="lieu_naissance" required>
+                <div class="invalid-feedback">Veuillez entrer le lieu de naissance.</div>
+            </div>
+            <div class="mb-3">
+                <label for="genre" class="form-label">Genre</label>
+                <select class="form-select" id="genre" name="genre" required>
+                    <option value="">-- Sélectionner --</option>
+                    <option value="Masculin">Masculin</option>
+                    <option value="Féminin">Féminin</option>
+                    <option value="Autre">Autre</option>
+                </select>
+                <div class="invalid-feedback">Veuillez sélectionner un genre.</div>
+            </div>
 
-    <label>genre :
-        <select name="genre" required>
-            <option value="">-- Sélectionner --</option>
-            <option value="Masculin">Masculin</option>
-            <option value="Féminin">Féminin</option>
-            <option value="Autre">Autre</option>
-        </select>
-    </label><br>
+            <h3>Informations du père</h3>
+            <div class="mb-3">
+                <label for="nom_pere" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="nom_pere" name="nom_pere" required>
+                <div class="invalid-feedback">Veuillez entrer le nom du père.</div>
+            </div>
+            <div class="mb-3">
+                <label for="prenom_pere" class="form-label">Prénom</label>
+                <input type="text" class="form-control" id="prenom_pere" name="prenom_pere" required>
+                <div class="invalid-feedback">Veuillez entrer le prénom du père.</div>
+            </div>
+            <div class="mb-3">
+                <label for="profession_pere" class="form-label">Profession</label>
+                <input type="text" class="form-control" id="profession_pere" name="profession_pere" required>
+                <div class="invalid-feedback">Veuillez entrer la profession du père.</div>
+            </div>
 
-    <h3>Informations du père</h3>
-    <label>Nom :
-        <input type="text" name="nom_pere" required>
-    </label><br>
+            <h3>Informations de la mère</h3>
+            <div class="mb-3">
+                <label for="nom_mere" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="nom_mere" name="nom_mere" required>
+                <div class="invalid-feedback">Veuillez entrer le nom de la mère.</div>
+            </div>
+            <div class="mb-3">
+                <label for="prenom_mere" class="form-label">Prénom</label>
+                <input type="text" class="form-control" id="prenom_mere" name="prenom_mere" required>
+                <div class="invalid-feedback">Veuillez entrer le prénom de la mère.</div>
+            </div>
+            <div class="mb-3">
+                <label for="profession_mere" class="form-label">Profession</label>
+                <input type="text" class="form-control" id="profession_mere" name="profession_mere" required>
+                <div class="invalid-feedback">Veuillez entrer la profession de la mère.</div>
+            </div>
 
-    <label>Prénom :
-        <input type="text" name="prenom_pere" required>
-    </label><br>
+            <h3>Informations optionnelles</h3>
+            <div class="mb-3">
+                <label for="date_mariage" class="form-label">Date de mariage</label>
+                <input type="date" class="form-control" id="date_mariage" name="date_mariage">
+            </div>
+            <div class="mb-3">
+                <label for="lieu_mariage" class="form-label">Lieu de mariage</label>
+                <input type="text" class="form-control" id="lieu_mariage" name="lieu_mariage">
+            </div>
+            <div class="mb-3">
+                <label for="statut_mariage" class="form-label">Statut du mariage</label>
+                <input type="text" class="form-control" id="statut_mariage" name="statut_mariage">
+            </div>
+            <div class="mb-3">
+                <label for="date_deces" class="form-label">Date de décès</label>
+                <input type="date" class="form-control" id="date_deces" name="date_deces">
+            </div>
+            <div class="mb-3">
+                <label for="lieu_deces" class="form-label">Lieu de décès</label>
+                <input type="text" class="form-control" id="lieu_deces" name="lieu_deces">
+            </div>
 
-    <label>Profession :
-        <input type="text" name="profession_pere" required>
-    </label><br>
+            <button type="submit" class="btn btn-primary">Passer à l'acte suivant</button>
+            <a href="index.php?controller=demande&action=create_step3" class="btn btn-secondary ms-2">Précédent</a>
+            <a href="index.php?controller=demande&action=final_process" class="btn btn-success ms-2">Continuer</a>
+        </form>
 
-    <h3>Informations de la mère</h3>
-    <label>Nom :
-        <input type="text" name="nom_mere" required>
-    </label><br>
+        <script>
+        (function() {
+            'use strict';
+            var form = document.querySelector('.needs-validation');
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        })();
+        </script>
+    </div>
+</body>
 
-    <label>Prénom :
-        <input type="text" name="prenom_mere" required>
-    </label><br>
-
-    <label>Profession :
-        <input type="text" name="profession_mere" required>
-    </label><br>
-
-    <h3>Informations optionnelles</h3>
-    <label>Date de mariage :
-        <input type="date" name="date_mariage">
-    </label><br>
-
-    <label>Lieu de mariage :
-        <input type="text" name="lieu_mariage">
-    </label><br>
-
-    <label>Statut du mariage :
-        <input type="text" name="statut_mariage">
-    </label><br>
-
-    <label>Date de décès :
-        <input type="date" name="date_deces">
-    </label><br>
-
-    <label>Lieu de décès :
-        <input type="text" name="lieu_deces">
-    </label><br>
-
-    <button type="submit">Passer à l'acte suivant</button>
-</form>
-
-<style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 1.6;
-        color: #333;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #f9f9f9;
-    }
-
-    form {
-        background-color: white;
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    }
-
-    h3 {
-        color: #2c3e50;
-        margin-top: 25px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #eee;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 15px;
-        font-weight: 500;
-    }
-
-    input[type="text"],
-    input[type="date"],
-    input[type="time"],
-    select {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        box-sizing: border-box;
-        font-size: 16px;
-    }
-
-    input[type="text"]:focus,
-    input[type="date"]:focus,
-    input[type="time"]:focus,
-    select:focus {
-        border-color: #3498db;
-        outline: none;
-        box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
-    }
-
-    button[type="submit"] {
-        background-color: #3498db;
-        color: white;
-        border: none;
-        padding: 12px 25px;
-        font-size: 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-top: 20px;
-        transition: background-color 0.3s;
-    }
-
-    button[type="submit"]:hover {
-        background-color: #2980b9;
-    }
-
-    @media (min-width: 600px) {
-        label {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            align-items: center;
-            gap: 15px;
-        }
-
-        input[type="text"],
-        input[type="date"],
-        input[type="time"],
-        select {
-            margin-top: 0;
-        }
-    }
-</style>
+</html>

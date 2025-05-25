@@ -1,0 +1,298 @@
+:root {
+  --cacao-dark: #3d2914;
+  --cacao-medium: #5d4037;
+  --cacao-light: #8d6e63;
+  --cacao-cream: #d7ccc8;
+  --cacao-beige: #f5f5dc;
+  --cacao-chocolate: #6f4e37;
+  --cacao-gold: #d4a574;
+  --cacao-accent: #a0522d;
+}
+
+/* Conteneur spécifique aux steppers */
+.stepper-container {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(61, 41, 20, 0.1);
+  padding: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Stepper Styles - uniquement pour les steppers */
+.stepper-container .list-group-horizontal {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(61, 41, 20, 0.15);
+  background: var(--cacao-cream);
+}
+
+.stepper-container .list-group-item {
+  border: none;
+  background: var(--cacao-cream);
+  color: var(--cacao-dark);
+  padding: 1rem 1.5rem;
+  font-weight: 500;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.stepper-container .list-group-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid var(--cacao-cream);
+  border-top: 25px solid transparent;
+  border-bottom: 25px solid transparent;
+  z-index: 2;
+}
+
+.stepper-container .list-group-item.active {
+  background: linear-gradient(
+    135deg,
+    var(--cacao-chocolate) 0%,
+    var(--cacao-medium) 100%
+  );
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(61, 41, 20, 0.3);
+}
+
+.stepper-container .list-group-item.active:not(:last-child)::after {
+  border-left-color: var(--cacao-medium);
+}
+
+.stepper-container .list-group-item:hover:not(.active) {
+  background: var(--cacao-light);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Headers dans les steppers */
+.stepper-container h1 {
+  color: var(--cacao-dark);
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(61, 41, 20, 0.1);
+  margin-bottom: 2rem;
+}
+
+.stepper-container h5,
+.stepper-container h6 {
+  color: var(--cacao-chocolate);
+  font-weight: 600;
+}
+
+/* Form Styles dans les steppers */
+.stepper-container .form-label {
+  color: var(--cacao-dark);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.stepper-container .form-control,
+.stepper-container .form-select {
+  border: 2px solid var(--cacao-cream);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  background: white;
+  color: var(--cacao-dark);
+  transition: all 0.3s ease;
+}
+
+.stepper-container .form-control:focus,
+.stepper-container .form-select:focus {
+  border-color: var(--cacao-chocolate);
+  box-shadow: 0 0 0 0.25rem rgba(111, 78, 55, 0.25);
+  background: var(--cacao-beige);
+}
+
+.stepper-container .form-control:hover,
+.stepper-container .form-select:hover {
+  border-color: var(--cacao-light);
+}
+
+/* Checkbox Styles dans les steppers */
+.stepper-container .form-check {
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  background: var(--cacao-beige);
+  border: 1px solid var(--cacao-cream);
+  transition: all 0.3s ease;
+}
+
+.stepper-container .form-check:hover {
+  background: var(--cacao-cream);
+  transform: translateX(5px);
+}
+
+.stepper-container .form-check-input:checked {
+  background-color: var(--cacao-chocolate);
+  border-color: var(--cacao-chocolate);
+}
+
+.stepper-container .form-check-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(111, 78, 55, 0.25);
+}
+
+.stepper-container .form-check-label {
+  color: var(--cacao-dark);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Button Styles pour les steppers */
+.stepper-container .btn {
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.stepper-container .btn-primary {
+  background: linear-gradient(
+    135deg,
+    var(--cacao-chocolate) 0%,
+    var(--cacao-medium) 100%
+  );
+  color: white;
+  box-shadow: 0 4px 15px rgba(111, 78, 55, 0.3);
+}
+
+.stepper-container .btn-primary:hover {
+  background: linear-gradient(
+    135deg,
+    var(--cacao-medium) 0%,
+    var(--cacao-dark) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(111, 78, 55, 0.4);
+}
+
+.stepper-container .btn-success {
+  background: linear-gradient(
+    135deg,
+    var(--cacao-accent) 0%,
+    var(--cacao-chocolate) 100%
+  );
+  color: white;
+  box-shadow: 0 4px 15px rgba(160, 82, 45, 0.3);
+}
+
+.stepper-container .btn-success:hover {
+  background: linear-gradient(
+    135deg,
+    var(--cacao-chocolate) 0%,
+    var(--cacao-dark) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(160, 82, 45, 0.4);
+}
+
+.stepper-container .btn-secondary {
+  background: var(--cacao-cream);
+  color: var(--cacao-dark);
+  border: 2px solid var(--cacao-light);
+}
+
+.stepper-container .btn-secondary:hover {
+  background: var(--cacao-light);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Card Styles pour les steppers */
+.stepper-container .card {
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--cacao-beige) 0%, white 100%);
+  box-shadow: 0 6px 20px rgba(61, 41, 20, 0.1);
+  border-left: 4px solid var(--cacao-chocolate);
+}
+
+.stepper-container .card-body {
+  padding: 1.5rem;
+}
+
+.stepper-container .card-body p {
+  color: var(--cacao-dark);
+  margin-bottom: 0.75rem;
+}
+
+.stepper-container .card-body strong {
+  color: var(--cacao-chocolate);
+}
+
+/* Validation Styles pour les steppers */
+.stepper-container .invalid-feedback {
+  color: #dc3545;
+  font-weight: 500;
+}
+
+.stepper-container .was-validated .form-control:invalid,
+.stepper-container .was-validated .form-select:invalid {
+  border-color: #dc3545;
+}
+
+.stepper-container .was-validated .form-control:valid,
+.stepper-container .was-validated .form-select:valid {
+  border-color: var(--cacao-chocolate);
+}
+
+/* Responsive Design pour les steppers */
+@media (max-width: 768px) {
+  .stepper-container .list-group-horizontal {
+    flex-direction: column;
+  }
+
+  .stepper-container .list-group-item:not(:last-child)::after {
+    display: none;
+  }
+
+  .stepper-container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+}
+
+/* Animation Effects */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stepper-container {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.stepper-container .form-control,
+.stepper-container .form-select,
+.stepper-container .form-check,
+.stepper-container .btn {
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.stepper-container .form-control:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.stepper-container .form-control:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.stepper-container .form-control:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.stepper-container .btn {
+  animation-delay: 0.4s;
+}
