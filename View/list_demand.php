@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../Controller/certificatedemandController.php';
 $actedemandeController = new ActeDemandeController();
 $demandes = $actedemandeController->getAllPending();
+// var_dump(count($demandes))
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +52,7 @@ $demandes = $actedemandeController->getAllPending();
                         <?php endif; ?>
                     </td>
                     <td><?= htmlspecialchars($demande['relation_avec_beneficiaire']) ?></td>
-                    <td><a href="details_demand.php?id=<?= urlencode($demande['code_demande']) ?>" class="btn">Voir</a></td>
+                    <td><a href="details_demand.php?code_demande=<?= urlencode($demande['code_demande']) ?>" class="btn">Voir</a></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

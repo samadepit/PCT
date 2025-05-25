@@ -1,5 +1,6 @@
 <?php
 // details_demande.php
+// var_dump($_GET);
 require_once __DIR__ . '/../Controller/certificatedemandController.php';
 require_once __DIR__ . '/../Controller/demandController.php';
 $actedemandeController = new ActeDemandeController();
@@ -9,17 +10,17 @@ if (!isset($_GET['code_demande'])) {
     exit;
 }
 
-$id_certificate = $_GET['code_demande'];
-$demande = $actedemandeController->getCertificateById($id_certificate); // Méthode à créer dans le contrôleur
+$code_demande = $_GET['code_demande'];
+$demande = $actedemandeController->getCertificateById($code_demande);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'];
     $motif = $_POST['motif'] ?? null;
 
     if ($action === 'valider') {
-        $demandeController->updateStatut($id_certificate, 'valider');
+        $demandeController->updateStatut($code_demande, 'valider');
     } elseif ($action === 'rejeter') {
-        $demandeController->updateStatut($id_certificate, 'en_attente', $motif);
+        $demandeController->updateStatut($code_demande, 'rejeter', $motif);
     }
 
     header('Location: list_demand.php');
@@ -57,9 +58,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              née le <?= htmlspecialchars($demande['date_naissance']) ?> à <?= htmlspecialchars($demande['lieu_naissance']) ?></p>
             <p><label>Nom et prénom du père :</label> <?= htmlspecialchars($demande['nom_pere']) ?> <?= htmlspecialchars($demande['prenom_pere']) ?>  <?= htmlspecialchars($demande['profession_pere']) ?></p>
             <p><label>Nom et prénom de la mère :</label> <?= htmlspecialchars($demande['nom_mere']) ?> <?= htmlspecialchars($demande['prenom_mere']) ?> <?= htmlspecialchars($demande['profession_mere']) ?></p>
-        <?php elseif ($demande['type_acte'] === 'mariage'): ?>
-            <p><label>Mari :</label> <?= htmlspecialchars($demande['nom_mari']) ?> <?= htmlspecialchars($demande['prenom_mari']) ?></p>
-            <p><label>Femme :</label> <?= htmlspecialchars($demande['nom_femme']) ?> <?= htmlspecialchars($demande['prenom_femme']) ?></p>
+        <?php elseif ($demande['type_acte'] === 'mariage'):?>
+            <?php
+                $dateNaissanceHomme = new DateTime($demande['age_homme']);
+                $dateNaissanceFemme = new DateTime($demande['age_femme']);
+                $aujourdhui = new DateTime();
+                $ageHomme = $aujourdhui->diff($dateNaissanceHomme)->y;
+                $ageFemme = $aujourdhui->diff($dateNaissanceFemme)->y;
+            ?>
+            <p><label>Mari :</label> <?= htmlspecialchars($demande['nom_mari']) ?> <?= htmlspecialchars($demande['prenom_mari']) ?>(<?= htmlspecialchars($ageHomme) ?> ans)</p>
+            <p><label>Femme :</label> <?= htmlspecialchars($demande['nom_femme']) ?> <?= htmlspecialchars($demande['prenom_femme']) ?>(<?= htmlspecialchars($ageFemme) ?> ans)</p>
+            <p><label>Date et lieu de mariage:</label> <?= htmlspecialchars($demande['date_mariage']) ?> à <?= htmlspecialchars($demande['lieu_mariage']) ?></p>
         <?php elseif ($demande['type_acte'] === 'deces'): ?>
             <p><label>Défunt :</label> <?= htmlspecialchars($demande['nom_defunt']) ?> <?= htmlspecialchars($demande['prenom_defunt']) ?></p>
         <?php endif; ?>
