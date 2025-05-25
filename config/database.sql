@@ -5,8 +5,9 @@ USE PCT;
 CREATE TABLE IF NOT EXISTS demande (
     id INT AUTO_INCREMENT PRIMARY KEY,
     code_demande VARCHAR(50) UNIQUE NOT NULL,
-    statut ENUM('en_attente','valider','est_signer') DEFAULT 'en_attente' NOT NULL,
+    statut ENUM('en_attente','valider','rejeter') DEFAULT 'en_attente' NOT NULL,
     localiter VARCHAR(100) NOT NULL,
+    moti_rejet VARCHAR(255) DEFAULT NULL,
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -65,6 +66,7 @@ CREATE TABLE IF NOT EXISTS demandeur (
     code_demande VARCHAR(50) UNIQUE,
     nom VARCHAR(100) NOT NULL,
     prenom VARCHAR(100) NOT NULL,
+    lieu_residence VARCHAR(255) NOT NULL,
     numero_telephone VARCHAR(15),
     email VARCHAR(100),
     relation_avec_beneficiaire VARCHAR(255),
@@ -79,6 +81,7 @@ CREATE TABLE IF NOT EXISTS administration (
     prenom VARCHAR(100) NOT NULL,
     numero_telephone VARCHAR(15),
     profession VARCHAR(100),
+    email VARCHAR(100),
     role ENUM('agent', 'officier') NOT NULL,
     mot_de_passe VARCHAR(255) NOT NULL,
     statut ENUM('actif', 'inactif') DEFAULT 'actif',

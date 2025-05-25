@@ -23,7 +23,13 @@ class Demande
             ':code_demande' => $code_demand,
             ':localiter' => $localization
         ]);
-
         return $code_demand;
+    }
+
+    public function updateStatut($code_demand, $statut, $motif = null) {
+        $query = "
+        UPDATE demande SET statut = ?, motif_rejet = ? WHERE code_demande = ?";
+        $stmt = $this->con->prepare($query);
+        return $stmt->execute([$statut, $motif, $code_demand]);
     }
 }
