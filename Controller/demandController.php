@@ -138,6 +138,4 @@ class DemandeController
         $title = "Traitement Final de la Demande";
         require_once __DIR__ . '/../View/traitement_final_demande.php';
     }
-
-    
 }

@@ -22,4 +22,12 @@ class ActeDemandeController
     {
         return $this->actedemandeModel->get_Alldemand($code_demand);
     }
+
+    public function getAllPending() {
+        return $this->actedemandeModel->getAllPendingActeDemandes();
+    }
+
+    public function getCertificateById($id_certificate) {
+        return $this->actedemandeModel->getOneCertificateById($id_certificate);
+    }
 }
