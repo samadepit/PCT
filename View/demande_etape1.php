@@ -26,16 +26,16 @@
             <div class="col-12">
                 <label class="form-label">Choisissez les actes à demander :</label>
                 <div class="form-check">
-                    <input class="form-check-input acte-checkbox" type="checkbox" name="actes[]" value="naissance" id="acteNaissance">
-                    <label class="form-check-label" for="acteNaissance">Acte de naissance</label>
+                    <input class="form-check-input acte-checkbox ms-2" type="checkbox" name="actes[]" value="naissance" id="acteNaissance">
+                    <label class="form-check-label" for="acteNaissance"> &nbsp; Acte de naissance</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input acte-checkbox" type="checkbox" name="actes[]" value="mariage" id="acteMariage">
-                    <label class="form-check-label" for="acteMariage">Acte de mariage</label>
+                    <input class="form-check-input acte-checkbox ms-2" type="checkbox" name="actes[]" value="mariage" id="acteMariage">
+                    <label class="form-check-label" for="acteMariage"> &nbsp; Acte de mariage</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input acte-checkbox" type="checkbox" name="actes[]" value="deces" id="acteDeces">
-                    <label class="form-check-label" for="acteDeces">Acte de décès</label>
+                    <input class="form-check-input acte-checkbox ms-2" type="checkbox" name="actes[]" value="deces" id="acteDeces">
+                    <label class="form-check-label" for="acteDeces"> &nbsp; Acte de décès</label>
                 </div>
                 <div class="invalid-feedback" id="actes-error" style="display:none;">Veuillez sélectionner au moins un acte.</div>
             </div>
