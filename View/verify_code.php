@@ -22,6 +22,7 @@ $code_paiement_generate = $_SESSION['code_paiement'] ?? null;
 $data_certificate = $_SESSION['donnees_actes'] ?? [];
 $requestor_data = $_SESSION['demandeur'] ?? [];
 $numero = $_SESSION['numero_telephone'] ?? null;
+$code_demande_duplicate=$_SESSION['code_demande_duplicate'] ?? null;
 
 foreach ($data_certificate as $type => $certificate) {
     if (!is_array($certificate) || array_keys($certificate) === range(0, count($certificate) - 1)) {
@@ -81,14 +82,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code_paiement'])) {
                         $certificat_ids[] = ['type' => $type, 'id' => $certificate_id];
                     }
                 }
-
                 $code_demand = $demandController->create_demand($_SESSION['localiter'] ?? null);
                 $requestroController->create_requestor($code_demand, $requestor_data);
-                $paymentcontroller->createPayment($code_demand, $numero, $code_paiement_generate);
+                $paymentcontroller->createPayment($code_demand, $numero, $code_paiement_generate,$is_duplicate=0);
 
                 foreach ($certificat_ids as $certif) {
                     $certificate_demandController->certificate_demand($code_demand, $certif['type'], $certif['id']);
                 }
+                
+                $certificate_demandController->addPaymentForOneCertificate($code_demand);
 
                 $_SESSION['code_demande'] = $code_demand;
                 unset($_SESSION['demandeur'], $_SESSION['localiter'], $_SESSION['donnees_actes'], $_SESSION['code_paiement']);
@@ -98,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code_paiement'])) {
             else {
                 // $code_demand = $_SESSION['code_demande'] ?? null;
                 // if (!$code_demand) throw new Exception("Code de demande manquant pour duplicata.");
-                $paymentcontroller->createPayment(null, $numero, $code_paiement_generate);
+                $paymentcontroller->createPayment($code_demande_duplicate, $numero, $code_paiement_generate,$is_duplicate=1);
                 unset($_SESSION['code_paiement']);
                 header('Location: impression.php');
                 exit;

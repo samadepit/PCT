@@ -56,12 +56,13 @@ class Deces
             n.date_naissance,
             d.date_deces,
             d.lieu_deces,
-            d.numero_registre
+            d.numero_registre,
+            ad.code_demande
         FROM naissance n
         INNER JOIN deces d ON n.id = d.id_naissance
         INNER JOIN actes_demande ad ON d.id = ad.id_acte
         WHERE 
-            ad.est_signer = FALSE  
+            ad.est_signer = 1 AND ad.payer =1
             AND d.numero_registre = :numero_registre  
             AND d.date_deces = :evenement_date;
         ");

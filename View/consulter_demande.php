@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 if (isset($_SESSION['actes'])) {
     $certificates = $_SESSION['actes'];
-    unset($_SESSION['actes']);
+    // unset($_SESSION['actes']);
 }
 
 if (isset($_SESSION['erreur'])) {
@@ -55,8 +55,15 @@ if (isset($_SESSION['erreur'])) {
         <div class="acte">
             <strong>Type d'acte :</strong> <?= htmlspecialchars($certificate['type_acte']) ?><br>
             <strong>Statut de la demande :</strong> <?= htmlspecialchars($certificate['statut']) ?><br>
-
-            <?php if (strtolower($certificate['statut']) === 'valider'): ?>
+            <?php 
+            $canPrint = (
+                isset($certificate['statut'], $certificate['est_signer'], $certificate['payer']) &&
+                strtolower($certificate['statut']) === 'valider' &&
+                $certificate['est_signer'] == 1 &&  
+                $certificate['payer'] == 1          
+            );
+            
+            if ($canPrint): ?>
                 <form method="POST" action="impression.php" target="_blank">
                     <input type="hidden" name="code_demande" value="<?= htmlspecialchars($code) ?>">
                     <input type="hidden" name="type_acte" value="<?= htmlspecialchars($certificate['type_acte']) ?>">

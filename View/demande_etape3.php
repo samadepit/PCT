@@ -7,7 +7,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'prenom' => $_POST['prenom'],
         'relation_avec_beneficiaire' => $_POST['relation_avec_beneficiaire'],
         'numero_telephone' => $_POST['numero_telephone'],
-        'email' => $_POST['email']
+        'email' => $_POST['email'],
+        'lieu_residence'=>  $_POST['lieu_residence']
     ];
 
     $_SESSION['actes_restants'] = $_SESSION['actes'];

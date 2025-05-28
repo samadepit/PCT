@@ -38,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <option value="autre">Autre</option>
     </select>
     </label>
+    <label>lieu de residence: <input type="text" name="lieu_residence"required></label>
     <label>Téléphone : <input type="tel" name="numero_telephone"></label>
     <label>Email : <input type="email" name="email"></label>
     <button type="submit">Suivant</button>

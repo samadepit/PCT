@@ -160,11 +160,11 @@ class Naissance
             n.nom_mere, n.prenom_mere, n.profession_mere,
             n.date_mariage, n.lieu_mariage, n.statut_mariage,
             n.date_deces, n.lieu_deces, n.date_creation,
-            n.numero_registre
+            n.numero_registre,ad.code_demande
         FROM naissance n
         INNER JOIN actes_demande ad ON n.id = ad.id_acte
         WHERE 
-            ad.est_signer = FALSE  
+            ad.est_signer = 1  AND ad.payer =1
             AND n.numero_registre = :numero_registre  
             AND n.date_naissance = :evenement_date;
         ");

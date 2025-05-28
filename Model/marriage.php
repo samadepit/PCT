@@ -56,12 +56,14 @@ class Marriage
             homme.nom_beneficiaire AS nom_mari, 
             homme.prenom_beneficiaire AS prenom_mari,
             femme.nom_beneficiaire AS nom_femme, 
-            femme.prenom_beneficiaire AS prenom_femme
+            femme.prenom_beneficiaire AS prenom_femme,
+            ad.code_demande
         FROM mariage m
         INNER JOIN naissance homme ON m.id_naissance_mari = homme.id
         INNER JOIN naissance femme ON m.id_naissance_femme = femme.id
         INNER JOIN actes_demande ad ON m.id = ad.id_acte
-        WHERE ad.est_signer=FALSE and m.numero_registre = :numero_registre AND m.date_mariage = :evenement_date
+        WHERE ad.est_signer=1 AND ad.payer =1
+        and m.numero_registre = :numero_registre AND m.date_mariage = :evenement_date
         ");
         $params=[
             'numero_registre'=>$number_registre,

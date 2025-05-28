@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $_SESSION['actes'] = $actes;
                 $_SESSION['type_acte'] = $type;
+                $_SESSION['code_demande_duplicate']=$actes['code_demande'];
             }
         } catch (Exception $e) {
             $_SESSION['erreur'] = "Erreur : " . $e->getMessage();

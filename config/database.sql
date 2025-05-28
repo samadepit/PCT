@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS demandeur (
     code_demande VARCHAR(50) UNIQUE,
     nom VARCHAR(100) NOT NULL,
     prenom VARCHAR(100) NOT NULL,
-    lieu_residence VARCHAR(255) NOT NULL,
+    lieu_residence VARCHAR(255),
     numero_telephone VARCHAR(15),
     email VARCHAR(100),
     relation_avec_beneficiaire VARCHAR(255),
@@ -94,7 +94,9 @@ CREATE TABLE IF NOT EXISTS actes_demande (
     code_demande VARCHAR(50),
     type_acte ENUM('naissance', 'mariage', 'deces') NOT NULL,
     id_acte INT NOT NULL,
-    est_signer BOOLEAN,
+    est_signer BOOLEAN DEFAULT FALSE,
+    payer BOOLEAN DEFAULT FALSE,
+    signature VARCHAR(255) DEFAULT NULL,
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (code_demande) REFERENCES demande(code_demande)
 );
@@ -104,6 +106,7 @@ CREATE TABLE paiement (
   code_demande VARCHAR(50),
   numero VARCHAR(20),
   code_paiement VARCHAR(8),
+  is_duplicate BOOLEAN DEFAULT FALSE,
   date_creation DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (code_demande) REFERENCES demande(code_demande)
 );

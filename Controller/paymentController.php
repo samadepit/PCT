@@ -11,10 +11,10 @@ class PaymentController
         $this->paymentModel = new Payment();
     }
 
-    public function createPayment(?string $code_demande = null, $numero,$code_paiement)
+    public function createPayment(?string $code_demande = null, $numero,$code_paiement,$is_duplicate)
     {
         try {
-            $result = $this->paymentModel->insert_paiement($code_demande, $numero, $code_paiement);
+            $result = $this->paymentModel->insert_paiement($code_demande, $numero, $code_paiement,$is_duplicate);
             if (!$result) {
                 throw new Exception("Erreur lors de la création du paiement.");
             }

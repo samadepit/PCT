@@ -14,20 +14,21 @@ class Payment
     }
 
 
-    public function insert_paiement($code_demande, $numero, $code_paiement)
+    public function insert_paiement($code_demande, $numero, $code_paiement,$is_duplicate)
     {
         $stmt = $this->con->prepare("
             INSERT INTO paiement (
-                code_demande, numero, code_paiement, date_creation
+                code_demande, numero, code_paiement,is_duplicate,date_creation
             ) VALUES (
-                :code_demande, :numero, :code_paiement, NOW()
+                :code_demande, :numero,:code_paiement,:is_duplicate, NOW()
             )
         ");
         
         return $stmt->execute([
             'code_demande' => $code_demande,
             'numero' => $numero,
-            'code_paiement' => $code_paiement
+            'code_paiement' => $code_paiement,
+            'is_duplicate'=>$is_duplicate
         ]);
     }
 

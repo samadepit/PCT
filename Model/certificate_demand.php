@@ -23,51 +23,57 @@ class certificate_demand
         return true;
     }
 
-    public function mark_demand_signed($id_certificate_demande) {
-        $stmt = $this->con->prepare("
-        UPDATE actes_demande SET signer = 1 WHERE id = :id
-        ");
-        $stmt->execute([':id' => $id_certificate_demande]);
-    }
 
     public function get_Alldemand($code_demand) {
         $stmt = $this->con->prepare("
             SELECT 
             ad.type_acte,
+            ad.payer,
+            ad.est_signer,
+            ad.signature,
             dm.statut,
+            dm.date_creation,
+            dm.localiter,
+    
 
             -- Naissance (si acte = naissance)
             n.nom_beneficiaire, n.prenom_beneficiaire, n.date_naissance, n.lieu_naissance,
             n.nom_pere, n.prenom_pere, n.profession_pere,
             n.nom_mere, n.prenom_mere, n.profession_mere,
-            n.date_creation AS naissance_date_creation,
+            n.date_creation AS naissance_date_creation,n.heure_naissance,n.genre AS naissance_genre,
+            n.date_mariage AS naissance_date_mariage,n.lieu_mariage AS naissance_lieu_mariage,
+            n.statut_mariage AS naissance_statut_mariage,n.date_deces AS naissance_date_deces ,
+            n.lieu_deces AS naissance_lieu_deces,n.numero_registre,
 
             -- Mariage
             mari.date_mariage, mari.lieu_mariage, mari.date_creation AS mariage_date_creation,
             homme.nom_beneficiaire AS nom_mari, homme.prenom_beneficiaire AS prenom_mari,
+            homme.date_naissance AS date_naissance_mari,femme.date_naissance AS date_naissance_femme,
             femme.nom_beneficiaire AS nom_femme, femme.prenom_beneficiaire AS prenom_femme,
+          
 
             -- Décès
             defunt.nom_beneficiaire AS nom_defunt, defunt.prenom_beneficiaire AS prenom_defunt,
+            defunt.date_naissance AS defunt_date_naissance,
             d.lieu_deces, d.date_deces, d.cause, d.genre, d.profession,
             d.date_creation AS deces_date_creation
 
-FROM actes_demande ad
-LEFT JOIN demande dm ON ad.code_demande = dm.code_demande
+            FROM actes_demande ad
+            LEFT JOIN demande dm ON ad.code_demande = dm.code_demande
 
--- Naissance uniquement si type_acte = 'naissance'
-LEFT JOIN naissance n ON ad.type_acte = 'naissance' AND ad.id_acte = n.id
+            -- Naissance uniquement si type_acte = 'naissance'
+            LEFT JOIN naissance n ON ad.type_acte = 'naissance' AND ad.id_acte = n.id
 
--- Mariage uniquement si type_acte = 'mariage'
-LEFT JOIN mariage mari ON ad.type_acte = 'mariage' AND ad.id_acte = mari.id
-LEFT JOIN naissance homme ON mari.id_naissance_mari = homme.id
-LEFT JOIN naissance femme ON mari.id_naissance_femme = femme.id
+            -- Mariage uniquement si type_acte = 'mariage'
+            LEFT JOIN mariage mari ON ad.type_acte = 'mariage' AND ad.id_acte = mari.id
+            LEFT JOIN naissance homme ON mari.id_naissance_mari = homme.id
+            LEFT JOIN naissance femme ON mari.id_naissance_femme = femme.id
 
--- Décès uniquement si type_acte = 'deces'
-LEFT JOIN deces d ON ad.type_acte = 'deces' AND ad.id_acte = d.id
-LEFT JOIN naissance defunt ON d.id_naissance = defunt.id
+            -- Décès uniquement si type_acte = 'deces'
+            LEFT JOIN deces d ON ad.type_acte = 'deces' AND ad.id_acte = d.id
+            LEFT JOIN naissance defunt ON d.id_naissance = defunt.id
 
-WHERE ad.code_demande = :code_demande;
+            WHERE ad.code_demande = :code_demande;
 
 
             ");
@@ -117,7 +123,7 @@ WHERE ad.code_demande = :code_demande;
             LEFT JOIN deces dc ON ad.type_acte = 'deces' AND ad.id_acte = dc.id
             LEFT JOIN naissance def ON dc.id_naissance = def.id
 
-            WHERE d.statut = 'en_attente';
+            WHERE  d.statut='en_attente' and ad.payer=1;
 
         ";
         $stmt = $this->con->prepare($query);
@@ -169,7 +175,50 @@ WHERE ad.code_demande = :code_demande;
         $stmt->execute([$id_certificate]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    public function getAllvalidationActeDemandes($id_certificate) {
+    public function getAllvalidationCertificateDemandes() {
+        $query = "
+            SELECT 
+                ad.id, ad.type_acte, ad.id_acte, ad.code_demande,
+                d.date_creation AS date_demande,
+                dm.nom AS nom_demandeur, dm.prenom AS prenom_demandeur, dm.relation_avec_beneficiaire,
+                dm.numero_telephone AS numero_demandeur, dm.email AS email_demandeur,
+
+                n.nom_beneficiaire, n.prenom_beneficiaire, n.date_naissance, n.lieu_naissance,
+                n.heure_naissance, n.nom_pere, n.prenom_pere, n.profession_pere,
+                n.nom_mere, n.prenom_mere, n.profession_mere,
+                mari.date_mariage, mari.lieu_mariage,
+                mari.numero_registre AS registre_mariage,
+                mari.date_creation AS mariage_date_creation,
+                homme.nom_beneficiaire AS nom_mari,
+                homme.prenom_beneficiaire AS prenom_mari,
+                homme.date_naissance as age_homme,
+                femme.date_naissance as age_femme,
+                femme.nom_beneficiaire AS nom_femme,
+                femme.prenom_beneficiaire AS prenom_femme,
+
+                dc.date_deces, dc.lieu_deces,
+                def.nom_beneficiaire AS nom_defunt,
+                def.prenom_beneficiaire AS prenom_defunt
+
+            FROM actes_demande ad
+
+            INNER JOIN demande d ON ad.code_demande = d.code_demande
+            INNER JOIN demandeur dm ON d.code_demande = dm.code_demande
+
+            LEFT JOIN naissance n ON ad.type_acte = 'naissance' AND ad.id_acte = n.id
+            LEFT JOIN mariage mari ON ad.type_acte = 'mariage' AND ad.id_acte = mari.id
+            LEFT JOIN naissance homme ON mari.id_naissance_mari = homme.id
+            LEFT JOIN naissance femme ON mari.id_naissance_femme = femme.id
+            LEFT JOIN deces dc ON ad.type_acte = 'deces' AND ad.id_acte = dc.id
+            LEFT JOIN naissance def ON dc.id_naissance = def.id
+            WHERE d.statut='valider'  and est_signer= FALSE;
+        ";
+
+        $stmt = $this->con->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function getOnevalidationcetificateByID($id_certificate) {
         $query = "
             SELECT 
                 ad.id, ad.type_acte, ad.id_acte, ad.code_demande,
@@ -206,7 +255,7 @@ WHERE ad.code_demande = :code_demande;
             LEFT JOIN deces dc ON ad.type_acte = 'deces' AND ad.id_acte = dc.id
             LEFT JOIN naissance def ON dc.id_naissance = def.id
 
-            WHERE d.statut=valider and  ad.code_demande = :code_demande;
+            WHERE d.statut='valider' and ad.est_signer=0 and   ad.code_demande = :code_demande;
         ";
 
         $stmt = $this->con->prepare($query);
@@ -214,5 +263,25 @@ WHERE ad.code_demande = :code_demande;
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-
+    public function AddSigning($code_demande, $cheminSignature) {
+        $stmt = $this->con->prepare("
+        UPDATE actes_demande SET est_signer = TRUE, signature = :signature WHERE code_demande = :code
+        ");
+        return $stmt->execute([
+            ':signature' => $cheminSignature,
+            ':code' => $code_demande
+        ]);
+    }
+    public function updatePayment($code_demande) {
+         try {
+        $stmt = $this->con->prepare("
+        UPDATE actes_demande SET payer = 1 WHERE code_demande = :code_demande");
+        $stmt->execute([':code_demande' => $code_demande]);
+        return $stmt->rowCount();
+    } catch (PDOException $e) {
+        error_log("Erreur lors de la mise à jour du paiement: " . $e->getMessage());
+        return false;
+    }
+    }
+   
 }
