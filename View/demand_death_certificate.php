@@ -45,6 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($error)) {
                 case 'deces':
                     header('Location: index.php?controller=demande&action=death_certificate');
                     exit;
+                default:
+                header('Location: index.php?controller=demande&action=final_process');    
             }
         } else {
             header('Location: index.php?controller=demande&action=final_process');
@@ -111,6 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($error)) {
 
         <button type="submit" class="btn btn-primary">Passer à l'acte suivant</button>
         <a href="index.php?controller=demande&action=create_step3" class="btn btn-secondary ms-2">Précédent</a>
+        <a href="index.php?controller=demande&action=final_process" class="btn btn-success ms-2">Continuer</a>
     </form>
 
     <script>

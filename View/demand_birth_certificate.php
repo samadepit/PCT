@@ -1,54 +1,44 @@
 <?php
-require_once __DIR__ . '/../Controller/birthcontroller.php'; // Inclure le contrôleur
 
-$title = "Demande d'Acte de Naissance";
 $error = '';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $naissanceController = new NaissanceController();
-
-    $data = [
-        'nom_beneficiaire' => $_POST['nom_beneficiaire'] ?? '',
-        'prenom_beneficiaire' => $_POST['prenom_beneficiaire'] ?? '',
-        'date_naissance' => $_POST['date_naissance'] ?? '',
-        'heure_naissance' => $_POST['heure_naissance'] ?? '',
-        'genre' => $_POST['genre'] ?? '',
-        'lieu_naissance' => $_POST['lieu_naissance'] ?? '',
-        'nom_pere' => $_POST['nom_pere'] ?? '',
-        'prenom_pere' => $_POST['prenom_pere'] ?? '',
-        'profession_pere' => $_POST['profession_pere'] ?? '',
-        'nom_mere' => $_POST['nom_mere'] ?? '',
-        'prenom_mere' => $_POST['prenom_mere'] ?? '',
-        'profession_mere' => $_POST['profession_mere'] ?? '',
-        'date_mariage' => $_POST['date_mariage'] ?? null,
-        'lieu_mariage' => $_POST['lieu_mariage'] ?? null,
-        'statut_mariage' => $_POST['statut_mariage'] ?? null,
-        'date_deces' => $_POST['date_deces'] ?? null,
-        'lieu_deces' => $_POST['lieu_deces'] ?? null,
+    $_SESSION['donnees_actes']['naissance'] = [
+        'nom' => $_POST['nom_beneficiaire'],
+        'prenom' => $_POST['prenom_beneficiaire'],
+        'date_naissance' => $_POST['date_naissance'],
+        'heure_naissance' => $_POST['heure_naissance'],
+        'genre' => $_POST['genre'],
+        'lieu_naissance' => $_POST['lieu_naissance'],
+        'nom_pere' => $_POST['nom_pere'],
+        'prenom_pere' => $_POST['prenom_pere'],
+        'profession_pere' => $_POST['profession_pere'],
+        'nom_mere' => $_POST['nom_mere'],
+        'prenom_mere' => $_POST['prenom_mere'],
+        'profession_mere' => $_POST['profession_mere'],
+        'date_mariage' => $_POST['date_mariage'] ?: null,
+        'lieu_mariage' => $_POST['lieu_mariage'] ?: null,
+        'statut_mariage' => $_POST['statut_mariage'] ?: null,
+        'date_deces' => $_POST['date_deces'] ?: null,
+        'lieu_deces' => $_POST['lieu_deces'] ?: null,
     ];
 
-    $naissance_id = $naissanceController->creerActeNaissance($data);
-    if ($naissance_id) {
-        $_SESSION['donnees_actes']['naissance'] = $data;
+    if (!empty($_SESSION['actes_restants'])) {
+        $acte_suivant = array_shift($_SESSION['actes_restants']);
 
-        if (!empty($_SESSION['actes_restants'])) {
-            $acte_suivant = array_shift($_SESSION['actes_restants']);
-            switch ($acte_suivant) {
-                case 'mariage':
-                    header('Location: index.php?controller=demande&action=marriage');
-                    exit;
-                case 'deces':
-                    header('Location: index.php?controller=demande&action=death_certificate');
-                    exit;
-            }
-        } else {
-            header('Location: index.php?controller=demande&action=final_process');
-            exit;
+        switch ($acte_suivant) {
+            case 'mariage':
+                header('Location: demand_marriage.php');
+                exit;
+            case 'deces':
+                header('Location: demand_death_certificate.php');
+                exit;
         }
-    } else {
-        $error = "Erreur lors de l'enregistrement de l'acte de naissance.";
     }
+
+    header('Location: traitement_final_demande.php');
+    exit;
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -68,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <li class="list-group-item">Étape 2 : Demandeur</li>
             <li class="list-group-item active bg-primary text-white">
                 Étape 3 :
-                <?php echo htmlspecialchars(implode(', ', $_SESSION['actes_restants'] ?? ['Actes restants'])); ?>
+                <?php echo htmlspecialchars(implode(', ', $_SESSION['actes_restants'] ?? ['Actes restants']));?>
             </li>
         </ul>
 
@@ -80,12 +70,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h3>Bénéficiaire</h3>
             <div class="mb-3">
                 <label for="nom_beneficiaire" class="form-label">Nom</label>
-                <input type="text" class="form-control" id="nom_beneficiaire" name="nom_beneficiaire" required>
+                <input type="text" class="form-control" id="nom_beneficiaire" name="nom" required>
                 <div class="invalid-feedback">Veuillez entrer le nom.</div>
             </div>
             <div class="mb-3">
                 <label for="prenom_beneficiaire" class="form-label">Prénom</label>
-                <input type="text" class="form-control" id="prenom_beneficiaire" name="prenom_beneficiaire" required>
+                <input type="text" class="form-control" id="prenom_beneficiaire" name="prenom" required>
                 <div class="invalid-feedback">Veuillez entrer le prénom.</div>
             </div>
             <div class="mb-3">
@@ -169,7 +159,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="lieu_deces" class="form-label">Lieu de décès</label>
                 <input type="text" class="form-control" id="lieu_deces" name="lieu_deces">
             </div>
-
             <button type="submit" class="btn btn-primary">Passer à l'acte suivant</button>
             <a href="index.php?controller=demande&action=create_step3" class="btn btn-secondary ms-2">Précédent</a>
             <a href="index.php?controller=demande&action=final_process" class="btn btn-success ms-2">Continuer</a>

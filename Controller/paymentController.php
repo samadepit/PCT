@@ -11,7 +11,7 @@ class PaymentController
         $this->paymentModel = new Payment();
     }
 
-    public function createPayment(?string $code_demande = null, $numero,$code_paiement)
+    public function createPayment(?string $code_demande = null, $numero ,$code_paiement)
     {
         try {
             $result = $this->paymentModel->insert_paiement($code_demande, $numero, $code_paiement);

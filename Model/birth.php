@@ -86,8 +86,8 @@ class Naissance
                 AND genre =:genre
                 LIMIT 1");
         $params = [
-            ':nom' => $data['nom'],
-            ':prenom' => $data['prenom'],
+            ':nom' => $data['nom_beneficiaire'],
+            ':prenom' => $data['prenom_beneficiaire'],
             ':date_naissance' => $data['date_naissance'],
             ':lieu_naissance' => $data['lieu_naissance'],
             ':genre' => $data['genre']

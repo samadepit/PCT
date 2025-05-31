@@ -46,8 +46,13 @@
                                 <a class="nav-link text-dark hover:text-primary"
                                     href="index.php?controller=demande&action=demander">Demande</a>
                             </li>
+
+                            <li class="nav-item mx-2">
+                                <a class="nav-link text-dark hover:text-primary"
+                                    href="index.php?controller=demande&action=suivie">Suivie</a>
+                            </li>
                           
-                              <li class="nav-item mx-2">
+                            <li class="nav-item mx-2">
                                 <a class="nav-link text-dark hover:text-primary"
                                     href="index.php?controller=index&action=index">Contact</a>
                             </li>

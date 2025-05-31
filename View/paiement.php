@@ -1,5 +1,4 @@
 <?php 
-session_start();
 
 $type = $_SESSION['actes'] ?? null;
 $montant = 0;
@@ -27,98 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Paiement</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f3f3f3;
-        }
-
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            width: 350px;
-            text-align: center;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-        }
-
-        .price {
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .agregateurs {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-
-        .agregateurs input[type="radio"] {
-            display: none;
-        }
-
-        .agregateurs label {
-            border: 3px solid transparent;
-            border-radius: 10px;
-            padding: 5px;
-            transition: border 0.3s ease;
-        }
-
-        .agregateurs img {
-            width: 80px;
-            height: auto;
-            transition: transform 0.3s ease;
-            border-radius: 8px;
-        }
-
-        .agregateurs label:hover img {
-            transform: scale(1.05);
-        }
-
-        /* Bordure personnalisée selon l'agrégateur */
-        input[type="radio"][value="wave"]:checked + img {
-            border: 3px solid #007BFF; /* Bleu */
-        }
-
-        input[type="radio"][value="orange"]:checked + img {
-            border: 3px solid #FFA500; /* Orange */
-        }
-
-        input[type="tel"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #00aaff;
-            border: none;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background-color: #008ecc;
-        }
-    </style>
+ 
 </head>
 <body>
 
@@ -137,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </label>
         </div>
         <input type="tel" name="numero" placeholder="Numéro de téléphone" required>
-        <button type="submit">Payez</button>
+        <a href="index.php?controller=demande&action=verify_code" class="btn btn-success ms-2" > payer</a>
     </form>
 </div>
 

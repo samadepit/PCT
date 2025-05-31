@@ -17,7 +17,7 @@
                 <h1 class="text-center  fw-bold display-4 mb-4">Bienvenue sur le site officiel de notre mairie</h1>
                 <p class="lead mb-5"> Au service des citoyens et du développement de notre territoire</p>
                 <div class="d-flex gap-3 mb-4">
-                    <a href="index.php?controller=demande&action=index" class="btn btnprimary">Faire une demande</a>
+                    <a href="index.php?controller=demande&action=demander" class="btn btnprimary">Faire une demande</a>
                     <a href="index.php?controller=demandeur&action=index" class="btn btnsecondary">Suivre une
                         demande</a>
 

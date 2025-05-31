@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 require_once __DIR__ . '/../Controller/paymentController.php';
 require_once __DIR__ . '/../Controller/birthController.php';
 require_once __DIR__ . '/../Controller/marriageController.php';
@@ -119,63 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code_paiement'])) {
 <head>
     <meta charset="UTF-8">
     <title>Vérification du paiement</title>
-    <style>
-        body {
-            background-color: #f1f1f1;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .container {
-            background-color: white;
-            padding: 30px 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            text-align: center;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        input[type="text"] {
-            padding: 10px;
-            width: 100%;
-            margin-top: 15px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-        }
-
-        button {
-            background-color: #3498db;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #2980b9;
-        }
-
-        .message {
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        .message.success {
-            color: green;
-        }
-
-        .message.error {
-            color: red;
-        }
-    </style>
+   
 </head>
 <body>
     <div class="container">

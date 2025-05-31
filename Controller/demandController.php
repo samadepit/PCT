@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once __DIR__ . '/../Model/demand.php';
 require_once __DIR__ . '/birthController.php';
 require_once __DIR__ . '/deathController.php';
@@ -19,8 +19,7 @@ class DemandeController
         $this->naissanceController = new NaissanceController();
         $this->decesController = new DecesController();
         $this->mariageController = new MarriageController();
-        
-     session_start();
+       
     }
 
     public function creer_demande($localiter)
@@ -137,5 +136,29 @@ class DemandeController
     {
         $title = "Traitement Final de la Demande";
         require_once __DIR__ . '/../View/traitement_final_demande.php';
+    }
+
+    public function paiement()
+    {
+        $title = "Paiement";
+        require_once __DIR__ . '/../View/paiement.php';
+    }
+
+    public function verify_code()
+    {
+        $title = "verify_code";
+        require_once __DIR__ . '/../View/verify_code.php';
+    }
+
+    public function duplicata()
+    {
+        $title = "duplicata";
+        require_once __DIR__ . '/../View/faire_un_duplicata.php';
+    }
+
+    public function suivie()
+    {
+        $title = "suive";
+        require_once __DIR__ . '/../View/consulter_demande.php';
     }
 }
