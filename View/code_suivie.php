@@ -98,8 +98,12 @@ $messagePrincipal = "Merci ! Votre demande a été enregistrée.";
                 </div>
             <?php endif; ?>
 
-            <button class="print-button" onclick="window.print()">Imprimer cette confirmation</button>
-            <p>Conservez précieusement ce code pour suivre votre demande.</p>
+                <button class="print-button" onclick="window.print()">Imprimer cette confirmation</button>
+                <form action="dashboard.php" method="get" style="margin-top: 1rem;">
+                    <button type="submit" class="print-button">🏠 Retour à l’accueil</button>
+                </form>
+
+                <p>Conservez précieusement ce code pour suivre votre demande.</p>
 
         <?php else: ?>
             <div class="card" style="border-left: 4px solid #e74c3c;">

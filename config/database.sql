@@ -81,9 +81,9 @@ CREATE TABLE IF NOT EXISTS administration (
     prenom VARCHAR(100) NOT NULL,
     numero_telephone VARCHAR(15),
     profession VARCHAR(100),
-    email VARCHAR(100),
+    email VARCHAR(255) NOT NULL UNIQUE,
     role ENUM('agent', 'officier') NOT NULL,
-    mot_de_passe VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     statut ENUM('actif', 'inactif') DEFAULT 'actif',
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (code_demande) REFERENCES demande(code_demande) ON DELETE SET NULL
@@ -95,10 +95,15 @@ CREATE TABLE IF NOT EXISTS actes_demande (
     type_acte ENUM('naissance', 'mariage', 'deces') NOT NULL,
     id_acte INT NOT NULL,
     est_signer BOOLEAN DEFAULT FALSE,
-    payer BOOLEAN DEFAULT FALSE,
     signature VARCHAR(255) DEFAULT NULL,
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    payer BOOLEAN DEFAULT FALSE,
+    id_agent INT DEFAULT NULL,
+    id_officier INT DEFAULT NULL,
+    date_signature TIMESTAMP DEFAULT NULL,
     FOREIGN KEY (code_demande) REFERENCES demande(code_demande)
+    FOREIGN KEY (id_agent) REFERENCES administration(id) ON DELETE SET NULL
+    FOREIGN KEY (id_officier) REFERENCES administration(id) ON DELETE SET NULL
 );
 
 CREATE TABLE paiement (

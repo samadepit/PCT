@@ -18,6 +18,7 @@ class SigningController {
         try {
             $codeDemande = $_POST['code_demande'] ?? '';
             $signatureData = $_POST['signature'] ?? '';
+            $id=$_POST['id'] ??'';
             
             if (empty($codeDemande) || empty($signatureData)) {
                 throw new Exception("Données manquantes");
@@ -25,6 +26,7 @@ class SigningController {
             
             $filePath = $this->saveSignatureImage($signatureData);
             $success = $this->demandeModel->AddSigning($codeDemande, $filePath);
+            $result= $this->demandeModel->SigningByOfficer($id,$codeDemande);
             
             if (!$success) {
                 throw new Exception("Échec de l'enregistrement");

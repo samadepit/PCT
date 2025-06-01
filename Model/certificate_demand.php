@@ -34,7 +34,12 @@ class certificate_demand
             dm.statut,
             dm.date_creation,
             dm.localiter,
-    
+            ad.code_demande,
+            dm.motif_rejet,
+
+            -- Information de l'officier d'état civil
+            adm.nom AS officier_nom,
+            adm.prenom AS officier_prenom,
 
             -- Naissance (si acte = naissance)
             n.nom_beneficiaire, n.prenom_beneficiaire, n.date_naissance, n.lieu_naissance,
@@ -47,6 +52,7 @@ class certificate_demand
 
             -- Mariage
             mari.date_mariage, mari.lieu_mariage, mari.date_creation AS mariage_date_creation,
+            mari.nombre_enfant,
             homme.nom_beneficiaire AS nom_mari, homme.prenom_beneficiaire AS prenom_mari,
             homme.date_naissance AS date_naissance_mari,femme.date_naissance AS date_naissance_femme,
             femme.nom_beneficiaire AS nom_femme, femme.prenom_beneficiaire AS prenom_femme,
@@ -54,12 +60,15 @@ class certificate_demand
 
             -- Décès
             defunt.nom_beneficiaire AS nom_defunt, defunt.prenom_beneficiaire AS prenom_defunt,
-            defunt.date_naissance AS defunt_date_naissance,
+            defunt.date_naissance AS defunt_date_naissance,defunt.lieu_naissance AS defunt_lieu_naissance,
             d.lieu_deces, d.date_deces, d.cause, d.genre, d.profession,
             d.date_creation AS deces_date_creation
 
             FROM actes_demande ad
             LEFT JOIN demande dm ON ad.code_demande = dm.code_demande
+
+            LEFT JOIN administration adm ON ad.id_officier = adm.id
+
 
             -- Naissance uniquement si type_acte = 'naissance'
             LEFT JOIN naissance n ON ad.type_acte = 'naissance' AND ad.id_acte = n.id
@@ -74,7 +83,6 @@ class certificate_demand
             LEFT JOIN naissance defunt ON d.id_naissance = defunt.id
 
             WHERE ad.code_demande = :code_demande;
-
 
             ");
         $stmt->execute([':code_demande' => $code_demand]);
@@ -282,6 +290,90 @@ class certificate_demand
         error_log("Erreur lors de la mise à jour du paiement: " . $e->getMessage());
         return false;
     }
+    }
+
+    public function ValidateByAgent($id_agent,$code_demand) {
+        $query = "
+        UPDATE actes_demande SET id_agent = ? WHERE code_demande = ?";
+        $stmt = $this->con->prepare($query);
+        return $stmt->execute([$id_agent,$code_demand]);
+    }
+
+    public function SigningByOfficer($id_officier,$code_demand) {
+        $query = "
+        UPDATE actes_demande SET id_officier = ?, date_signature = NOW() WHERE code_demande = ?";
+        $stmt = $this->con->prepare($query);
+        return $stmt->execute([$id_officier,$code_demand]);
+    }
+
+    public function getNumberBirth() {
+        $stmt = $this->con->prepare("
+            SELECT COUNT(*) AS total_birth
+            FROM actes_demande 
+            WHERE type_acte = 'naissance'
+        ");
+        $stmt->execute();
+        return (int)$stmt->fetchColumn();
+    }
+
+    public function getNumberDeath() {
+        $stmt = $this->con->prepare("
+            SELECT COUNT(*) AS total_death
+            FROM actes_demande 
+            WHERE type_acte = 'deces'
+        ");
+        $stmt->execute();
+        return (int)$stmt->fetchColumn();
+    }
+
+    public function getNumberMarriage() {
+        $stmt = $this->con->prepare("
+            SELECT COUNT(*) AS total_marriage
+            FROM actes_demande 
+            WHERE type_acte = 'mariage'
+        ");
+        $stmt->execute();
+        return (int)$stmt->fetchColumn();
+    }
+    public function getNumbercertificatePending() {
+        $stmt = $this->con->prepare("
+            SELECT COUNT(*) AS total_pending
+            FROM demande d
+            INNER JOIN actes_demande ad on d.code_demande = ad.code_demande
+            WHERE statut = 'en_attente' and payer=1
+        ");
+        $stmt->execute();
+        return (int)$stmt->fetchColumn();
+    }
+    public function getNumbercertificateValidate() {
+        $stmt = $this->con->prepare("
+            SELECT COUNT(*) AS total_validate
+            FROM demande d
+            INNER JOIN actes_demande ad on d.code_demande = ad.code_demande
+            WHERE statut = 'valider' and payer=1
+        ");
+        $stmt->execute();
+        return (int)$stmt->fetchColumn();
+    }
+    public function getNumbercertificateRejeted() {
+        $stmt = $this->con->prepare("
+            SELECT COUNT(*) AS total_rejeted
+            FROM demande d
+            INNER JOIN actes_demande ad on d.code_demande = ad.code_demande
+            WHERE statut = 'rejeter' and payer=1
+        ");
+        $stmt->execute();
+        return (int)$stmt->fetchColumn();
+    }
+    public function getNumbercertificate() {
+        $stmt = $this->con->prepare("
+            SELECT COUNT(*) AS total_certificate
+            FROM demande d
+            INNER JOIN actes_demande ad on d.code_demande = ad.code_demande
+            WHERE  payer=1
+        ");
+        $stmt->execute();
+        return (int)$stmt->fetchColumn();
     }
    
 }

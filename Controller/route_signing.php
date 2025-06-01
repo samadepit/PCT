@@ -10,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Appel de la méthode du contrôleur pour enregistrer la signature
     $controller = new SigningController();
     $result = $controller->enregistrerSignature($codeDemande, $signatureData);
 

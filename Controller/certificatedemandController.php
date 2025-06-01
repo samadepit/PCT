@@ -41,6 +41,27 @@ class ActeDemandeController
         error_log("Résultat de la mise à jour: " . ($result ? "succès" : "échec"));
         return $result;
     }
+
+    public function ValidateByAgent($id_agent,$code_demand) {
+        $result = $this->actedemandeModel->ValidateByAgent($id_agent,$code_demand);
+
+    }
     
+    public function SigningByOfficer($id_officier,$code_demand,) {
+        $result = $this->actedemandeModel->ValidateByAgent($id_officier,$code_demand);
+    }
+    
+    public function getStatistics()
+    {
+        return [
+            'birth' => $this->actedemandeModel->getNumberBirth(),
+            'death' => $this->actedemandeModel->getNumberDeath(),
+            'marriage' => $this->actedemandeModel->getNumberMarriage(),
+            'pending' => $this->actedemandeModel->getNumbercertificatePending(),
+            'validated' => $this->actedemandeModel->getNumbercertificateValidate(),
+            'rejeted' => $this->actedemandeModel->getNumbercertificateRejeted(),
+            'total_certificate'=>$this->actedemandeModel->getNumbercertificate(),
+        ];
+    }
 
 }
