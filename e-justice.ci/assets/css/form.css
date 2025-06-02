@@ -1,0 +1,344 @@
+*{
+    color: #000;
+  }
+
+  a{
+    cursor: pointer;
+  }
+
+  #card_cni{
+    opacity: 0;
+  }
+
+  #card_nni_parent{
+    opacity: 0;
+  }
+
+  #card_cni_spouse{
+    opacity: 0;
+  }
+
+  input:focus {
+      outline: 2px solid #F77F00;  /* Ajoute un outline orange d'épaisseur 2px */
+  }
+
+  li.select2-results__option--selected[aria-selected="true"]::after {
+      content: "✔"; /* Le caractère de check, vous pouvez le remplacer par une autre icône ou une image */
+      color: #fff; /* Couleur du check */
+      margin-left: 8px; /* Espacement entre le check et le texte */
+      font-size: 1rem; /* Ajustez la taille du check selon vos besoins */
+      display: inline-block; /* Assure que le check est en ligne avec le texte */
+  }
+
+  .square_orange{
+    margin: 3.5px 0;
+    right: 2%;
+    position: absolute;
+    background-color: #F77F00;
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    box-shadow: 0px 4px 20px 0px #FF98111A
+  }
+
+  #card_nni{
+    opacity: 0;
+  }
+
+  #card_nni_spouse{
+    opacity: 0;
+  }
+      @keyframes zoomIn {
+        from {
+          transform: scale(1);
+        }
+        to {
+          transform: scale(1.1);
+        }
+      }
+
+      #card-piece .type_piece:hover h5{
+        font-size: 23px !important;
+        font-weight: 700 !important;
+        animation: zoomIn 0.3s forwards;
+      }
+
+      #card-piece-parent .type_piece:hover h5{
+        font-size: 23px !important;
+        font-weight: 700 !important;
+        animation: zoomIn 0.3s forwards;
+      }
+
+      #card-piece-spouse .type_piece:hover h5{
+        font-size: 23px !important;
+        font-weight: 700 !important;
+        animation: zoomIn 0.3s forwards;
+      }
+
+      /* input[type="checkbox"] {
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+      margin-right: 5px;
+      background-color: #D9D9D9;
+      outline: none;
+      appearance:none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      position: relative;
+  } */
+
+
+  .swal2-icon.swal2-info.swal2-icon-show{
+      border-color: #F77F00 !important;
+  }
+
+  .swal2-icon-content{
+      color: #F77F00 !important;
+  }
+
+  .swal2-title{
+      color: black !important;
+  }
+
+
+  input[type="number"]#applicant_nni, input[type="text"]#applicant_cni{
+    background: rgb(255 255 255) !important;
+    border: 1px solid #F77F00;
+    height: 45px;
+  }
+
+  /* input[type="checkbox"]:before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    bottom: 2px;
+    left: 2px;
+    border-radius: 100%;
+  } */
+
+  input[type="checkbox"]#radio_orange:checked:before{
+    background-color: orange;
+  }
+
+  input[type="checkbox"]#radio_vert:checked:before{
+    background-color: green;
+  }
+
+  input[type="checkbox"]#radio_orange_spouse:checked:before{
+    background-color: orange;
+  }
+
+  input[type="checkbox"]#radio_vert_spouse:checked:before{
+    background-color: green;
+  }
+
+  input[type="checkbox"]#radio_orange_parent:checked:before{
+    background-color: orange;
+  }
+
+  input[type="checkbox"]#radio_vert_parent:checked:before{
+    background-color: green;
+  }
+
+
+    label{
+      color: #000;
+    }
+
+    input:focus{
+      box-shadow: none !important;
+    }
+
+    .content-space-lg-3{
+      padding-top: 6.8rem !important
+    }
+
+    input[type=radio]{
+          background-image: none !important;
+      }
+      input[name="id_type_cni"][value="orange"].form-check-input:checked {
+          background-color: #f6a001 !important;
+          border: 3px solid #d1d1d1 !important;
+      }
+      input[name="id_type_cni"][value="green"].form-check-input:checked {
+          background-color: green !important;
+          border: 3px solid #d1d1d1 !important;
+      }
+
+      input[name="id_type_cni_parent"][value="orange"].form-check-input:checked {
+        background-color: #f6a001 !important;
+        border: 3px solid #d1d1d1 !important;
+    }
+    input[name="id_type_cni_parent"][value="green"].form-check-input:checked {
+        background-color: green !important;
+        border: 3px solid #d1d1d1 !important;
+    }
+
+      input[name="id_type_cni_spouse"][value="orange"].form-check-input:checked {
+          background-color: #f6a001 !important;
+          border: 3px solid #d1d1d1 !important;
+      }
+      input[name="id_type_cni_spouse"][value="green"].form-check-input:checked {
+          background-color: green !important;
+          border: 3px solid #d1d1d1 !important;
+      }
+      input[name="have_cni"][value="0"]:checked {
+          background-color: #f6a001 !important;
+          border: 3px solid #d1d1d1 !important;
+      }
+      input[name="have_cni"][value="1"]:checked {
+          background-color: green !important;
+          border: 3px solid #d1d1d1 !important;
+      }
+      input[name="spouse_have_cni"][value="0"]:checked {
+          background-color: #f6a001 !important;
+          border: 3px solid #d1d1d1 !important;
+      }
+      input[name="spouse_have_cni"][value="1"]:checked {
+          background-color: green !important;
+          border: 3px solid #d1d1d1 !important;
+      }
+
+      input[name="spouse_jurisdiction"][value="0"]:checked {
+          background-color: #f6a001 !important;
+          border: 3px solid #d1d1d1 !important;
+      }
+      input[name="spouse_jurisdiction"][value="1"]:checked {
+          background-color: green !important;
+          border: 3px solid #d1d1d1 !important;
+      }
+
+      input[name="parent_have_cni"][value="0"]:checked {
+        background-color: #f6a001 !important;
+        border: 3px solid #d1d1d1 !important;
+    }
+    input[name="parent_have_cni"][value="1"]:checked {
+        background-color: green !important;
+        border: 3px solid #d1d1d1 !important;
+    }
+
+    input[name="parent_jurisdiction"][value="0"]:checked {
+        background-color: #f6a001 !important;
+        border: 3px solid #d1d1d1 !important;
+    }
+    input[name="parent_jurisdiction"][value="1"]:checked {
+        background-color: green !important;
+        border: 3px solid #d1d1d1 !important;
+    }
+
+      input[name="have_pnd"][value="1"]:checked {
+          background-color: #f6a001 !important;
+          border: 3px solid #d1d1d1 !important;
+      }
+      input[name="have_pnd"][value="0"]:checked {
+          background-color: green !important;
+          border: 3px solid #d1d1d1 !important;
+      }
+
+      .form-check-input {
+          background-color: #d1d1d1 !important;
+      }
+      .form-check-input {
+          width: 12px !important;
+          height: 12px !important;
+      }
+
+  .nav-pills .nav-link:hover, .nav-pills .nav-link.active:hover{
+    background: none
+  }
+
+
+  .nav-pills .nav-link{
+    font-size: 20px
+  }
+
+    .nav .nav-item button.active {
+    background-color: transparent;
+    color: #F6A001 !important;
+  }
+
+
+  .nav.nav-pills{
+    border-bottom: none !important;
+  }
+  .nav .nav-item button.active::after {
+    content: "";
+    border-bottom: 3px solid #F77F00;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    border-radius: 5px 5px 0 0;
+    transition: width 0.3s ease-out, left 0.3s ease-out;
+  }
+
+  .nav-pills .nav-link:hover {
+    color: #bdc5d1;
+  }
+
+  .select2-container--default .select2-selection--single {
+              position: relative !important;
+              padding: 1.3rem 1rem !important; /* Correspond à px-4 py-[0.4rem] */
+              margin: 0.5rem 0 !important; /* Correspond à my-2 */
+              display: flex !important;
+              align-items: center !important;
+              text-overflow: ellipsis !important;
+              white-space: nowrap !important;
+              overflow: hidden !important;
+              background-color: #F1F2FA !important; /* Correspond à bg-white */
+              border: none !important; /* Correspond à border-[#F77F00] */
+              border-radius: 0.5rem !important; /* Correspond à rounded-lg */
+              color: #000000 !important; /* Couleur du texte */
+              font-size: 0.875rem !important; /* Correspond à text-sm */
+              cursor: pointer !important;
+          }
+
+          .select2-container--default .select2-selection--single .select2-selection__rendered {
+              color: #000000 !important; /* Couleur du texte */
+          }
+
+          .select2-container--default .select2-selection--single .select2-selection__arrow {
+              position: absolute !important;
+              right: 0.5rem !important;
+              top: 50% !important;
+              transform: translateY(-50%) !important;
+              z-index: 1 !important;
+          }
+
+          .select2-container--default .select2-results__option {
+              padding: 0.5rem 1rem !important; /* Padding similaire à Tailwind */
+
+          }
+
+          .select2-container--default .select2-selection--single:before {
+              content: '' !important;
+              position: absolute !important;
+              inset: 0 !important;
+              z-index: 1 !important;
+          }
+
+          .select2-dropdown.select2-dropdown--below{
+              background: #F1F2FA;
+              box-shadow: 1px 3px 10px #0000004d !important;
+              border: none !important;
+          }
+
+          .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+              background-color: #F77F00 !important;
+          }
+
+          .select2-container--default .select2-search--dropdown .select2-search__field {
+              background: #fff;
+              border: 1px solid #ced0de  !important;
+          }
+          .select2-container--default .select2-search--dropdown .select2-search__field:focus,
+          .select2-container--default .select2-search--dropdown .select2-search__field:focus-visible {
+              outline: none !important; /* Enlever le contour de focus */
+              box-shadow: none !important; /* Enlever la ombre de focus, si nécessaire */
+          }
+
+          .select2-container--default .select2-selection--single .select2-selection__clear {
+              z-index: 1;
+          }

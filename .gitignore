@@ -1,0 +1,18 @@
+# View/demande_naissance.php
+# Model/certificate_demand.php
+# Model/deces.php
+# Model/mariage.php
+# Model/certificate_demand.php
+# Model/demandeur.php
+config/dbconnect.php
+Controller/cerificate_duplicateController.php
+Controller/index.php
+Model/index.php
+# Controller
+# Model
+View/essaie_feature_demande_naissance.php
+View/verify_code.php
+*:Zone.Identifier
+e-justice.ci
+signatures/*
+!signatures/.gitkeep
