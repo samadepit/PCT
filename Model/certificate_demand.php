@@ -335,6 +335,7 @@ class certificate_demand
         $stmt->execute();
         return (int)$stmt->fetchColumn();
     }
+    
     public function getNumbercertificatePending() {
         $stmt = $this->con->prepare("
             SELECT COUNT(*) AS total_pending
@@ -345,6 +346,7 @@ class certificate_demand
         $stmt->execute();
         return (int)$stmt->fetchColumn();
     }
+
     public function getNumbercertificateValidate() {
         $stmt = $this->con->prepare("
             SELECT COUNT(*) AS total_validate
@@ -355,6 +357,7 @@ class certificate_demand
         $stmt->execute();
         return (int)$stmt->fetchColumn();
     }
+
     public function getNumbercertificateRejeted() {
         $stmt = $this->con->prepare("
             SELECT COUNT(*) AS total_rejeted
@@ -365,6 +368,7 @@ class certificate_demand
         $stmt->execute();
         return (int)$stmt->fetchColumn();
     }
+
     public function getNumbercertificate() {
         $stmt = $this->con->prepare("
             SELECT COUNT(*) AS total_certificate
@@ -375,5 +379,18 @@ class certificate_demand
         $stmt->execute();
         return (int)$stmt->fetchColumn();
     }
-   
+
+    public function getNumbercertificateSigned() {
+        $stmt = $this->con->prepare("
+            SELECT COUNT(*) AS total_certificate_signed
+            FROM demande d
+            INNER JOIN actes_demande ad on d.code_demande = ad.code_demande
+            WHERE  statut = 'valider' and payer=1 and est_signer=1
+        ");
+        $stmt->execute();
+        return (int)$stmt->fetchColumn();
+    }
+
 }
+
+
