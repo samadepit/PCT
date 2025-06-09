@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'numero_telephone' => $_POST['numero_telephone'] ?? '',
         'profession' => $_POST['profession'] ?? '',
         'email' => $_POST['email'] ?? '',
-        'mot_de_passe' => $_POST['mot_de_passe'] ?? '',
+        'password' => $_POST['password'] ?? '',
         'role' => $_POST['role'] ?? '',
         'statut' => $_POST['statut'] ?? '',
     ];
@@ -179,8 +179,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="email" name="email" required autocomplete="off">
         </div>
         <div class="form-group">
-            <label for="mot_de_passe">Mot de passe</label>
-            <input type="password" name="mot_de_passe" required autocomplete="new-password">
+            <label for="password">Mot de passe</label>
+            <input type="password" name="password" required autocomplete="new-password">
         </div>
         <div class="form-group">
             <label for="role">Rôle</label>

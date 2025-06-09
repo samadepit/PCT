@@ -91,8 +91,8 @@ class User
     }
 
     public function InsertAdministrationUser($data) {
-        $query = "INSERT INTO administration (nom, prenom, numero_telephone, profession, email, mot_de_passe, role, statut, date_creation) 
-                  VALUES (:nom, :prenom, :numero_telephone, :profession, :email, :mot_de_passe, :role, :statut, NOW())";
+        $query = "INSERT INTO administration (nom, prenom, numero_telephone, profession, email, password, role, statut, date_creation) 
+                  VALUES (:nom, :prenom, :numero_telephone, :profession, :email, :password, :role, :statut, NOW())";
     
         $stmt = $this->con->prepare($query);
         $params = [
@@ -101,7 +101,7 @@ class User
             ':numero_telephone' => $data['numero_telephone'],
             ':profession' => $data['profession'],
             ':email' => $data['email'],
-            ':mot_de_passe' => $data['mot_de_passe'],
+            ':password' => $data['password'],
             ':role' => $data['role'],
             ':statut' => $data['statut'],
         ];
