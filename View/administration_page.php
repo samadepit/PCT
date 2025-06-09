@@ -4,7 +4,7 @@ require_once __DIR__ . '/../Controller/UserController.php';
 $actedemandeController = new ActeDemandeController();
 $userController= new UserController();
 $demandes = $actedemandeController->getAllvalidationCertificate();
-// $id = $_GET['id'] ?? null;
+$id = $_GET['id'] ?? null;
 $stats = $actedemandeController->getStatistics();
 $userstats=$userController->getStatisticsAdministration();
 $usersadministration=$userController->getAllAdministration();
@@ -324,6 +324,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ac
 
         <!-- Tableau des demandes -->
         <div class="card">
+        <div style="text-align: right; margin-bottom: 15px;">
+            <a href="create_user.php" class="btn btn-green">➕ Ajouter un utilisateur</a>
+        </div>
             <table>
                 <thead>
                     <tr>

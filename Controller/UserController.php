@@ -30,6 +30,11 @@ class UserController
         return $result;
     }
 
-
+    public function createAdministrationUser($data) {
+        $result=$this->userModel->InsertAdministrationUser($data);
+        return $result;
+    }
+    
+    
 
 }

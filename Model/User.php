@@ -89,4 +89,29 @@ class User
             $stmt->execute();
             return (int)$stmt->fetchColumn();
     }
+
+    public function InsertAdministrationUser($data) {
+        $query = "INSERT INTO administration (nom, prenom, numero_telephone, profession, email, mot_de_passe, role, statut, date_creation) 
+                  VALUES (:nom, :prenom, :numero_telephone, :profession, :email, :mot_de_passe, :role, :statut, NOW())";
+    
+        $stmt = $this->con->prepare($query);
+        $params = [
+            ':nom' => $data['nom'],
+            ':prenom' => $data['prenom'],
+            ':numero_telephone' => $data['numero_telephone'],
+            ':profession' => $data['profession'],
+            ':email' => $data['email'],
+            ':mot_de_passe' => $data['mot_de_passe'],
+            ':role' => $data['role'],
+            ':statut' => $data['statut'],
+        ];
+
+        try {
+            $stmt->execute($params);
+            return $this->con->lastInsertId();
+        } catch (Exception $e) {
+            error_log("Erreur insertion naissance : " . $e->getMessage());
+            return false;
+        }
+    }
 }

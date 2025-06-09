@@ -18,6 +18,9 @@ switch ($page) {
     case 'dashboardAgent':
         $controller->dashboardAgent();
         break;
+    case 'dashboardAdministrator':
+        $controller->dashboardAdministrator();
+        break;
     case 'logout':
         $controller->logout();
         break;
