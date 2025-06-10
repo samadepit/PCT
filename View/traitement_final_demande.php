@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['modifier_type'])) {
                                 <fieldset>
                                     <ul>
                                         <?php foreach ($certificate as $cle => $val): ?>
-                                            <li><strong><?= htmlspecialchars($cle) ?>:</strong> <?= htmlspecialchars($val) ?></li>
+                                            <li><strong><?= htmlspecialchars($cle) ?>:</strong> <?= htmlspecialchars($val  ?? '') ?></li>
                                         <?php endforeach; ?>
                                     </ul>
                                 </fieldset>

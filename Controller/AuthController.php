@@ -22,12 +22,22 @@ class AuthController
                 $_SESSION['user'] = $user;
                 $userId = $user['id'];
 
-                if ($user['role'] === 'officier') {
-                    header("Location: index.php?page=dashboard&id=$userId");
-                } else {
-                    header("Location: index.php?page=dashboardAgent&id=$userId");
+                if ($user['statut'] === 'actif') {
+                    $dashboards = [
+                        'officier' => 'dashboard',
+                        'agent' => 'dashboardAgent',
+                        'admin' => 'dashboardAdministrator'
+                    ];
+                
+                    if (isset($dashboards[$user['role']])) {
+                        $page = $dashboards[$user['role']];
+                        header("Location: index.php?page={$page}&id=$userId");
+                        exit;
+                    }
+                } else{
+                    $error = "Identifiants invalides vous n'êtes plus autorisé";
+                    require_once __DIR__ . '/../View/login.php';
                 }
-                exit;
             } else {
                 $error = "Identifiants invalides";
                 require_once __DIR__ . '/../View/login.php';
@@ -60,5 +70,15 @@ class AuthController
         session_destroy();
         header('Location: index.php?page=login');
         exit;
+    }
+
+    public function dashboardAdministrator()
+    {
+        if (!isset($_SESSION['user'])) {
+            header('Location: index.php?page=login');
+            exit;
+        }
+
+        require_once __DIR__ . '/../View/administration_page.php';
     }
 }
