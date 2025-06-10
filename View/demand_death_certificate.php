@@ -1,8 +1,7 @@
-<?php
+<?php 
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validation serveur simple (exemple : nom ou prénom vide malgré le required HTML)
     if (empty($_POST['nom_defunt']) || empty($_POST['prenom_defunt'])) {
         $_SESSION['error'] = "Le nom et le prénom du défunt sont requis.";
         header("Location: " . $_SERVER['PHP_SELF']);
@@ -15,10 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'date_naissance' => $_POST['date_naissance'],
         'lieu_naissance' => $_POST['lieu_naissance'],
         'genre' => $_POST['genre'],
+        'profession' => $_POST['profession'],
         'date_deces' => $_POST['date_deces'],
         'lieu_deces' => $_POST['lieu_deces'],
-        'cause' => $_POST['cause'],
-        'profession' => $_POST['profession']
+        'cause' => $_POST['cause']
     ];
 
     if (!empty($_SESSION['actes_restants'])) {
@@ -36,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -287,7 +287,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="col form-group">
                 <label>Lieu de décès</label>
-                <input type="text" name="lieu_deces" required>
+                <input type="text" name="lieu_deces" value="Ouangolodougou" readonly required>
             </div>
             <div class="col form-group">
                 <label>Cause du décès</label>

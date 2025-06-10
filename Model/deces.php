@@ -11,10 +11,13 @@ class Deces
         $this->con = $db->getConnection();
     }
 
-    public function insert_data_death_certificate(array $data,$birth_id) {
+    public function insert_data_death_certificate(array $data) {
         $stmt = $this->con->prepare("
             INSERT INTO deces (
-                id_naissance,
+                nom_defunt,
+                prenom_defunt,
+                date_naissance,
+                lieu_naissance,
                 date_deces,
                 lieu_deces,
                 cause,
@@ -22,7 +25,10 @@ class Deces
                 profession,
                 date_creation
             ) VALUES (
-                :id_naissance,
+                :nom_defunt,
+                :prenom_defunt,
+                :date_naissance,
+                :lieu_naissance,
                 :date_deces,
                 :lieu_deces,
                 :cause,
@@ -31,40 +37,46 @@ class Deces
                 NOW()
             )
         ");
+    
         $params = [
-            'id_naissance' => $birth_id ,
-            'date_deces' => $data['date_deces'] ,
-            'lieu_deces' => $data['lieu_deces'] ,
-            'cause' => $data['cause'] ?? null,
-            'genre' => $data['genre'],
-            'profession' => $data['profession']
+            'nom_defunt'     => $data['nom_defunt'],
+            'prenom_defunt'  => $data['prenom_defunt'],
+            'date_naissance' => $data['date_naissance'],
+            'lieu_naissance' => $data['lieu_naissance'],
+            'date_deces'     => $data['date_deces'],
+            'lieu_deces'     => $data['lieu_deces'],
+            'cause'          => $data['cause'] ?? null,
+            // 'nom_pere'       => $data['nom_pere'],
+            // 'prenom_pere'    => $data['prenom_pere'],
+            'genre'          => $data['genre'],
+            'profession'     => $data['profession']
         ];
-
+    
         try {
             $stmt->execute($params);
-            return  $this->con->lastInsertId();
+            return $this->con->lastInsertId();
         } catch (Exception $e) {
             error_log("Erreur insertion dans deces : " . $e->getMessage());
             return false;
         }
     }
+    
     public function getCertificateDeathDuplicate($number_registre,$death_date){
         $stmt = $this->con->prepare("
         SELECT 
-            n.nom_beneficiaire,
-            n.prenom_beneficiaire,
-            n.date_naissance,
-            d.date_deces,
-            d.lieu_deces,
-            d.numero_registre,
-            ad.code_demande
-        FROM naissance n
-        INNER JOIN deces d ON n.id = d.id_naissance
-        INNER JOIN actes_demande ad ON d.id = ad.id_acte
-        WHERE 
-            ad.est_signer = 1 AND ad.payer =1
-            AND d.numero_registre = :numero_registre  
-            AND d.date_deces = :evenement_date;
+        d.nom_defunt,
+        d.prenom_defunt,
+        d.date_naissance,
+        d.date_deces,
+        d.lieu_deces,
+        ad.code_demande
+    FROM deces d
+    INNER JOIN actes_demande ad ON ad.id_acte = d.id AND ad.type_acte = 'deces'
+    WHERE 
+        ad.est_signer = 1 
+        AND ad.payer = 1
+        AND d.date_deces = :evenement_date;
+
         ");
         $params=[
             'numero_registre'=>$number_registre,
@@ -78,4 +90,39 @@ class Deces
             return false;
         }
     }
+
+    function get_deathcertificate_byId(array $data) {
+        $stmt = $this->con->prepare("
+            SELECT id FROM deces
+            WHERE 
+                nom_defunt = :nom
+                AND prenom_defunt = :prenom
+                AND date_naissance = :date_naissance
+                AND lieu_naissance = :lieu_naissance
+                AND date_deces = :date_deces
+                AND lieu_deces = :lieu_deces
+                AND genre = :genre
+            LIMIT 1
+        ");
+    
+        $params = [
+            ':nom' => $data['nom'],
+            ':prenom' => $data['prenom'],
+            ':date_naissance' => $data['date_naissance'],
+            ':lieu_naissance' => $data['lieu_naissance'],
+            ':date_deces' => $data['date_deces'],
+            ':lieu_deces' => $data['lieu_deces'],
+            ':genre' => $data['genre']
+        ];
+    
+        try {
+            $stmt->execute($params);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ? $result['id'] : null;
+        } catch (Exception $e) {
+            error_log("Erreur récupération id_deces : " . $e->getMessage());
+            return false;
+        }
+    }
+    
 }

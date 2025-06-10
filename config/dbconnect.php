@@ -1,7 +1,7 @@
 <?php
 class Database {
     private $host = "localhost";
-    private $db_name = "PCT";
+    private $db_name = "etatcivil";
     private $username = "groupe_pct";
     private $password = "groupe27";
     public $conn;

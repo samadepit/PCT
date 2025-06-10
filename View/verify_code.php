@@ -50,36 +50,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code_paiement'])) {
                     if (!is_array($certificates)) $certificates = [$certificates];
 
                     foreach ($certificates as $certificate) {
+                        $certificate_id = null;
+        
                         switch ($type) {
                             case 'naissance':
-                                $birth_id = $birthController->get_existing_birth_id($certificate);
-                                if (!$birth_id) {
+                                $certificate_id = $birthController->get_existing_birth_id($certificate);
+                                if (!$certificate_id) {
                                     $certificate_id = $birthController->create_birth_certificate($certificate);
-                                    if (!$certificate_id) throw new Exception("Erreur dans l'acte de naissance.");
-                                } else {
-                                    $certificate_id = $birth_id;
+                                    if (!$certificate_id) {
+                                        throw new Exception("Erreur lors de l'enregistrement de l'acte de naissance.");
+                                    }
                                 }
                                 break;
-
+        
                             case 'mariage':
-                                $certificate_id = $marriageController->create_marriage_certificate($certificate);
-                                if (!$certificate_id) throw new Exception("Erreur dans l'acte de mariage.");
-                                $birthController->addMarriageInbirthcertificate($certificate);
-                                break;
-
-                            case 'deces':
+                                $certificate_id = $deathController->get_existing_marriage_id($certificate);
+                                if (!$certificate_id) {
+                                    $certificate_id = $marriageController->create_marriage_certificate($certificate);
+                                    if (!$certificate_id) {
+                                        throw new Exception("Erreur lors de l'enregistrement de l'acte de mariage.");
+                                    }
+                                }
                                 $birth_id = $birthController->get_existing_birth_id($certificate);
-                                if (!$birth_id) throw new Exception("ID naissance introuvable pour décès.");
-                                $certificate_id = $deathController->create_death_certificate($certificate, $birth_id);
-                                if (!$certificate_id) throw new Exception("Erreur dans l'acte de décès.");
-                                $birthController->addDeathInbirthcertificate($certificate, $birth_id);
+                                if ($birth_id) {
+                                    $birthController->addMarriageInbirthcertificate($certificate);
+                                }
                                 break;
-
+                            case 'deces':
+                                $certificate_id = $deathController->get_existing_death_id($certificate);
+                                if (!$certificate_id) {
+                                    $certificate_id = $deathController->create_death_certificate($certificate);
+                                    if (!$certificate_id) {
+                                        throw new Exception("Erreur lors de l'enregistrement de l'acte de décès.");
+                                    }
+                                }
+        
+                                $birth_id = $birthController->get_existing_birth_id($certificate);
+                                if ($birth_id) {
+                                    $birthController->addDeathInbirthcertificate($certificate, $birth_id);
+                                }
+                                break;
+        
                             default:
                                 throw new Exception("Type d'acte inconnu : $type");
                         }
-
-                        $certificat_ids[] = ['type' => $type, 'id' => $certificate_id];
+        
+                        $certificat_ids[] = [
+                            'type' => $type,
+                            'id' => $certificate_id
+                        ];
                     }
                 }
                 $code_demand = $demandController->create_demand($_SESSION['localiter'] ?? null);
