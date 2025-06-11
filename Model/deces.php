@@ -23,7 +23,9 @@ class Deces
                 cause,
                 genre,
                 profession,
-                date_creation
+                date_creation,
+                certificat_medical_deces,
+                piece_identite_defunt
             ) VALUES (
                 :nom_defunt,
                 :prenom_defunt,
@@ -34,7 +36,9 @@ class Deces
                 :cause,
                 :genre,
                 :profession,
-                NOW()
+                NOW(),
+                :certificat_medical_deces,
+                :piece_identite_defunt
             )
         ");
     
@@ -49,7 +53,9 @@ class Deces
             // 'nom_pere'       => $data['nom_pere'],
             // 'prenom_pere'    => $data['prenom_pere'],
             'genre'          => $data['genre'],
-            'profession'     => $data['profession']
+            'profession'     => $data['profession'],
+            'certificat_medical_deces'=> $data['certificat_medical_deces'] ?? null,
+            'piece_identite_defunt' => $data['piece_identite_defunt']  ?? null
         ];
     
         try {
@@ -106,8 +112,8 @@ class Deces
         ");
     
         $params = [
-            ':nom' => $data['nom'],
-            ':prenom' => $data['prenom'],
+            ':nom' => $data['nom_defunt'],
+            ':prenom' => $data['prenom_defunt'],
             ':date_naissance' => $data['date_naissance'],
             ':lieu_naissance' => $data['lieu_naissance'],
             ':date_deces' => $data['date_deces'],
@@ -118,9 +124,9 @@ class Deces
         try {
             $stmt->execute($params);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $result ? $result['id'] : null;
+            return $result ? (int)$result['id'] : null;
         } catch (Exception $e) {
-            error_log("Erreur récupération id_deces : " . $e->getMessage());
+            error_log("Erreur récupération id_birth_existing : " . $e->getMessage());
             return false;
         }
     }

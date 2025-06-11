@@ -39,8 +39,8 @@ class DecesController
     public function get_existing_death_id(array $data) {
         try {
             $birth_id = $this->deathModel->get_deathcertificate_byId($data);
-            if (!$birth_id) {
-                throw new Exception("Aucun acte de deces trouvé pour le défunt");
+            if ($birth_id) {
+                throw new Exception(" acte de deces déjà existant trouvé pour le défunt");
             }
             return $birth_id;
         } catch (Exception $e) {

@@ -1,5 +1,24 @@
 <?php
 session_start();
+
+function moveFromTmpToFinalStructured($filename, $type, $categorie) {
+    $baseDir = __DIR__ . '/../uploads';
+    $src = "$baseDir/tmp/$filename";
+    
+    $destDir = "$baseDir/$type/$categorie";
+    if (!file_exists($destDir)) {
+        mkdir($destDir, 0755, true);
+    }
+
+    $destPath = "$destDir/$filename";
+
+    if (file_exists($src)) {
+        rename($src, $destPath);
+        return "$type/$categorie/$filename"; 
+    }
+
+    return null;
+}
 require_once __DIR__ . '/../Controller/paymentController.php';
 require_once __DIR__ . '/../Controller/birthController.php';
 require_once __DIR__ . '/../Controller/marriageController.php';
@@ -45,62 +64,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code_paiement'])) {
         try {
             if (!empty($data_certificate)) {
                 $certificat_ids = [];
-
+                
                 foreach ($data_certificate as $type => $certificates) {
                     if (!is_array($certificates)) $certificates = [$certificates];
 
                     foreach ($certificates as $certificate) {
                         $certificate_id = null;
+
+                        foreach ($certificate as $key => $value) {
+                            if (is_string($value) && file_exists(__DIR__ . '/../uploads/tmp/' . $value)) {
+                                $certificate[$key] = moveFromTmpToFinalStructured($value, $type, $key);
+                            }
+                        }
         
                         switch ($type) {
                             case 'naissance':
                                 $certificate_id = $birthController->get_existing_birth_id($certificate);
                                 if (!$certificate_id) {
                                     $certificate_id = $birthController->create_birth_certificate($certificate);
-                                    if (!$certificate_id) {
-                                        throw new Exception("Erreur lors de l'enregistrement de l'acte de naissance.");
-                                    }
                                 }
                                 break;
-        
-                            case 'mariage':
-                                $certificate_id = $deathController->get_existing_marriage_id($certificate);
-                                if (!$certificate_id) {
-                                    $certificate_id = $marriageController->create_marriage_certificate($certificate);
+                
+                                case 'mariage':
+                                    $certificate_id = $marriageController->get_existing_marriage_id($certificate);
+                                
                                     if (!$certificate_id) {
-                                        throw new Exception("Erreur lors de l'enregistrement de l'acte de mariage.");
+                                        $certificate_id = $marriageController->create_marriage_certificate($certificate);
                                     }
-                                }
-                                $birth_id = $birthController->get_existing_birth_id($certificate);
-                                if ($birth_id) {
-                                    $birthController->addMarriageInbirthcertificate($certificate);
-                                }
-                                break;
+                                
+                                    $id_naissance_epoux = $birthController->get_existing_birth_id([
+                                        'nom' => $certificate['nom_epoux'],
+                                        'prenom' => $certificate['prenom_epoux'],
+                                        'date_naissance' => $certificate['date_naissance_epoux'],
+                                        'lieu_naissance' => $certificate['lieu_naissance_epoux'],
+                                        'genre' => 'masculin'
+                                    ]);
+                                
+                                    $id_naissance_epouse = $birthController->get_existing_birth_id([
+                                        'nom' => $certificate['nom_epouse'],
+                                        'prenom' => $certificate['prenom_epouse'],
+                                        'date_naissance' => $certificate['date_naissance_epouse'],
+                                        'lieu_naissance' => $certificate['lieu_naissance_epouse'],
+                                        'genre' => 'feminin'
+                                    ]);
+                                
+                                    if ($id_naissance_epoux || $id_naissance_epouse) {
+                                        $certificate['id_naissance_epoux'] = $id_naissance_epoux;
+                                        $certificate['id_naissance_epouse'] = $id_naissance_epouse;
+                                
+                                        $birthController->addMarriageInbirthcertificate($certificate);
+                                    }
+                                
+                                    break;
+
+                                    
                             case 'deces':
                                 $certificate_id = $deathController->get_existing_death_id($certificate);
                                 if (!$certificate_id) {
                                     $certificate_id = $deathController->create_death_certificate($certificate);
-                                    if (!$certificate_id) {
-                                        throw new Exception("Erreur lors de l'enregistrement de l'acte de décès.");
-                                    }
                                 }
-        
-                                $birth_id = $birthController->get_existing_birth_id($certificate);
+                                $birth_id = $birthController->get_existing_birth_id([
+                                    'nom' => $certificate['nom_defunt'],
+                                    'prenom' => $certificate['prenom_defunt'],
+                                    'date_naissance' => $certificate['date_naissance'],
+                                    'lieu_naissance' => $certificate['lieu_naissance'],
+                                    'genre' => $certificate['genre'] ?? null
+                                ]);
                                 if ($birth_id) {
                                     $birthController->addDeathInbirthcertificate($certificate, $birth_id);
                                 }
                                 break;
-        
-                            default:
-                                throw new Exception("Type d'acte inconnu : $type");
                         }
-        
-                        $certificat_ids[] = [
-                            'type' => $type,
-                            'id' => $certificate_id
-                        ];
+                
+                        $certificat_ids[] = ['type' => $type, 'id' => $certificate_id];
                     }
-                }
+                
+                    }
                 $code_demand = $demandController->create_demand($_SESSION['localiter'] ?? null);
                 $requestroController->create_requestor($code_demand, $requestor_data);
                 $paymentcontroller->createPayment($code_demand, $numero, $code_paiement_generate,$is_duplicate=0);
