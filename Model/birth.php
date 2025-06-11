@@ -37,14 +37,16 @@ class Naissance
                 nom_pere, prenom_pere, profession_pere,
                 nom_mere, prenom_mere, profession_mere,
                 date_mariage, lieu_mariage, statut_mariage,
-                date_deces, lieu_deces, date_creation
+                date_deces, lieu_deces, date_creation ,piece_identite_pere,
+                piece_identite_mere ,certificat_de_naissance
             ) VALUES (
                 :nom_beneficiaire, :prenom_beneficiaire, :date_naissance,
                 :lieu_naissance,:heure_naissance,:genre,
                 :nom_pere, :prenom_pere, :profession_pere,
                 :nom_mere, :prenom_mere, :profession_mere,
                 :date_mariage, :lieu_mariage, :statut_mariage,
-                :date_deces, :lieu_deces, NOW()
+                :date_deces, :lieu_deces, NOW(), :piece_identite_pere,
+                :piece_identite_mere,:certificat_de_naissance
             )
         ");
         $params = [
@@ -64,7 +66,10 @@ class Naissance
             'lieu_mariage' => $data['lieu_mariage'] ?? null,
             'statut_mariage' => $data['statut_mariage'] ?? null,
             'date_deces' => $data['date_deces'] ?? null,
-            'lieu_deces' => $data['lieu_deces'] ?? null
+            'lieu_deces' => $data['lieu_deces'] ?? null,
+            'piece_identite_pere' => $data['piece_identite_pere'] ?? null,
+            'piece_identite_mere' => $data['piece_identite_mere'] ?? null,
+            'certificat_de_naissance' => $data['certificat_de_naissance'] ?? null
         ];
 
         try {

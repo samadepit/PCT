@@ -22,6 +22,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'lieu_deces' => $_POST['lieu_deces'] ?: null,
     ];
 
+    function saveTempFile($file, $folder = 'uploads/tmp') {
+        if ($file && $file['error'] === UPLOAD_ERR_OK) {
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = uniqid('temp_') . '.' . $ext;
+            if (!is_dir($folder)) mkdir($folder, 0755, true);
+            $destination = $folder . '/' . $filename;
+            move_uploaded_file($file['tmp_name'], $destination);
+            return $destination;
+        }
+        return null;
+    }
+
+    $_SESSION['donnees_actes']['naissance']['piece_identite_pere'] = saveTempFile($_FILES['piece_identite_pere']);
+    $_SESSION['donnees_actes']['naissance']['piece_identite_mere'] = saveTempFile($_FILES['piece_identite_mere']);
+    $_SESSION['donnees_actes']['naissance']['certificat_de_naissance'] = saveTempFile($_FILES['certificat_de_naissance']);
+
     if (!empty($_SESSION['actes_restants'])) {
         $acte_suivant = array_shift($_SESSION['actes_restants']);
         switch ($acte_suivant) {
@@ -152,6 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-bottom: 6px;
         }
 
+        input[type="file"],
         input[type="text"],
         input[type="date"],
         input[type="time"],
@@ -225,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <div class="container">
     <h2>Acte de Naissance</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col form-group">
                 <label>Nom</label>
@@ -261,6 +278,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label>Lieu de naissance</label>
             <input type="text" name="lieu_naissance" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
         </div>
+        <div class="form-group">
+            <label>Certificat de naissance</label>
+            <input type="file"  name="certificat_de_naissance" accept="application/pdf,image/jpeg,image/png" required>
+        </div>
 
         <h3>Informations du père</h3>
         <div class="row">
@@ -277,7 +298,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="text" name="profession_pere" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
             </div>
         </div>
-
+        <div class="row">
+        <div class="col form-group">
+                <label>Pièce d'identité du pere (PDF/JPEG/PNG max 5MB) :</label>
+                <input type="file" name="piece_identite_pere" accept="application/pdf,image/jpeg,image/png" required>
+            </div>
+        </div>
         <h3>Informations de la mère</h3>
         <div class="row">
             <div class="col form-group">
@@ -291,6 +317,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="col form-group">
                 <label>Profession</label>
                 <input type="text" name="profession_mere" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+            </div>
+        </div>
+        <div class="row"> 
+            <div class="col form-group"> 
+                <label>Pièce d'identité de la mere (PDF/JPEG/PNG max 5MB) :</label>
+                <input type="file" name="piece_identite_mere" accept="application/pdf,image/jpeg,image/png" required>
             </div>
         </div>
 

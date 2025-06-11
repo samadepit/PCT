@@ -34,7 +34,11 @@ class Marriage
     
                 date_mariage,
                 lieu_mariage,
-                date_creation
+                date_creation,
+                piece_identite_epouse,
+                certificat_residence_epouse,
+                piece_identite_epoux,
+                certificat_residence_epoux
             )
             VALUES (
                 :nom_epoux,
@@ -57,7 +61,11 @@ class Marriage
     
                 :date_mariage,
                 :lieu_mariage,
-                NOW()
+                NOW(),
+                :piece_identite_epouse,
+                :certificat_residence_epouse,
+                :piece_identite_epoux,
+                :certificat_residence_epoux
             )
         ");
     
@@ -81,7 +89,11 @@ class Marriage
             ':profession_epouse' => $data['profession_epouse'],
     
             ':date_mariage' => $data['date_mariage'],
-            ':lieu_mariage' => $data['lieu_mariage']
+            ':lieu_mariage' => $data['lieu_mariage'],
+            ':piece_identite_epouse'=> $data['piece_identite_epouse'],
+            ':certificat_residence_epouse'=> $data['certificat_residence_epouse'],
+            ':piece_identite_epoux'=> $data['piece_identite_epoux'],
+            ':certificat_residence_epoux'=> $data['certificat_residence_epoux']
         ];
     
         try {

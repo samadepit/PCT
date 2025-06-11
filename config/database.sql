@@ -31,6 +31,9 @@ CREATE TABLE IF NOT EXISTS naissance (
     lieu_deces VARCHAR(100) DEFAULT NULL,
     genre VARCHAR(10) DEFAULT NULL,
     numero_registre INT DEFAULT NULL,
+    piece_identite_pere VARCHAR(255) DEFAULT NULL,
+    piece_identite_mere VARCHAR(255) DEFAULT NULL,
+    certificat_de_naissance VARCHAR(255) DEFAULT NULL,
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -54,6 +57,10 @@ CREATE TABLE IF NOT EXISTS mariage (
     profession_epouse VARCHAR(100) NOT NULL,
     date_mariage DATE NOT NULL,
     lieu_mariage VARCHAR(100) NOT NULL,
+    piece_identite_epoux VARCHAR(255) DEFAULT NULL,
+    certificat_residence_epoux VARCHAR(255) DEFAULT NULL,
+    piece_identite_epouse VARCHAR(255) DEFAULT NULL,
+    certificat_residence_epouse VARCHAR(255) DEFAULT NULL,
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -70,6 +77,8 @@ CREATE TABLE IF NOT EXISTS deces (
     prenom_pere VARCHAR(100) NOT NULL,
     genre VARCHAR(10) DEFAULT NULL,
     profession VARCHAR(100) NOT NULL,
+    certificat_medical_deces VARCHAR(255) DEFAULT NULL,
+    piece_identite_defunt VARCHAR(255) DEFAULT NULL,
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -83,6 +92,7 @@ CREATE TABLE IF NOT EXISTS demandeur (
     email VARCHAR(100),
     relation_avec_beneficiaire VARCHAR(255),
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    piece_identite_demandeur VARCHAR(255) DEFAULT NULL
     CONSTRAINT fk_demandeur_demande FOREIGN KEY (code_demande) REFERENCES demande(code_demande) ON DELETE SET NULL
 );
 

@@ -115,6 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #333;
         }
 
+        input[type="file"],
         input[type="text"],
         input[type="tel"],
         input[type="email"]{
@@ -214,7 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-    <form method="post" action="demande_etape3.php">
+    <form method="post" action="demande_etape3.php" enctype="multipart/form-data">
         <div class="header-etape">
             <a href="demande_etape1.php" class="btn-retour">&#8592; Retour</a>
             <h2>Étape 2 : Informations sur le demandeur</h2>
@@ -249,6 +250,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <label for="email">Email (optionnel):
             <input type="email" name="email" id="email">
+        </label>
+
+        <label for="file">Pièce d'identité  (PDF/JPEG/PNG max 5MB) :
+            <input type="file" name="piece_identite_demandeur" accept="application/pdf,image/jpeg,image/png" required>
         </label>
         <button type="submit">Suivant</button>
     </form>

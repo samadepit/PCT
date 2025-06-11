@@ -24,9 +24,9 @@ class Demandeur
 
         $stmt = $this->con->prepare("
             INSERT INTO demandeur (
-                code_demande,nom, prenom, relation_avec_beneficiaire, numero_telephone, email,lieu_residence, date_creation
+                code_demande,nom, prenom, relation_avec_beneficiaire, numero_telephone, email,lieu_residence, date_creation,piece_identite_demandeur
             ) VALUES (
-                :code_demande,:nom, :prenom, :relation_avec_beneficiaire, :numero_telephone, :email,:lieu_residence, NOW()
+                :code_demande,:nom, :prenom, :relation_avec_beneficiaire, :numero_telephone, :email,:lieu_residence, NOW() ,:piece_identite_demandeur
             )
         ");
         $params = [
@@ -36,7 +36,8 @@ class Demandeur
             'relation_avec_beneficiaire' => $data['relation_avec_beneficiaire'] ?? null,
             'numero_telephone' => $data['numero_telephone'] ?? null,
             'email' => $data['email'] ?? null,
-            'lieu_residence' => $data['lieu_residence'] ?? null
+            'lieu_residence' => $data['lieu_residence'] ?? null,
+            'piece_identite_demandeur' => $data['piece_identite_demandeur'] ?? null
         ];
 
         if ($stmt->execute($params)) {

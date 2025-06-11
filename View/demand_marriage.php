@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'situation_matrimoniale_epoux' => $_POST['situation_matrimoniale_epoux'] ?? '',
         'temoin_epoux' => $_POST['temoin_epoux'] ?? '',
         'profession_epoux' => $_POST['profession_epoux'] ?? '',
+        'piece_identite_epoux' => $_POST['piece_identite_epoux'] ?? '',
+        'certificat_residence_epoux' => $_POST['certificat_residence_epoux'] ?? '',
 
         'nom_epouse' => $_POST['nom_epouse'] ?? '',
         'prenom_epouse' => $_POST['prenom_epouse'] ?? '',
@@ -28,10 +30,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'situation_matrimoniale_epouse' => $_POST['situation_matrimoniale_epouse'] ?? '',
         'temoin_epouse' => $_POST['temoin_epouse'] ?? '',
         'profession_epouse' => $_POST['profession_epouse'] ?? '',
+        'piece_identite_epouse'=> $_POST['piece_identite_epouse'] ?? '',
+        'certificat_residence_epouse'=> $_POST['certificat_residence_epouse'] ?? '',
 
         'date_mariage' => $_POST['date_mariage'] ?? '',
         'lieu_mariage' => $_POST['lieu_mariage'] ?? ''
     ];
+
+
+    function saveTempFile($file, $folder = 'uploads/tmp') {
+        if ($file && $file['error'] === UPLOAD_ERR_OK) {
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = uniqid('temp_') . '.' . $ext;
+            if (!is_dir($folder)) mkdir($folder, 0755, true);
+            $destination = $folder . '/' . $filename;
+            move_uploaded_file($file['tmp_name'], $destination);
+            return $destination;
+        }
+        return null;
+    }
+
+    $_SESSION['donnees_actes']['mariage']['piece_identite_epoux'] = saveTempFile($_FILES['piece_identite_epoux']);
+    $_SESSION['donnees_actes']['mariage']['certificat_residence_epoux'] = saveTempFile($_FILES['certificat_residence_epoux']);
+    $_SESSION['donnees_actes']['mariage']['piece_identite_epouse'] = saveTempFile($_FILES['piece_identite_epouse']);
+    $_SESSION['donnees_actes']['mariage']['certificat_residence_epouse'] = saveTempFile($_FILES['certificat_residence_epouse']);
+
 
     if (!empty($_SESSION['actes_restants'])) {
         $acte_suivant = array_shift($_SESSION['actes_restants']);
@@ -165,6 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-bottom: 6px;
         }
 
+        input[type="file"],
         input[type="text"],
         input[type="number"],
         input[type="date"] {
@@ -257,7 +281,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <div class="container">
     <h2>Acte de Mariage</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
     <h3>Informations sur le conjoint</h3>
     <div class="row">
         <div class="col form-group">
@@ -304,6 +328,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" name="temoin_epoux" required>
         </div>
     </div>
+    <div class="row"> 
+            <div class="col form-group">
+                <label>Pièce d'identité de l'epoux (PDF/JPEG/PNG max 5MB) :</label>
+                <input type="file" name="piece_identite_epoux" accept="application/pdf,image/jpeg,image/png" required>
+            </div>
+            <div class="col form-group"> 
+                <label>certificat de residence de l'epoux  (PDF/JPEG/PNG max 5MB) :</label>
+                <input type="file" name="certificat_residence_epoux" accept="application/pdf,image/jpeg,image/png" required>
+            </div>
+     </div>
 
     <h3>Informations sur la conjointe</h3>
     <div class="row">
@@ -351,6 +385,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" name="temoin_epouse" required>
         </div>
     </div>
+    <div class="row"> 
+            <div class="col form-group">
+                <label>Pièce d'identité de l'epouse (PDF/JPEG/PNG max 5MB) :</label>
+                <input type="file" name="piece_identite_epouse" accept="application/pdf,image/jpeg,image/png" required>
+            </div>
+            <div class="col form-group"> 
+                <label>certificat de residence de l'epoux (PDF/JPEG/PNG max 5MB) :</label>
+                <input type="file" name="certificat_residence_epouse" accept="application/pdf,image/jpeg,image/png" required>
+            </div>
+     </div>
 
     <h3>Détails du mariage</h3>
     <div class="row">

@@ -29,12 +29,12 @@ class NaissanceController
         try {
             $birth_id = $this->naissanceModel->get_birthcertificate_byId($data);
             if (!$birth_id) {
-                throw new Exception("Aucun acte de naissance trouvé pour le défunt");
+                return null; 
             }
             return $birth_id;
         } catch (Exception $e) {
             error_log("Erreur get_existing_birth_id : " . $e->getMessage());
-            return false;
+            return []; 
         }
     }
 
