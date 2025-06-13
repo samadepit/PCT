@@ -1,9 +1,13 @@
 <?php
 require_once __DIR__ . '/../Controller/certificatedemandController.php';
+require_once __DIR__ . '/../service/date_convert.php';
+
 $actedemandeController = new ActeDemandeController();
 $demandes = $actedemandeController->getAllvalidationCertificate();
 $id = $_GET['id'] ?? null;
 $stats = $actedemandeController->getStatistics();
+
+
 ?>
 
 <!DOCTYPE html>
@@ -261,15 +265,15 @@ $stats = $actedemandeController->getStatistics();
                 <tbody>
                     <?php foreach ($demandes as $demande): ?>
                         <tr>
-                            <td><?= htmlspecialchars($demande['date_demande']) ?></td>
+                            <td><?=$dateConvertie = convertirDateEnFrancais(htmlspecialchars($demande['date_demande'])) ?></td>
                             <td><?= htmlspecialchars($demande['nom_demandeur']) ?> <?= htmlspecialchars($demande['prenom_demandeur']) ?></td>
                             <td><?= htmlspecialchars($demande['type_acte']) ?></td>
                             <td>
                                 <?php if ($demande['type_acte'] === 'naissance'): ?>
                                     <?= htmlspecialchars($demande['nom_beneficiaire']) ?> <?= htmlspecialchars($demande['prenom_beneficiaire']) ?>
                                 <?php elseif ($demande['type_acte'] === 'mariage'): ?>
-                                    <?= htmlspecialchars($demande['nom_mari']) ?> <?= htmlspecialchars($demande['prenom_mari']) ?> & 
-                                    <?= htmlspecialchars($demande['nom_femme']) ?> <?= htmlspecialchars($demande['prenom_femme']) ?>
+                                    <?= htmlspecialchars($demande['nom_epoux']) ?> <?= htmlspecialchars($demande['prenom_epoux']) ?> & 
+                                    <?= htmlspecialchars($demande['nom_epouse']) ?> <?= htmlspecialchars($demande['prenom_epouse']) ?>
                                 <?php elseif ($demande['type_acte'] === 'deces'): ?>
                                     <?= htmlspecialchars($demande['nom_defunt']) ?> <?= htmlspecialchars($demande['prenom_defunt']) ?>
                                 <?php else: ?>
@@ -278,7 +282,15 @@ $stats = $actedemandeController->getStatistics();
                             </td>
                             <td><?= htmlspecialchars($demande['relation_avec_beneficiaire']) ?></td>
                             <td>
-                                <a href="certificate_signing.php?code_demande=<?= urlencode($demande['code_demande']) ?>&id=<?= urlencode($id) ?>" class="btn">Voir</a>
+                            <a href="certificate_signing.php?code_demande=<?= urlencode($demande['code_demande']) ?>&id=<?= urlencode($id) ?>" 
+                                class="btn"
+                                onclick="event.preventDefault(); document.getElementById('form-<?= $demande['code_demande'] ?>').submit();">
+                                Voir
+                                </a>
+
+                                <form id="form-<?= $demande['code_demande'] ?>" method="post" action="certificate_signing.php?code_demande=<?= urlencode($demande['code_demande']) ?>&id=<?= urlencode($id) ?>" style="display: none;">
+                                    <input type="hidden" name="email_demandeur" value="<?= htmlspecialchars($demande['email_demandeur']) ?>">
+                                </form>
                             </td>
                         </tr>
                     <?php endforeach; ?>

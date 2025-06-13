@@ -214,7 +214,7 @@ $acte = $actes[$index];
         à <strong><?= htmlspecialchars($acte['lieu_mariage']) ?></strong><br><br>
 
         Entre :<br>
-        <strong><?= htmlspecialchars($acte['nom_mari']) ?> <?= htmlspecialchars($acte['prenom_mari']) ?></strong>, né le <?= date('d/m/Y', strtotime($acte['date_naissance_epoux'])) ?> à <?= htmlspecialchars($acte['lieu_naissance_epoux']) ?><br>
+        <strong><?= htmlspecialchars($acte['nom_epoux']) ?> <?= htmlspecialchars($acte['prenom_epoux']) ?></strong>, né le <?= date('d/m/Y', strtotime($acte['date_naissance_epoux'])) ?> à <?= htmlspecialchars($acte['lieu_naissance_epoux']) ?><br>
         Profession : <strong><?= htmlspecialchars($acte['profession_epoux']) ?></strong><br><br>
 
         Et :<br>

@@ -79,7 +79,7 @@
         <!-- <a href="faire_un_duplicata.php" class="button">Faire un duplicata</a> -->
     </div>
     <footer>
-        &copy; 2025 Portail de l'État Civil - Tous droits réservés
+        &copy; 2025 Portail de l'État Civil - Tous droits réservés <a href="login.php">Office de l'etat civil de ouangolodougou</a>
     </footer>
 </body>
 </html>

@@ -29,4 +29,13 @@ class DemandeurController
             return null;
         }
     }
+    public function get_requestor_mail($id)
+    {
+        try {
+            return $this->requestorModel->get_requestorMail_ByCodeDemande($id);
+        } catch (Exception $e) {
+            error_log("erreur lors de la récupération du demandeur : " . $e->getMessage());
+            return null;
+        }
+    }
 }

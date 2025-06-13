@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS demande (
     code_demande VARCHAR(50) UNIQUE NOT NULL,
     statut ENUM('en_attente','valider','rejeter','signer') DEFAULT 'en_attente' NOT NULL,
     localiter VARCHAR(100) NOT NULL,
-    moti_rejet VARCHAR(255) DEFAULT NULL,
+    motif_rejet VARCHAR(255) DEFAULT NULL,
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

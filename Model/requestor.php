@@ -41,7 +41,7 @@ class Demandeur
         ];
 
         if ($stmt->execute($params)) {
-            return true;
+            return $data['email']; 
         }
         return false;
     }
@@ -49,11 +49,23 @@ class Demandeur
     public function get_requestor_ById($id)
     {
         $stmt = $this->con->prepare("
-        SELECT * FROM demandeur WHERE id = :id
+        SELECT * FROM demandeur WHERE id = :id 
         ");
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function get_requestorMail_ByCodeDemande($code_demande)
+    {
+        $stmt = $this->con->prepare("
+            SELECT email FROM demandeur WHERE code_demande = :code_demande
+        ");
+        $stmt->bindValue(':code_demande', $code_demande, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['email'] : null;
     }
 }

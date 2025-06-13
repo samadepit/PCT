@@ -38,14 +38,12 @@ class DecesController
 
     public function get_existing_death_id(array $data) {
         try {
-            $birth_id = $this->deathModel->get_deathcertificate_byId($data);
-            if ($birth_id) {
-                throw new Exception(" acte de deces déjà existant trouvé pour le défunt");
-            }
-            return $birth_id;
+            $death_id = $this->deathModel->get_deathcertificate_byId($data);
+            error_log("Acte de décès déjà existant pour ce défunt.");
+            return $death_id ?: null;
         } catch (Exception $e) {
             error_log("Erreur get_existing_death_id : " . $e->getMessage());
-            return false;
+            return null;
         }
     }
     

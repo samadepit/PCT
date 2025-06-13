@@ -23,8 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['erreur'] = "Veuillez entrer un code de demande.";
     }
 
-    header("Location: " . $_SERVER['PHP_SELF']); 
-    exit();
 }
 
 if (isset($_SESSION['actes'])) {
@@ -63,10 +61,9 @@ if (isset($_SESSION['erreur'])) {
         <?php
 $status = strtolower($certificate['statut'] ?? '');
 $canPrint = (
-    isset($certificate['statut'], $certificate['est_signer'], $certificate['payer']) &&
+    isset($certificate['statut'], $certificate['est_signer']) &&
     $status === 'valider' &&
-    $certificate['est_signer'] == 1 &&
-    $certificate['payer'] == 1
+    $certificate['est_signer'] == 1 
 );
 
 $cssClass = 'autre'; // par défaut
@@ -77,85 +74,6 @@ if ($status === 'valider') {
     $cssClass = 'rejeter';
 }
 ?>
-<div class="acte <?= $cssClass ?>">
-    <div class="acte-header">
-        <div class="acte-header-item"><strong>Type d'acte :</strong> <?= htmlspecialchars($certificate['type_acte']) ?></div>
-        <div class="acte-header-item">
-            <strong>Statut de la demande :</strong>
-            <span><?= htmlspecialchars($certificate['statut']) ?></span>
-            <?php if ($status === 'rejeter' && !empty($certificate['motif_rejet'])): ?>
-                <p style="color: red; margin: 5px 0 0;"><strong>Motif :</strong> <?= htmlspecialchars($certificate['motif_rejet']) ?></p>
-            <?php endif; ?>
-        </div>
-    </div>
-            <?php
-                $canPrint = (
-                    isset($certificate['statut'], $certificate['est_signer'], $certificate['payer']) &&
-                    strtolower($certificate['statut']) === 'valider' &&
-                    $certificate['est_signer'] == 1 &&
-                    $certificate['payer'] == 1
-                );
-            ?>
-            <?php if ($canPrint): ?>
-                <form method="POST" action="impression.php" target="_blank" class="print-form">
-                    <input type="hidden" name="code_demande" value="<?= htmlspecialchars($code) ?>" />
-                    <input type="hidden" name="type_acte" value="<?= htmlspecialchars($certificate['type_acte']) ?>" />
-                    <input type="hidden" name="index" value="<?= $index ?>" />
-                    <button class="imprimer-btn" type="submit">🖨️ Imprimer</button>
-                </form>
-            <?php endif; ?>
-
-            <details>
-                <summary>Voir les détails</summary>
-                <div class="details-content">
-                    <?php if (!empty($certificate['nom_beneficiaire'])): ?>
-                        <h4>Naissance</h4>
-                        <p>Nom : <?= htmlspecialchars($certificate['nom_beneficiaire']) ?> <?= htmlspecialchars($certificate['prenom_beneficiaire']) ?></p>
-                        <p>Né(e) le : <?= htmlspecialchars($certificate['date_naissance']) ?> à <?= htmlspecialchars($certificate['lieu_naissance']) ?></p>
-                        <p>Père : <?= htmlspecialchars($certificate['prenom_pere']) ?> <?= htmlspecialchars($certificate['nom_pere']) ?> (<?= htmlspecialchars($certificate['profession_pere']) ?>)</p>
-                        <p>Mère : <?= htmlspecialchars($certificate['prenom_mere']) ?> <?= htmlspecialchars($certificate['nom_mere']) ?> (<?= htmlspecialchars($certificate['profession_mere']) ?>)</p>
-                        <p>Enregistré le : <?= htmlspecialchars($certificate['naissance_date_creation']) ?></p>
-                    <?php endif; ?>
-
-                    <?php if (!empty($certificate['date_mariage'])): ?>
-                        <h4>Mariage</h4>
-                        <p>Date : <?= htmlspecialchars($certificate['date_mariage']) ?></p>
-                        <p>Lieu : <?= htmlspecialchars($certificate['lieu_mariage']) ?></p>
-                        <p>Marié : <?= htmlspecialchars($certificate['prenom_mari']) ?> <?= htmlspecialchars($certificate['nom_mari']) ?></p>
-                        <p>Mariée : <?= htmlspecialchars($certificate['prenom_femme']) ?> <?= htmlspecialchars($certificate['nom_femme']) ?></p>
-                        <p>Enregistré le : <?= htmlspecialchars($certificate['mariage_date_creation']) ?></p>
-                    <?php endif; ?>
-
-                    <?php if (!empty($certificate['date_deces'])): ?>
-                        <h4>Décès</h4>
-                        <p>Nom du défunt : <?= htmlspecialchars($certificate['prenom_defunt']) ?> <?= htmlspecialchars($certificate['nom_defunt']) ?></p>
-                        <p>Date : <?= htmlspecialchars($certificate['date_deces']) ?></p>
-                        <p>Lieu : <?= htmlspecialchars($certificate['lieu_deces']) ?></p>
-                        <p>Cause : <?= htmlspecialchars($certificate['cause']) ?></p>
-                        <p>Genre : <?= htmlspecialchars($certificate['genre']) ?></p>
-                        <p>Profession : <?= htmlspecialchars($certificate['profession']) ?></p>
-                        <p>Enregistré le : <?= htmlspecialchars($certificate['deces_date_creation']) ?></p>
-                    <?php endif; ?>
-                </div>
-            </details>
-        </div>
-    <?php endforeach; ?>
-<?php endif; ?>
-
-
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    <?php if (!empty($erreur)) : ?>
-    Swal.fire({
-        icon: 'error',
-        title: 'Erreur',
-        text: <?= json_encode($erreur) ?>,
-        confirmButtonColor: '#ff8008'
-    });
-    <?php endif; ?>
-</script>
-
 <style>
       html, body {
         margin: 0;
@@ -372,3 +290,94 @@ if ($status === 'valider') {
         margin: 6px 0;
     }
 </style>
+
+<div class="acte <?= $cssClass ?>">
+    <div class="acte-header">
+        <div class="acte-header-item"><strong>Type d'acte :</strong> <?= htmlspecialchars($certificate['type_acte']) ?></div>
+        <div class="acte-header-item">
+            <strong>Statut de la demande :</strong>
+            <span><?= htmlspecialchars($certificate['statut']) ?></span>
+            <?php if ($status === 'rejeter' && !empty($certificate['motif_rejet'])): ?>
+                <p style="color: red; margin: 5px 0 0;"><strong>Motif :</strong> <?= htmlspecialchars($certificate['motif_rejet']) ?></p>
+            <?php endif; ?>
+        </div>
+    </div>
+            <?php
+                $canPrint = (
+                    isset($certificate['statut'], $certificate['est_signer']) &&
+                    strtolower($certificate['statut']) === 'valider' &&
+                    $certificate['est_signer'] == 1 
+                );
+            ?>
+            <?php if ($canPrint): ?>
+                <form method="POST" action="paiement.php?code_demande=<?= urlencode($code) ?>" target="_blank" class="print-form">
+                    <input type="hidden" name="code_demande" value="<?= htmlspecialchars($code) ?>" />
+                    <input type="hidden" name="type_acte" value="<?= htmlspecialchars($certificate['type_acte']) ?>" />
+                    <input type="hidden" name="index" value="<?= $index ?>" />
+                    <button class="imprimer-btn" type="submit"> 💸​ Payez le timbre</button>
+                </form>
+            <?php endif; ?>
+
+            <details>
+                <summary>Voir les détails</summary>
+                <div class="details-content">
+                    <?php if (!empty($certificate['nom_beneficiaire'])): ?>
+                        <h4>Naissance</h4>
+                        <p>Nom : <?= htmlspecialchars($certificate['nom_beneficiaire']) ?> <?= htmlspecialchars($certificate['prenom_beneficiaire']) ?></p>
+                        <p>Né(e) le : <?= htmlspecialchars($certificate['date_naissance']) ?> à <?= htmlspecialchars($certificate['lieu_naissance']) ?></p>
+                        <p>Père : <?= htmlspecialchars($certificate['prenom_pere']) ?> <?= htmlspecialchars($certificate['nom_pere']) ?> (<?= htmlspecialchars($certificate['profession_pere']) ?>)</p>
+                        <p>Mère : <?= htmlspecialchars($certificate['prenom_mere']) ?> <?= htmlspecialchars($certificate['nom_mere']) ?> (<?= htmlspecialchars($certificate['profession_mere']) ?>)</p>
+                        <p>Enregistré le : <?= htmlspecialchars($certificate['naissance_date_creation']) ?></p>
+                    <?php endif; ?>
+
+                    <?php if (!empty($certificate['date_mariage'])): ?>
+                        <h4>Mariage</h4>
+                        <p>Date de demande : <?= htmlspecialchars($certificate['date_mariage']) ?></p>
+                        <p>Lieu : <?= htmlspecialchars($certificate['lieu_mariage']) ?></p>
+                        <p>Marié : <?= htmlspecialchars($certificate['nom_epoux']) ?> <?= htmlspecialchars($certificate['prenom_epoux']) ?></p>
+                        <p>Nationalité  Marié: <?= htmlspecialchars($certificate['nationalite_epoux']) ?></p>
+                        <p>Profession de la Marié: <?= htmlspecialchars($certificate['profession_epoux']) ?></p>
+                        <p>Témoin du  Marié: <?= htmlspecialchars($certificate['temoin_epoux']) ?></p>
+                        <p>Date de naissance du Marié: <?= htmlspecialchars($certificate['date_naissance_epoux']) ?></p>
+                        <p>Lieu de naissance du  Marié: <?= htmlspecialchars($certificate['lieu_naissance_epoux']) ?></p>
+                        <p>Mariée : <?= htmlspecialchars($certificate['nom_epouse']) ?> <?= htmlspecialchars($certificate['prenom_epouse']) ?></p>
+                        <p>Nationalité  Mariée: <?= htmlspecialchars($certificate['nationalite_epouse']) ?></p>
+                        <p>Profession de la Mariée: <?= htmlspecialchars($certificate['profession_epouse']) ?></p>
+                        <p>Témoin de la  Mariée: <?= htmlspecialchars($certificate['temoin_epouse']) ?></p>
+                        <p>Date de naissance de la  Mariée: <?= htmlspecialchars($certificate['date_naissance_epouse']) ?></p>
+                        <p>Lieu de naissance de la  Mariée: <?= htmlspecialchars($certificate['lieu_naissance_epouse']) ?></p>
+                        <p>Enregistré le : <?= htmlspecialchars($certificate['mariage_date_creation']) ?></p>
+                    <?php endif; ?>
+
+                    <?php if (!empty($certificate['date_deces'])): ?>
+                        <h4>Décès</h4>
+                        <p>Nom du défunt : <?= htmlspecialchars($certificate['prenom_defunt']) ?> <?= htmlspecialchars($certificate['nom_defunt']) ?></p>
+                        <p>Date : <?= htmlspecialchars($certificate['date_deces']) ?></p>
+                        <p>Lieu : <?= htmlspecialchars($certificate['lieu_deces']) ?></p>
+                        <p>Cause : <?= htmlspecialchars($certificate['cause']) ?></p>
+                        <p>Genre : <?= htmlspecialchars($certificate['genre']) ?></p>
+                        <p>Profession : <?= htmlspecialchars($certificate['profession']) ?></p>
+                        <p>Enregistré le : <?= htmlspecialchars($certificate['deces_date_creation']) ?></p>
+                    <?php endif; ?>
+                </div>
+            </details>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
+
+
+<!-- SweetAlert2 -->
+<script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        <?php if (!empty($erreur)) : ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: <?= json_encode($erreur) ?>,
+            confirmButtonColor: '#ff8008'
+        });
+        <?php endif; ?>
+    });
+</script>
+
