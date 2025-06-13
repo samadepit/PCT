@@ -3,7 +3,7 @@ session_start();
 
 $type = $_SESSION['actes'] ?? null;
 $montant = 0;
-
+$code_demande=$_GET["code_demande"];
 if (count($type) == 3) {
     $montant = 15000;
 } elseif (count($type) == 2) {
@@ -16,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_POST['numero'])) {
         $_SESSION['numero_telephone'] = $_POST['numero'];
         $_SESSION['code_paiement'] = 'TRC' . random_int(100, 999);
-        header("Location: verify_code.php");
-        exit;
+        // header("Location: verify_code.php");
+        // exit;
     }
 }
 ?>
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="container">
     <h2>Choisissez votre moyen de paiement</h2>
     <div class="price">Montant à payer : <?= $montant ?> F CFA</div>
-    <form method="POST">
+    <form method="POST" action="verify_code.php?code_demande=<?= urlencode($code_demande) ?>">
         <div class="agregateurs">
             <label>
                 <input type="radio" name="agregateur" value="wave" required>
