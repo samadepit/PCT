@@ -37,6 +37,10 @@ class certificate_demand
                 dm.localiter,
                 dm.date_creation AS demande_date_creation,
                 ad.code_demande,
+
+                 -- Information de l'officier d'état civil
+                adm.nom AS officier_nom,
+                adm.prenom AS officier_prenom,
     
                 -- Infos Naissance (si applicable)
                 n.nom_beneficiaire, n.prenom_beneficiaire, n.date_naissance, n.heure_naissance,
@@ -68,6 +72,7 @@ class certificate_demand
     
             FROM actes_demande ad
             INNER JOIN demande dm ON ad.code_demande = dm.code_demande
+            LEFT JOIN administration adm ON ad.id_officier = adm.id
             LEFT JOIN naissance n ON ad.type_acte = 'naissance' AND ad.id_acte = n.id
             LEFT JOIN mariage mari ON ad.type_acte = 'mariage' AND ad.id_acte = mari.id
             LEFT JOIN deces d ON ad.type_acte = 'deces' AND ad.id_acte = d.id
@@ -481,6 +486,8 @@ class certificate_demand
         $stmt->execute();
         return (int)$stmt->fetchColumn();
     }
+
+   
 
 }
 

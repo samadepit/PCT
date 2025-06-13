@@ -32,6 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code_paiement'])) {
         $message = "✅ Paiement confirmé. Merci !";
         $paymentcontroller->createPayment($code_demand, $numero, $code_paiement_generate,$is_duplicate=0);
         $acteDemandeController->addPaymentForOneCertificate($code_demand);
+        header("Location: impression.php?code_demande=" . urlencode($code_demand));
+        exit;
     }
 }
 ?>

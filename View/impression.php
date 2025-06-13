@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../Controller/certificatedemandController.php';
+require_once __DIR__ . '/../service/date_convert.php';
 
 $certificate_demandController = new ActeDemandeController();
 $code_demand = $_GET['code_demande'] ;
@@ -140,7 +141,7 @@ try {
         }
     }
     img{
-        width: 150px;
+        width: 250px;
     }
     </style>
 </head>
@@ -162,7 +163,7 @@ try {
     <div class="section-title">EXTRAIT DE NAISSANCE</div>
     
     <div class="info-block">
-        Le <?= date('d F Y', strtotime($acte['date_naissance'])) ?><br>
+        Le <?=$dateConvertie = convertirDateEnFrancais(htmlspecialchars($acte['date_naissance']))?><br>
         à <?= htmlspecialchars($acte['heure_naissance']) ?><br><br>
         est né(e) <strong><?= htmlspecialchars($acte['nom_beneficiaire']) ?> <?= htmlspecialchars($acte['prenom_beneficiaire']) ?></strong><br><br>
         à <strong><?= htmlspecialchars($acte['lieu_naissance']) ?></strong><br><br>
@@ -186,7 +187,7 @@ try {
     <div>Certifié le présent extrait conforme aux indications portées au registre.</div>
     
     <div class="footer">
-        Délivré à <?= htmlspecialchars($acte['localiter']) ?>, le <?= date('d/m/Y') ?><br>
+        Délivré à <?= htmlspecialchars($acte['localiter']) ?>, le <?=$dateConvertie = convertirDateEnFrancais(date('d/m/Y')) ?><br>
         L' Officier de l'Etat Civil<br><br>
         <strong><?= htmlspecialchars($acte['officier_nom']) ?>  <?= htmlspecialchars($acte['officier_prenom']) ?></strong> <br>
         <img src=<?= htmlspecialchars($acte['signature']) ?> alt="signature">    
@@ -204,12 +205,12 @@ try {
     
     <div class="divider"></div>
     
-    <div class="section-center">N° <strong><?= htmlspecialchars($acte['code_demande']) ?></strong> du <?= date('d/m/Y', strtotime($acte['mariage_date_creation'])) ?> du Registre</div>
+    <div class="section-center">N° <strong><?= htmlspecialchars($acte['code_demande']) ?></strong> du <?=$dateConvertie = convertirDateEnFrancais(htmlspecialchars($acte['mariage_date_creation']))  ?> du Registre</div>
     
     <div class="section-title">EXTRAIT D'ACTE DE MARIAGE</div>
     
     <div class="info-block">
-        Le mariage a été célébré le <strong><?= date('d F Y', strtotime($acte['mariage_date_creation'])) ?></strong><br>
+        Le mariage a été célébré le <strong><?=$dateConvertie = convertirDateEnFrancais(htmlspecialchars($acte['mariage_date_creation'])) ?></strong><br>
         à <strong><?= htmlspecialchars($acte['lieu_mariage']) ?></strong><br><br>
 
         Entre :<br>
@@ -217,8 +218,7 @@ try {
         Profession : <strong><?= htmlspecialchars($acte['profession_epoux']) ?></strong><br><br>
 
         Et :<br>
-        <strong><?= htmlspecialchars($acte['nom_epouse']) ?> <?= htmlspecialchars($acte['prenom_epouse']) ?></strong>, née le <?= date('d/m/Y', strtotime($acte['date_naissance_epouse'])) ?> à <?= htmlspecialchars($acte['lieu_naissance_epouse']) ?><br>
-        Nombre d'enfant en commun : <strong><?= htmlspecialchars($acte['nombre_enfant']) ?></strong>
+        <strong><?= htmlspecialchars($acte['nom_epouse']) ?> <?= htmlspecialchars($acte['prenom_epouse']) ?></strong>, née le <?=$dateConvertie = convertirDateEnFrancais(htmlspecialchars($acte['date_naissance_epouse'])) ?> à <?= htmlspecialchars($acte['lieu_naissance_epouse']) ?><br>
     </div>
     
     <div class="mentions">
@@ -246,16 +246,16 @@ try {
     
     <div class="divider"></div>
     
-    <div class="section-center">N° <strong><?= htmlspecialchars($acte['code_demande']) ?></strong> du <?= date('d/m/Y', strtotime($acte['deces_date_creation'])) ?> du Registre</div>
+    <div class="section-center">N° <strong><?= htmlspecialchars($acte['code_demande']) ?></strong> du <?=$dateConvertie = convertirDateEnFrancais(htmlspecialchars( $acte['deces_date_creation'])) ?> du Registre</div>
     
     <div class="section-title">EXTRAIT D'ACTE DE DECES</div>
     
     <div class="info-block">
-        Est décédé(e) le <strong><?= date('d F Y', strtotime($acte['date_deces'])) ?></strong><br>
+        Est décédé(e) le <strong><?=$dateConvertie = convertirDateEnFrancais(htmlspecialchars($acte['date_deces'])) ?></strong><br>
         à <strong><?= htmlspecialchars($acte['lieu_deces']) ?></strong><br><br>
         Nom : <strong><?= htmlspecialchars($acte['nom_defunt']) ?> <?= htmlspecialchars($acte['prenom_defunt']) ?></strong><br>
         Genre : <strong><?= htmlspecialchars($acte['genre']) ?></strong><br>
-        Né(e) le <?= date('d/m/Y', strtotime($acte['defunt_date_naissance'])) ?> à <?= htmlspecialchars($acte['defunt_lieu_naissance']) ?><br>
+        Né(e) le <?=$dateConvertie = convertirDateEnFrancais(htmlspecialchars($acte['defunt_date_naissance']))?> à <?= htmlspecialchars($acte['defunt_lieu_naissance']) ?><br>
         Profession : <strong><?= htmlspecialchars($acte['profession']) ?></strong><br>
         cause du décès <strong><?= htmlspecialchars($acte['cause']) ?></strong><br><br>
     </div>
