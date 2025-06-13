@@ -86,7 +86,10 @@ class certificate_demand
 
             ");
         $stmt->execute([':code_demande' => $code_demand]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $test_ =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // var_dump( $test_);
+        return  $test_;
+
     }
 
     public function getAllPendingActeDemandes()

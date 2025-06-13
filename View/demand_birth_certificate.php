@@ -40,289 +40,333 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
-    <div class="top-header">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCPIRahRkX8w3AK0ahlZKqhkZi22eMtSf6qg&s" alt="Logo CI" />
-        <h1>Bienvenue sur le Portail des Demande d'actes d'état civil</h1>
-        <nav>
-            <a href="dashboard.php" class="nav-btn">Accueil</a>
-            <a href="demande_etape1.php" class="nav-btn"><span>Faire une demande</span></a>
-            <a href="consulter_demande.php" class="nav-btn">Suivre une demande</a>
-        </nav>
-    </div>
+
     <title>Demande - Acte de Naissance</title>
-    <style>
-            html, body {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        background-color: linear-gradient(to right, #ff8008, #ffc837);
-    }
+    <link rel="stylesheet" href="../assets/css/styleEtape.css">
 
-    body {
-        font-family: Arial, sans-serif;
-        background-color: linear-gradient(to right, #ff8008, #ffc837);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 80px; /* espace pour le header fixe */
-    }
 
-    .top-header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 80px;
-        width: 100%;
-        background-color: white;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 40px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        color: #1f2937;
-        z-index: 1000;
-        box-sizing: border-box;
-    }
-
-    .top-header img {
-        height: 50px;
-    }
-
-    .top-header h1 {
-        font-size: 20px;
-        font-weight: bold;
-        flex: 1;
-        text-align: center;
-        margin: 0;
-        color: #1f2937;
-    }
-
-    .top-header nav {
-        display: flex;
-        gap: 20px;
-        font-weight: 600;
-        font-size: 16px;
-    }
-
-    .top-header nav span {
-        color: #f97316; /* orange pour la page active */
-    }
-
-    .top-header nav a {
-        text-decoration: none;
-        color: #1f2937;
-    }
-
-        .container {
-            width: 100%;
-            max-width: 960px;
-            background: #fff;
-            padding: 30px 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            margin: 20px;
-        }
-
-        h2 {
-            text-align: center;
-            color: #ff8008;
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-
-        h3 {
-            margin-top: 30px;
-            margin-bottom: 10px;
-            color: #444;
-            font-size: 1.3rem;
-            border-left: 5px solid #ff8008;
-            padding-left: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        input[type="text"],
-        input[type="date"],
-        input[type="time"],
-        select {
-            width: 70%;
-            padding: 10px 15px;
-            border: 2px solid #ff8008;
-            border-radius: 8px;
-            background-color: #fff;
-            font-size: 0.95rem;
-            color: #333;
-        }
-
-        input:focus,
-        select:focus {
-            outline: none;
-            border-color: #ff9500;
-            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
-        }
-
-        .row {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .col {
-            flex: 1;
-            min-width: 260px;
-        }
-
-        button {
-            background: #ff8008;
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 25px;
-            transition: background 0.3s ease;
-        }
-
-        button:hover {
-            background: #e67600;
-        }
-
-        @media (max-width: 768px) {
-            h2 {
-                font-size: 1.6rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h2 {
-                font-size: 1.4rem;
-            }
-
-            button {
-                padding: 12px;
-            }
-
-            .container {
-                padding: 20px;
-            }
-        }
-    </style>
 </head>
+
 <body>
-<div class="container">
-    <h2>Acte de Naissance</h2>
-    <form method="post">
-        <div class="row">
-            <div class="col form-group">
-                <label>Nom</label>
-                <input type="text" name="nom_beneficiaire" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
-            </div>
-            <div class="col form-group">
-                <label>Prénom</label>
-                <input type="text" name="prenom_beneficiaire" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col form-group">
-                <label>Date de naissance</label>
-                <input type="date" name="date_naissance" required>
-            </div>
-            <div class="col form-group">
-                <label>Heure de naissance</label>
-                <input type="time" name="heure_naissance" required>
-            </div>
-            <div class="col form-group">
-                <label>Genre</label>
-                <select name="genre" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Masculin">Masculin</option>
-                    <option value="Féminin">Féminin</option>
-                    <option value="Autre">Autre</option>
-                </select>
-            </div>
-        </div>
+    <?php
+       require_once './partials/header.php'
+    ?>
 
-        <div class="form-group">
-            <label>Lieu de naissance</label>
-            <input type="text" name="lieu_naissance" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
-        </div>
+      <div class="stepper-container container mt-4">
+        <form method="post" novalidate>
+            <div class="header-etape">
+                <a href="demande_etape2.php" class="btn btn-retour">← Retour</a>
+                <h2>Étape 3 : Acte de Naissance</h2>
+            </div>
 
-        <h3>Informations du père</h3>
-        <div class="row">
-            <div class="col form-group">
-                <label>Nom</label>
-                <input type="text" name="nom_pere" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
-            </div>
-            <div class="col form-group">
-                <label>Prénom</label>
-                <input type="text" name="prenom_pere" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
-            </div>
-            <div class="col form-group">
-                <label>Profession</label>
-                <input type="text" name="profession_pere" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
-            </div>
-        </div>
+            <div class="form-grid">
+                <h3>Informations du bénéficiaire</h3>
+                <div class="form-row">
+                    <div class="form-item">
+                        <label for="nom_beneficiaire" class="form-label">Nom :</label>
+                        <input type="text" name="nom_beneficiaire" id="nom_beneficiaire" class="form-control"
+                            pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer un nom valide.</div>
+                    </div>
+                    <div class="form-item">
+                        <label for="prenom_beneficiaire" class="form-label">Prénom :</label>
+                        <input type="text" name="prenom_beneficiaire" id="prenom_beneficiaire" class="form-control"
+                            pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer un prénom valide.</div>
+                    </div>
+                </div>
 
-        <h3>Informations de la mère</h3>
-        <div class="row">
-            <div class="col form-group">
-                <label>Nom</label>
-                <input type="text" name="nom_mere" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
-            </div>
-            <div class="col form-group">
-                <label>Prénom</label>
-                <input type="text" name="prenom_mere" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
-            </div>
-            <div class="col form-group">
-                <label>Profession</label>
-                <input type="text" name="profession_mere" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
-            </div>
-        </div>
+                <div class="form-row">
+                    <div class="form-item">
+                        <label for="date_naissance" class="form-label">Date de naissance :</label>
+                        <input type="date" name="date_naissance" id="date_naissance" class="form-control" required>
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer une date de naissance valide.</div>
+                    </div>
+                    <div class="form-item">
+                        <label for="heure_naissance" class="form-label">Heure de naissance :</label>
+                        <input type="time" name="heure_naissance" id="heure_naissance" class="form-control" required>
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer une heure de naissance valide.</div>
+                    </div>
+                    <div class="form-item">
+                        <label for="genre" class="form-label">Genre :</label>
+                        <select name="genre" id="genre" class="form-select" required>
+                            <option value="">-- Sélectionner --</option>
+                            <option value="Masculin">Masculin</option>
+                            <option value="Féminin">Féminin</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                        <div class="invalid-feedback" style="display: none;">Veuillez sélectionner un genre.</div>
+                    </div>
+                </div>
 
-        <h3>Informations supplémentaires (facultatives)</h3>
-        <div class="row">
-            <div class="col form-group">
-                <label>Date de mariage</label>
-                <input type="date" name="date_mariage">
-            </div>
-            <div class="col form-group">
-                <label>Lieu de mariage</label>
-                <input type="text" name="lieu_mariage" pattern="^[A-Za-zÀ-ÿ\s\-]*$">
-            </div>
-            <div class="col form-group">
-                <label>Statut du mariage</label>
-                <input type="text" name="statut_mariage" pattern="^[A-Za-zÀ-ÿ\s\-]*$">
-            </div>
-        </div>
+                <div class="form-item">
+                    <label for="lieu_naissance" class="form-label">Lieu de naissance :</label>
+                    <input type="text" name="lieu_naissance" id="lieu_naissance" class="form-control"
+                        pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback" style="display: none;">Veuillez entrer un lieu de naissance valide.</div>
+                </div>
 
-        <div class="row">
-            <div class="col form-group">
-                <label>Date de décès</label>
-                <input type="date" name="date_deces">
-            </div>
-            <div class="col form-group">
-                <label>Lieu de décès</label>
-                <input type="text" name="lieu_deces" pattern="^[A-Za-zÀ-ÿ\s\-]*$">
-            </div>
-        </div>
+                <h3>Informations du père</h3>
+                <div class="form-row">
+                    <div class="form-item">
+                        <label for="nom_pere" class="form-label">Nom :</label>
+                        <input type="text" name="nom_pere" id="nom_pere" class="form-control"
+                            pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer un nom valide.</div>
+                    </div>
+                    <div class="form-item">
+                        <label for="prenom_pere" class="form-label">Prénom :</label>
+                        <input type="text" name="prenom_pere" id="prenom_pere" class="form-control"
+                            pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer un prénom valide.</div>
+                    </div>
+                    <div class="form-item">
+                        <label for="profession_pere" class="form-label">Profession :</label>
+                        <input type="text" name="profession_pere" id="profession_pere" class="form-control"
+                            pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer une profession valide.</div>
+                    </div>
+                </div>
 
-        <button type="submit">Passer à l'acte suivant</button>
-    </form>
-</div>
+                <h3>Informations de la mère</h3>
+                <div class="form-row">
+                    <div class="form-item">
+                        <label for="nom_mere" class="form-label">Nom :</label>
+                        <input type="text" name="nom_mere" id="nom_mere" class="form-control"
+                            pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer un nom valide.</div>
+                    </div>
+                    <div class="form-item">
+                        <label for="prenom_mere" class="form-label">Prénom :</label>
+                        <input type="text" name="prenom_mere" id="prenom_mere" class="form-control"
+                            pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer un prénom valide.</div>
+                    </div>
+                    <div class="form-item">
+                        <label for="profession_mere" class="form-label">Profession :</label>
+                        <input type="text" name="profession_mere" id="profession_mere" class="form-control"
+                            pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer une profession valide.</div>
+                    </div>
+                </div>
+
+                <h3>Informations supplémentaires (facultatives)</h3>
+                <div class="form-row">
+                    <div class="form-item">
+                        <label for="date_mariage" class="form-label">Date de mariage :</label>
+                        <input type="date" name="date_mariage" id="date_mariage" class="form-control">
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer une date valide.</div>
+                    </div>
+                    <div class="form-item">
+                        <label for="lieu_mariage" class="form-label">Lieu de mariage :</label>
+                        <input type="text" name="lieu_mariage" id="lieu_mariage" class="form-control"
+                            pattern="^[A-Za-zÀ-ÿ\s\-]*$">
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer un lieu valide.</div>
+                    </div>
+                    <div class="form-item">
+                        <label for="statut_mariage" class="form-label">Statut du mariage :</label>
+                        <select> 
+                         
+                            <option value="celibataire">celibataire</option>
+                            <option value="marié(e)">marié(e)</option>
+                            <option value="divorcé(e)">divorcé(e)</option>
+                        </select>
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer un statut valide.</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-item">
+                        <label for="date_deces" class="form-label">Date de décès :</label>
+                        <input type="date" name="date_deces" id="date_deces" class="form-control">
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer une date valide.</div>
+                    </div>
+                    <div class="form-item">
+                        <label for="lieu_deces" class="form-label">Lieu de décès :</label>
+                        <input type="text" name="lieu_deces" id="lieu_deces" class="form-control"
+                            pattern="^[A-Za-zÀ-ÿ\s\-]*$">
+                        <div class="invalid-feedback" style="display: none;">Veuillez entrer un lieu valide.</div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-25">Passer à l'acte suivant</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+    // Liste des champs requis
+    const requiredFields = [
+        'nom_beneficiaire', 'prenom_beneficiaire', 'date_naissance', 
+        'heure_naissance', 'genre', 'lieu_naissance',
+        'nom_pere', 'prenom_pere', 'profession_pere',
+        'nom_mere', 'prenom_mere', 'profession_mere'
+    ];
+
+    // Liste des champs optionnels avec patterns
+    const optionalFields = [
+        'date_mariage', 'lieu_mariage', 'statut_mariage', 
+        'date_deces', 'lieu_deces'
+    ];
+
+    // Validation lors de la soumission
+    document.querySelector("form").addEventListener("submit", function(e) {
+        let isValid = true;
+
+        // Validation des champs requis
+        requiredFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (!validateField(field, true)) {
+                isValid = false;
+            }
+        });
+
+        // Validation des champs optionnels (seulement s'ils sont remplis)
+        optionalFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field.value.trim() && !validateField(field, false)) {
+                isValid = false;
+            }
+        });
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+
+    // Fonction de validation d'un champ
+    function validateField(field, isRequired) {
+        const value = field.value.trim();
+        let isValid = true;
+        let message = '';
+
+        // Vérification si le champ est requis et vide
+        if (isRequired && !value) {
+            isValid = false;
+            message = getRequiredMessage(field);
+        }
+        // Vérification du pattern si le champ a une valeur
+        else if (value && field.hasAttribute('pattern')) {
+            const pattern = new RegExp(field.getAttribute('pattern'));
+            if (!pattern.test(value)) {
+                isValid = false;
+                message = getPatternMessage(field);
+            }
+        }
+        // Validation spéciale pour les dates
+        else if (value && field.type === 'date') {
+            const date = new Date(value);
+            if (isNaN(date.getTime())) {
+                isValid = false;
+                message = 'Veuillez entrer une date valide.';
+            }
+            // Vérification que la date de naissance n'est pas dans le futur
+            else if (field.id === 'date_naissance' && date > new Date()) {
+                isValid = false;
+                message = 'La date de naissance ne peut pas être dans le futur.';
+            }
+        }
+        // Validation pour le select
+        else if (isRequired && field.tagName === 'SELECT' && !value) {
+            isValid = false;
+            message = 'Veuillez faire une sélection.';
+        }
+
+        if (isValid) {
+            hideError(field);
+        } else {
+            showError(field, message);
+        }
+
+        return isValid;
+    }
+
+    // Messages d'erreur pour les champs requis
+    function getRequiredMessage(field) {
+        const messages = {
+            'nom_beneficiaire': 'Veuillez entrer le nom du bénéficiaire.',
+            'prenom_beneficiaire': 'Veuillez entrer le prénom du bénéficiaire.',
+            'date_naissance': 'Veuillez entrer la date de naissance.',
+            'heure_naissance': 'Veuillez entrer l\'heure de naissance.',
+            'genre': 'Veuillez sélectionner un genre.',
+            'lieu_naissance': 'Veuillez entrer le lieu de naissance.',
+            'nom_pere': 'Veuillez entrer le nom du père.',
+            'prenom_pere': 'Veuillez entrer le prénom du père.',
+            'profession_pere': 'Veuillez entrer la profession du père.',
+            'nom_mere': 'Veuillez entrer le nom de la mère.',
+            'prenom_mere': 'Veuillez entrer le prénom de la mère.',
+            'profession_mere': 'Veuillez entrer la profession de la mère.'
+        };
+        return messages[field.id] || 'Ce champ est requis.';
+    }
+
+    // Messages d'erreur pour les patterns
+    function getPatternMessage(field) {
+        const messages = {
+            'nom_beneficiaire': 'Le nom ne doit contenir que des lettres, espaces et tirets.',
+            'prenom_beneficiaire': 'Le prénom ne doit contenir que des lettres, espaces et tirets.',
+            'lieu_naissance': 'Le lieu ne doit contenir que des lettres, espaces et tirets.',
+            'nom_pere': 'Le nom ne doit contenir que des lettres, espaces et tirets.',
+            'prenom_pere': 'Le prénom ne doit contenir que des lettres, espaces et tirets.',
+            'profession_pere': 'La profession ne doit contenir que des lettres, espaces et tirets.',
+            'nom_mere': 'Le nom ne doit contenir que des lettres, espaces et tirets.',
+            'prenom_mere': 'Le prénom ne doit contenir que des lettres, espaces et tirets.',
+            'profession_mere': 'La profession ne doit contenir que des lettres, espaces et tirets.',
+            'lieu_mariage': 'Le lieu ne doit contenir que des lettres, espaces et tirets.',
+            'statut_mariage': 'Le statut ne doit contenir que des lettres, espaces et tirets.',
+            'lieu_deces': 'Le lieu ne doit contenir que des lettres, espaces et tirets.'
+        };
+        return messages[field.id] || 'Format invalide.';
+    }
+
+    // Fonction pour afficher l'erreur
+    function showError(element, message) {
+        const feedback = element.nextElementSibling;
+        if (feedback && feedback.classList.contains('invalid-feedback')) {
+            feedback.textContent = message;
+            feedback.style.display = "block";
+        }
+        element.classList.add("is-invalid");
+    }
+
+    // Fonction pour masquer l'erreur
+    function hideError(element) {
+        const feedback = element.nextElementSibling;
+        if (feedback && feedback.classList.contains('invalid-feedback')) {
+            feedback.style.display = "none";
+        }
+        element.classList.remove("is-invalid");
+    }
+
+    // Masquer les erreurs lors de la saisie
+    const allFields = [...requiredFields, ...optionalFields];
+    allFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener("input", function() {
+                if (this.value.trim()) {
+                    hideError(this);
+                }
+            });
+            
+            if (field.tagName === "SELECT") {
+                field.addEventListener("change", function() {
+                    if (this.value) {
+                        hideError(this);
+                    }
+                });
+            }
+        }
+    });
+    </script>
+
+    <?php
+       require_once './partials/footer.php'
+    ?>
 </body>
+
 </html>

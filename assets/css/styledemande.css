@@ -1,0 +1,223 @@
+:root{
+ --orange-ci: #ff8c00;
+--accent-orange: #ff6b35;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.section-demande {
+  font-family: "Arial", sans-serif;
+  background: linear-gradient(135deg, #fff 50%, var( --orange-ci) 50%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+}
+
+.section-demande h1 {
+  color:green;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  text-align: center;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  animation: fadeInDown 1s ease-out;
+}
+
+.section-demande .button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+.section-demande .button {
+  display: inline-block;
+  padding: 1.2rem 2.5rem;
+  background: linear-gradient(45deg, var(--orange-ci), var(--accent-orange));
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  min-width: 250px;
+  text-align: center;
+  border: 2px solid transparent;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.section-demande .button:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.section-demande .button:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(45deg, #f77f00, #f77f00);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.section-demande .button:hover:before {
+  left: 100%;
+}
+
+.section-demande .button:active {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.section-demande .button:nth-child(2) {
+  background: linear-gradient(45deg, #fff, #ffe);
+  color: #f77f00;
+  animation-delay: 0.5s;
+}
+
+.section-demande .button:nth-child(2):hover {
+  background: linear-gradient(45deg, #fff, #ffe);
+}
+
+.section-demande .button:hover {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translateY(-5px) scale(1.05);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.08);
+  }
+  100% {
+    transform: translateY(-5px) scale(1.05);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .section-demande .button-container {
+    flex-direction: row;
+    gap: 3rem;
+  }
+
+  .section-demande h1 {
+    font-size: 3rem;
+  }
+
+  .section-demande .button {
+    min-width: 280px;
+    padding: 1.5rem 3rem;
+    font-size: 1.2rem;
+  }
+}
+
+.section-demande::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(
+      circle at 20% 80%,
+      rgba(255, 255, 255, 0.1) 1px,
+      transparent 1px
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 255, 255, 0.1) 1px,
+      transparent 1px
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(255, 255, 255, 0.1) 1px,
+      transparent 1px
+    );
+  background-size: 100px 100px, 150px 150px, 200px 200px;
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.section-demande .button::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.section-demande .button:hover::after {
+  opacity: 1;
+}
+
+.section-demande .button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+}

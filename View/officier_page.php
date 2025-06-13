@@ -206,11 +206,15 @@ $stats = $actedemandeController->getStatistics();
 <body>
 
     <!-- Bandeau supérieur avec logo, titre et déconnexion -->
-    <div class="top-header">
+    <!-- <div class="top-header">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCPIRahRkX8w3AK0ahlZKqhkZi22eMtSf6qg&s" alt="Logo CI">
         <h1>Portail des officiers de l'état civil</h1>
         <a href="index.php?page=logout" class="logout-btn">Déconnexion</a>
-    </div>
+    </div> -->
+
+     <?php
+       require_once './partials/header.php'
+     ?>
 
     <div class="container">
         <!-- KPI -->
@@ -286,5 +290,8 @@ $stats = $actedemandeController->getStatistics();
             </table>
         </div>
     </div>
+    <?php
+       require_once './partials/footer.php'
+     ?>
 </body>
 </html>

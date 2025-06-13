@@ -39,281 +39,150 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
-    <div class="top-header">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCPIRahRkX8w3AK0ahlZKqhkZi22eMtSf6qg&s" alt="Logo CI" />
-        <h1>Bienvenue sur le Portail des Demande d'actes d'état civil</h1>
-        <nav>
-            <a href="dashboard.php" class="nav-btn">Accueil</a>
-            <a href="demande_etape1.php" class="nav-btn"><span>Faire une demande</span></a>
-            <a href="consulter_demande.php" class="nav-btn">Suivre une demande</a>
-        </nav>
-    </div>
+    
     <title>Demande - Acte de Décès</title>
-    <style>
-        /* ... styles existants ... */
-        html, body {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        background-color: linear-gradient(to right, #ff8008, #ffc837);
-    }
-
-    body {
-        font-family: Arial, sans-serif;
-        background-color: linear-gradient(to right, #ff8008, #ffc837);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 80px; /* espace pour le header fixe */
-    }
-
-    .top-header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 80px;
-        width: 100%;
-        background-color: white;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 40px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        color: #1f2937;
-        z-index: 1000;
-        box-sizing: border-box;
-    }
-
-    .top-header img {
-        height: 50px;
-    }
-
-    .top-header h1 {
-        font-size: 20px;
-        font-weight: bold;
-        flex: 1;
-        text-align: center;
-        margin: 0;
-        color: #1f2937;
-    }
-
-    .top-header nav {
-        display: flex;
-        gap: 20px;
-        font-weight: 600;
-        font-size: 16px;
-    }
-
-    .top-header nav span {
-        color: #f97316; /* orange pour la page active */
-    }
-
-    .top-header nav a {
-        text-decoration: none;
-        color: #1f2937;
-    }
-
-        .container {
-            width: 100%;
-            max-width: 960px;
-            background: #fff;
-            padding: 30px 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            margin: 20px;
-        }
-
-        h2 {
-            text-align: center;
-            color: #ff8008;
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-
-        h3 {
-            margin-top: 30px;
-            margin-bottom: 10px;
-            color: #444;
-            font-size: 1.3rem;
-            border-left: 5px solid #ff8008;
-            padding-left: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        input[type="text"],
-        input[type="date"],
-        select {
-            width: 80%;
-            padding: 10px 15px;
-            border: 2px solid #ff8008;
-            border-radius: 8px;
-            background-color: #fff;
-            font-size: 0.95rem;
-            color: #333;
-            max-width: 100%;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: #ff9500;
-            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
-        }
-
-        .row {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .col {
-            flex: 1;
-            min-width: 240px;
-            max-width: 48%;
-        }
-
-        button {
-            background: #ff8008;
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 25px;
-            transition: background 0.3s ease;
-        }
-
-        button:hover {
-            background: #e67600;
-        }
-
-        .back-button {
-            background: #999;
-            margin-top: 10px;
-        }
-
-        .back-button:hover {
-            background: #777;
-        }
-
-        @media (max-width: 768px) {
-            h2 {
-                font-size: 1.6rem;
-            }
-
-            .col {
-                max-width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h2 {
-                font-size: 1.4rem;
-            }
-
-            button {
-                padding: 12px;
-            }
-
-            .container {
-                padding: 20px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/css/styleEtape.css">
+   
 </head>
+
 <body>
-<div class="container">
-    <h2>Acte de Décès</h2>
-    <form method="post">
-        <h3>Informations sur le défunt</h3>
+    
+    <?php
+       require_once './partials/header.php'
+     ?> 
 
-        <div class="row">
-            <div class="col form-group">
-                <label>Nom</label>
-                <input type="text" name="nom_defunt" required>
-            </div>
-            <div class="col form-group">
-                <label>Prénom</label>
-                <input type="text" name="prenom_defunt" required>
-            </div>
+     <div class="stepper-container container">
+    <form method="post" action="" novalidate>
+        <div class="header-etape">
+            <a href="demande_etape3.php" class="btn btn-retour">← Retour</a>
+            <h2>Étape 4 : Acte de Décès</h2>
         </div>
 
-        <div class="row">
-            <div class="col form-group">
-                <label>Date de naissance</label>
-                <input type="date" name="date_naissance" required>
+        <div class="form-grid">
+            <h3>Informations sur le défunt</h3>
+            <div class="form-row">
+                <div class="form-item">
+                    <label for="nom_defunt" class="form-label">Nom :</label>
+                    <input type="text" name="nom_defunt" id="nom_defunt" class="form-control" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback">Veuillez entrer un nom valide.</div>
+                </div>
+                <div class="form-item">
+                    <label for="prenom_defunt" class="form-label">Prénom :</label>
+                    <input type="text" name="prenom_defunt" id="prenom_defunt" class="form-control" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback">Veuillez entrer un prénom valide.</div>
+                </div>
             </div>
-            <div class="col form-group">
-                <label>Lieu de naissance</label>
-                <input type="text" name="lieu_naissance" required>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col form-group">
-                <label>Genre</label>
-                <select name="genre" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Masculin">Masculin</option>
-                    <option value="Féminin">Féminin</option>
-                    <option value="Autre">Autre</option>
-                </select>
+            <div class="form-row">
+                <div class="form-item">
+                    <label for="date_naissance" class="form-label">Date de naissance :</label>
+                    <input type="date" name="date_naissance" id="date_naissance" class="form-control" required>
+                    <div class="invalid-feedback">Veuillez entrer une date de naissance valide.</div>
+                </div>
+                <div class="form-item">
+                    <label for="lieu_naissance" class="form-label">Lieu de naissance :</label>
+                    <input type="text" name="lieu_naissance" id="lieu_naissance" class="form-control" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback">Veuillez entrer un lieu de naissance valide.</div>
+                </div>
             </div>
-            <div class="col form-group">
-                <label>Profession</label>
-                <input type="text" name="profession" required>
-            </div>
-        </div>
 
-        <h3>Détails du décès</h3>
-        <div class="row">
-            <div class="col form-group">
-                <label>Date de décès</label>
-                <input type="date" name="date_deces" required>
+            <div class="form-row">
+                <div class="form-item">
+                    <label for="genre" class="form-label">Genre :</label>
+                    <select name="genre" id="genre" class="form-select" required>
+                        <option value="">-- Sélectionner --</option>
+                        <option value="Masculin">Masculin</option>
+                        <option value="Féminin">Féminin</option>
+                        <option value="Autre">Autre</option>
+                    </select>
+                    <div class="invalid-feedback">Veuillez sélectionner un genre.</div>
+                </div>
+                <div class="form-item">
+                    <label for="profession" class="form-label">Profession :</label>
+                    <input type="text" name="profession" id="profession" class="form-control" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback">Veuillez entrer une profession valide.</div>
+                </div>
             </div>
-            <div class="col form-group">
-                <label>Lieu de décès</label>
-                <input type="text" name="lieu_deces" required>
-            </div>
-            <div class="col form-group">
-                <label>Cause du décès</label>
-                <input type="text" name="cause" required>
-            </div>
-        </div>
 
-        <button type="submit">Soumettre la demande</button>
-        <a href="demande_etape2.php"><button type="button" class="back-button">← Retour</button></a>
+            <h3>Détails du décès</h3>
+            <div class="form-row">
+                <div class="form-item">
+                    <label for="date_deces" class="form-label">Date de décès :</label>
+                    <input type="date" name="date_deces" id="date_deces" class="form-control" required>
+                    <div class="invalid-feedback">Veuillez entrer une date de décès valide.</div>
+                </div>
+                <div class="form-item">
+                    <label for="lieu_deces" class="form-label">Lieu de décès :</label>
+                    <input type="text" name="lieu_deces" id="lieu_deces" class="form-control" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback">Veuillez entrer un lieu de décès valide.</div>
+                </div>
+                <div class="form-item">
+                    <label for="cause" class="form-label">Cause du décès :</label>
+                    <input type="text" name="cause" id="cause" class="form-control" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback">Veuillez entrer une cause valide.</div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-25">Soumettre la demande</button>
+        </div>
     </form>
+    
+    <script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        // Récupérer tous les champs
+        const nomDefunt = document.querySelector('input[name="nom_defunt"]');
+        const prenomDefunt = document.querySelector('input[name="prenom_defunt"]');
+        const dateNaissance = document.querySelector('input[name="date_naissance"]');
+        const lieuNaissance = document.querySelector('input[name="lieu_naissance"]');
+        const genre = document.querySelector('select[name="genre"]');
+        const profession = document.querySelector('input[name="profession"]');
+        const dateDeces = document.querySelector('input[name="date_deces"]');
+        const lieuDeces = document.querySelector('input[name="lieu_deces"]');
+        const cause = document.querySelector('input[name="cause"]');
+
+        // Vérifier si TOUS les champs sont vides
+        const allFieldsEmpty = (
+            (!nomDefunt.value || nomDefunt.value.trim() === '') &&
+            (!prenomDefunt.value || prenomDefunt.value.trim() === '') &&
+            (!dateNaissance.value || dateNaissance.value.trim() === '') &&
+            (!lieuNaissance.value || lieuNaissance.value.trim() === '') &&
+            (!genre.value || genre.value.trim() === '') &&
+            (!profession.value || profession.value.trim() === '') &&
+            (!dateDeces.value || dateDeces.value.trim() === '') &&
+            (!lieuDeces.value || lieuDeces.value.trim() === '') &&
+            (!cause.value || cause.value.trim() === '')
+        );
+
+        // Afficher le message d'erreur seulement si TOUS les champs sont vides
+        if (allFieldsEmpty) {
+            e.preventDefault();
+            alert("Veuillez remplir au moins un champ avant de soumettre le formulaire.");
+        }
+    });
+    </script>
 </div>
 
-<!-- SweetAlert2 CDN -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<?php if (isset($_SESSION['error'])): ?>
-<script>
+    <?php if (isset($_SESSION['error'])): ?>
+    <script>
     Swal.fire({
         icon: 'error',
         title: 'Erreur',
         text: <?= json_encode($_SESSION['error']) ?>,
         confirmButtonColor: '#ff8008'
     });
-</script>
-<?php unset($_SESSION['error']); ?>
-<?php endif; ?>
+    </script>
+    <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
 
+    <?php
+       require_once './partials/footer.php'
+      ?>
 </body>
+
 </html>

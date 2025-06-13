@@ -67,288 +67,175 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
-    <div class="top-header">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCPIRahRkX8w3AK0ahlZKqhkZi22eMtSf6qg&s" alt="Logo CI" />
-        <h1>Bienvenue sur le Portail des Demande d'actes d'état civil</h1>
-        <nav>
-            <a href="dashboard.php" class="nav-btn">Accueil</a>
-            <a href="demande_etape1.php" class="nav-btn"><span>Faire une demande</span></a>
-            <a href="consulter_demande.php" class="nav-btn">Suivre une demande</a>
-        </nav>
-    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Demande - Acte de Mariage</title>
-    <style>
-            html, body {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        background-color: linear-gradient(to right, #ff8008, #ffc837);
-    }
+    <link rel="stylesheet" href="../assets/css/styleEtape.css">
 
-    body {
-        font-family: Arial, sans-serif;
-        background-color: linear-gradient(to right, #ff8008, #ffc837);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 80px; /* espace pour le header fixe */
-    }
-
-    .top-header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 80px;
-        width: 100%;
-        background-color: white;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 40px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        color: #1f2937;
-        z-index: 1000;
-        box-sizing: border-box;
-    }
-
-    .top-header img {
-        height: 50px;
-    }
-
-    .top-header h1 {
-        font-size: 20px;
-        font-weight: bold;
-        flex: 1;
-        text-align: center;
-        margin: 0;
-        color: #1f2937;
-    }
-
-    .top-header nav {
-        display: flex;
-        gap: 20px;
-        font-weight: 600;
-        font-size: 16px;
-    }
-
-    .top-header nav span {
-        color: #f97316; /* orange pour la page active */
-    }
-
-    .top-header nav a {
-        text-decoration: none;
-        color: #1f2937;
-    }
-
-        .container {
-            width: 100%;
-            max-width: 960px;
-            background: #fff;
-            padding: 30px 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            margin: 20px;
-        }
-
-        h2 {
-            text-align: center;
-            color: #ff8008;
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-
-        h3 {
-            margin-top: 30px;
-            margin-bottom: 10px;
-            color: #444;
-            font-size: 1.3rem;
-            border-left: 5px solid #ff8008;
-            padding-left: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        input[type="text"],
-        input[type="number"],
-        input[type="date"] {
-            width: 70%;
-            padding: 10px 15px;
-            border: 2px solid #ff8008;
-            border-radius: 8px;
-            background-color: #fff;
-            font-size: 0.95rem;
-            color: #333;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #ff9500;
-            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
-        }
-
-        .row {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .col {
-            flex: 1;
-            min-width: 260px;
-        }
-
-        button {
-            background: #ff8008;
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 25px;
-            transition: background 0.3s ease;
-        }
-
-        button:hover {
-            background: #e67600;
-        }
-
-        .back-button {
-            background: #999;
-            margin-top: 10px;
-        }
-
-        .back-button:hover {
-            background: #777;
-        }
-
-        @media (max-width: 768px) {
-            h2 {
-                font-size: 1.6rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h2 {
-                font-size: 1.4rem;
-            }
-
-            button {
-                padding: 12px;
-            }
-
-            .container {
-                padding: 20px;
-            }
-        }
-    </style>
 </head>
+
 <body>
-<div class="container">
-    <h2>Acte de Mariage</h2>
-    <form method="post">
-        <h3>Informations sur le mari</h3>
-        <div class="row">
-            <div class="col form-group">
-                <label>Nom</label>
-                <input type="text" name="husband_lastname" required>
-            </div>
-            <div class="col form-group">
-                <label>Prénom</label>
-                <input type="text" name="husband_firstname" required>
-            </div>
+      
+     <?php
+       require_once './partials/header.php'
+     ?>
+    
+    <div class="stepper-container container">
+    <form method="post" action="" novalidate>
+        <div class="header-etape">
+            <a href="demande_etape4.php" class="btn btn-retour">← Retour</a>
+            <h2>Étape 5 : Acte de Mariage</h2>
         </div>
 
-        <div class="row">
-            <div class="col form-group">
-                <label>Date de naissance</label>
-                <input type="date" name="husband_birth_date" required>
+        <div class="form-grid">
+            <h3>Informations sur le mari</h3>
+            <div class="form-row">
+                <div class="form-item">
+                    <label for="husband_lastname" class="form-label">Nom :</label>
+                    <input type="text" name="husband_lastname" id="husband_lastname" class="form-control"
+                        pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback">Veuillez entrer un nom valide.</div>
+                </div>
+                <div class="form-item">
+                    <label for="husband_firstname" class="form-label">Prénom :</label>
+                    <input type="text" name="husband_firstname" id="husband_firstname" class="form-control"
+                        pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback">Veuillez entrer un prénom valide.</div>
+                </div>
             </div>
-            <div class="col form-group">
-                <label>Lieu de naissance</label>
-                <input type="text" name="husband_birth_place" required>
-            </div>
-        </div>
 
-        <h3>Informations sur la femme</h3>
-        <div class="row">
-            <div class="col form-group">
-                <label>Nom</label>
-                <input type="text" name="wife_lastname" required>
+            <div class="form-row">
+                <div class="form-item">
+                    <label for="husband_birth_date" class="form-label">Date de naissance :</label>
+                    <input type="date" name="husband_birth_date" id="husband_birth_date" class="form-control"
+                        required>
+                    <div class="invalid-feedback">Veuillez entrer une date de naissance valide.</div>
+                </div>
+                <div class="form-item">
+                    <label for="husband_birth_place" class="form-label">Lieu de naissance :</label>
+                    <input type="text" name="husband_birth_place" id="husband_birth_place" class="form-control"
+                        pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback">Veuillez entrer un lieu de naissance valide.</div>
+                </div>
             </div>
-            <div class="col form-group">
-                <label>Prénom</label>
-                <input type="text" name="wife_firstname" required>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col form-group">
-                <label>Date de naissance</label>
-                <input type="date" name="wife_birth_date" required>
+            <h3>Informations sur la femme</h3>
+            <div class="form-row">
+                <div class="form-item">
+                    <label for="wife_lastname" class="form-label">Nom :</label>
+                    <input type="text" name="wife_lastname" id="wife_lastname" class="form-control"
+                        pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback">Veuillez entrer un nom valide.</div>
+                </div>
+                <div class="form-item">
+                    <label for="wife_firstname" class="form-label">Prénom :</label>
+                    <input type="text" name="wife_firstname" id="wife_firstname" class="form-control"
+                        pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback">Veuillez entrer un prénom valide.</div>
+                </div>
             </div>
-            <div class="col form-group">
-                <label>Lieu de naissance</label>
-                <input type="text" name="wife_birth_place" required>
-            </div>
-        </div>
 
-        <h3>Détails du mariage</h3>
-        <div class="row">
-            <div class="col form-group">
-                <label>Date du mariage</label>
-                <input type="date" name="marriage_date" required>
+            <div class="form-row">
+                <div class="form-item">
+                    <label for="wife_birth_date" class="form-label">Date de naissance :</label>
+                    <input type="date" name="wife_birth_date" id="wife_birth_date" class="form-control" required>
+                    <div class="invalid-feedback">Veuillez entrer une date de naissance valide.</div>
+                </div>
+                <div class="form-item">
+                    <label for="wife_birth_place" class="form-label">Lieu de naissance :</label>
+                    <input type="text" name="wife_birth_place" id="wife_birth_place" class="form-control"
+                        pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback">Veuillez entrer un lieu de naissance valide.</div>
+                </div>
             </div>
-            <div class="col form-group">
-                <label>Lieu du mariage</label>
-                <input type="text" name="marriage_place" required>
-            </div>
-            <div class="col form-group">
-                <label>Statut du mariage</label>
-                <input type="text" name="statut_marriage" required>
-            </div>
-            <div class="col form-group">
-                <label>Nombre d'enfants</label>
-                <input type="number" name="number_children" min="1" required>
-                <script>
-                    document.querySelector('form').addEventListener('submit', function (e) {
-                        const nb = document.querySelector('input[name="number_children"]').value;
-                        if (nb <= 0 || !Number.isInteger(Number(nb))) {
-                            e.preventDefault();
-                            alert("Le nombre d'enfants doit être un entier strictement supérieur à 0.");
-                        }
-                    });
-                </script>
-            </div>
-        </div>
 
-        <button type="submit">Soumettre la demande</button>
-        <a href="demande_etape2.php"><button type="button" class="back-button">← Retour</button></a>
+            <h3>Détails du mariage</h3>
+            <div class="form-row">
+                <div class="form-item">
+                    <label for="marriage_date" class="form-label">Date du mariage :</label>
+                    <input type="date" name="marriage_date" id="marriage_date" class="form-control" required>
+                    <div class="invalid-feedback">Veuillez entrer une date de mariage valide.</div>
+                </div>
+                <div class="form-item">
+                    <label for="marriage_place" class="form-label">Lieu du mariage :</label>
+                    <input type="text" name="marriage_place" id="marriage_place" class="form-control"
+                        pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback">Veuillez entrer un lieu de mariage valide.</div>
+                </div>
+                <div class="form-item">
+                    <label for="statut_marriage" class="form-label">Statut du mariage :</label>
+                    <input type="text" name="statut_marriage" id="statut_marriage" class="form-control"
+                        pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                    <div class="invalid-feedback">Veuillez entrer un statut de mariage valide.</div>
+                </div>
+                <div class="form-item">
+                    <label for="number_children" class="form-label">Nombre d'enfants :</label>
+                    <input type="number" name="number_children" id="number_children" class="form-control" min="1"
+                        required>
+                    <div class="invalid-feedback">Veuillez entrer un nombre d'enfants supérieur à 0.</div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-25">Soumettre la demande</button>
+        </div>
     </form>
+    <script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        // Récupérer tous les champs
+        const husbandLastname = document.querySelector('input[name="husband_lastname"]');
+        const husbandFirstname = document.querySelector('input[name="husband_firstname"]');
+        const husbandBirthDate = document.querySelector('input[name="husband_birth_date"]');
+        const husbandBirthPlace = document.querySelector('input[name="husband_birth_place"]');
+        const wifeLastname = document.querySelector('input[name="wife_lastname"]');
+        const wifeFirstname = document.querySelector('input[name="wife_firstname"]');
+        const wifeBirthDate = document.querySelector('input[name="wife_birth_date"]');
+        const wifeBirthPlace = document.querySelector('input[name="wife_birth_place"]');
+        const marriageDate = document.querySelector('input[name="marriage_date"]');
+        const marriagePlace = document.querySelector('input[name="marriage_place"]');
+        const statutMarriage = document.querySelector('input[name="statut_marriage"]');
+        const numberChildren = document.querySelector('input[name="number_children"]');
+
+        // Vérifier si TOUS les champs sont vides
+        const allFieldsEmpty = (
+            (!husbandLastname.value || husbandLastname.value.trim() === '') &&
+            (!husbandFirstname.value || husbandFirstname.value.trim() === '') &&
+            (!husbandBirthDate.value || husbandBirthDate.value.trim() === '') &&
+            (!husbandBirthPlace.value || husbandBirthPlace.value.trim() === '') &&
+            (!wifeLastname.value || wifeLastname.value.trim() === '') &&
+            (!wifeFirstname.value || wifeFirstname.value.trim() === '') &&
+            (!wifeBirthDate.value || wifeBirthDate.value.trim() === '') &&
+            (!wifeBirthPlace.value || wifeBirthPlace.value.trim() === '') &&
+            (!marriageDate.value || marriageDate.value.trim() === '') &&
+            (!marriagePlace.value || marriagePlace.value.trim() === '') &&
+            (!statutMarriage.value || statutMarriage.value.trim() === '') &&
+            (!numberChildren.value || numberChildren.value.trim() === '')
+        );
+
+        // Afficher le message d'erreur seulement si TOUS les champs sont vides
+        if (allFieldsEmpty) {
+            e.preventDefault();
+            alert("Veuillez remplir au moins un champ avant de soumettre le formulaire.");
+        }
+    });
+    </script>
 </div>
-<?php if (!empty($_SESSION['error'])): ?>
-<script>
+    <?php if (!empty($_SESSION['error'])): ?>
+    <script>
     Swal.fire({
         icon: 'error',
         title: 'Erreur',
         text: '<?= $_SESSION["error"] ?>',
         confirmButtonColor: '#ff8008'
     });
-</script>
-<?php unset($_SESSION['error']); endif; ?>
+    </script>
+    <?php unset($_SESSION['error']); endif; ?>
+
+    <?php
+       require_once './partials/footer.php'
+    ?>
 </body>
+
 </html>

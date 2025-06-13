@@ -1,0 +1,157 @@
+:root {
+  --cacao-dark: #3d2914;
+  --cacao-medium: #5d4037;
+  --cacao-light: #8d6e63;
+  --cacao-cream: #d7ccc8;
+  --cacao-beige: #f5f5dc;
+  --cacao-chocolate: #6f4e37;
+  --cacao-gold: #d4a574;
+  --cacao-accent: #a0522d;
+}
+
+.search-form {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 7rem auto;
+  max-width: 800px;
+}
+
+.search-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: var(--cacao-medium);
+}
+
+.search-form input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--cacao-cream);
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.search-form button {
+  background-color: var(--cacao-accent);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.search-form button:hover {
+  background-color: var(--cacao-chocolate);
+}
+
+.acte {
+  border: 1px solid var(--cacao-light);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-color: var(--cacao-beige);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.acte-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background-color: var(--cacao-medium);
+  color: white;
+  flex-wrap: wrap;
+}
+
+.acte-header-item {
+  flex: 1;
+  min-width: 200px;
+  margin: 5px 0;
+}
+
+.acte-header-item strong {
+  color: var(--cacao-gold);
+}
+
+.print-form {
+  padding: 0 15px 15px;
+}
+
+.imprimer-btn {
+  background-color: var(--cacao-accent);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.imprimer-btn:hover {
+  background-color: var(--cacao-chocolate);
+}
+
+details {
+  padding: 0 15px 15px;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--cacao-dark);
+  padding: 10px 0;
+  outline: none;
+}
+
+details summary:hover {
+  color: var(--cacao-accent);
+}
+
+.details-content {
+  padding: 10px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid var(--cacao-cream);
+  margin-top: 10px;
+}
+
+.details-content h4 {
+  color: var(--cacao-dark);
+  margin-top: 15px;
+  border-bottom: 1px solid var(--cacao-cream);
+  padding-bottom: 5px;
+}
+
+.details-content p {
+  margin: 8px 0;
+  line-height: 1.4;
+  color: var(--cacao-medium);
+}
+
+/* Styles pour les différents statuts */
+.acte.rejeter {
+  border-left: 4px solid #e74c3c;
+}
+
+.acte.valider {
+  border-left: 4px solid #2ecc71;
+}
+
+.acte.en-cours {
+  border-left: 4px solid #f39c12;
+}
+
+/* Style pour le motif de rejet */
+[style*="color: red"] {
+  font-size: 14px;
+  padding: 5px;
+  background-color: #ffeeee;
+  border-radius: 4px;
+  display: inline-block;
+}
