@@ -1,22 +1,21 @@
 <?php
 session_start();
+require_once __DIR__ . '/../Controller/certificatedemandController.php';
 
-if (!isset($_SESSION['actes']) || !isset($_POST['type_acte']) || !isset($_POST['code_demande']) || !isset($_POST['index'])) {
-    header('Location: consulter_demande.php');
-    exit;
+$certificate_demandController = new ActeDemandeController();
+$code_demand = $_GET['code_demande'] ;
+
+try {
+    $certificates = $certificate_demandController->get_certificateby_Demande($code_demand);
+    if (empty($certificates)) {
+        $_SESSION['erreur'] = "Aucun acte trouvé pour ce code de demande.";
+    } else {
+        $_SESSION['actes'] = $certificates;
+    }
+} catch (Exception $e) {
+    $_SESSION['erreur'] = "Erreur lors de la récupération des actes : " . $e->getMessage();
 }
 
-$actes = $_SESSION['actes'];
-$type = $_POST['type_acte'];
-$index = (int) $_POST['index'];
-$code_demande = $_POST['code_demande'];
-
-if (!isset($actes[$index])) {
-    echo "Erreur : acte introuvable.";
-    exit;
-}
-
-$acte = $actes[$index];
 ?>
 
 <!DOCTYPE html>
@@ -146,8 +145,8 @@ $acte = $actes[$index];
     </style>
 </head>
 <body>
-
-<?php if ($type === 'naissance'): ?>
+<?php foreach ($certificates as $index => $acte): ?>
+<?php if ($acte['type_acte'] === 'naissance'): ?>
 <div class="document" id="print-zone">
     <div class="header">REPUBLIQUE DE CÔTE D'IVOIRE</div>
     
@@ -194,7 +193,7 @@ $acte = $actes[$index];
     </div>
 </div>
 
-<?php elseif ($type === 'mariage'): ?>
+<?php elseif ($acte['type_acte'] === 'mariage'): ?>
 <div class="document" id="print-zone">
     <div class="header">REPUBLIQUE DE CÔTE D'IVOIRE</div>
     
@@ -236,7 +235,7 @@ $acte = $actes[$index];
     </div>
 </div>
 
-<?php elseif ($type === 'deces'): ?>
+<?php elseif ($acte['type_acte'] === 'deces'): ?>
 <div class="document" id="print-zone">
     <div class="header">REPUBLIQUE DE CÔTE D'IVOIRE</div>
     
@@ -271,7 +270,7 @@ $acte = $actes[$index];
     </div>
 </div>
 <?php endif; ?>
-
+<?php endforeach; ?>
 
 <button class="print-button" onclick="window.print()">🖨️ Imprimer l’extrait</button>
 

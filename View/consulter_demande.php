@@ -66,7 +66,7 @@ $canPrint = (
     $certificate['est_signer'] == 1 
 );
 
-$cssClass = 'autre'; // par défaut
+$cssClass = 'autre'; 
 
 if ($status === 'valider') {
     $cssClass = $canPrint ? 'valide' : 'en-attente';
@@ -306,7 +306,8 @@ if ($status === 'valider') {
                 $canPrint = (
                     isset($certificate['statut'], $certificate['est_signer']) &&
                     strtolower($certificate['statut']) === 'valider' &&
-                    $certificate['est_signer'] == 1 
+                    $certificate['est_signer'] == 1 &&
+                    $certificate['payer'] == 0
                 );
             ?>
             <?php if ($canPrint): ?>

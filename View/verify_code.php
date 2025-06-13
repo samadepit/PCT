@@ -12,7 +12,7 @@ require_once __DIR__ . '/../Controller/requestroController.php';
 $acteDemandeController=new ActeDemandeController;
 
 $paymentcontroller = new PaymentController();
-$code_demand = $_GET['code_demande'] ?? null;
+$code_demand = $_GET['code_demande'] ;
 
 $message = "";
 $success = false;
@@ -30,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code_paiement'])) {
     } else {
         $success = true;
         $message = "✅ Paiement confirmé. Merci !";
-
         $paymentcontroller->createPayment($code_demand, $numero, $code_paiement_generate,$is_duplicate=0);
         $acteDemandeController->addPaymentForOneCertificate($code_demand);
     }
