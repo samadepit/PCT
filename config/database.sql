@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS administration (
     numero_telephone VARCHAR(15),
     profession VARCHAR(100),
     email VARCHAR(255) NOT NULL UNIQUE,
-    role ENUM('agent', 'officier') NOT NULL,
+    role ENUM('agent', 'officier','admin') NOT NULL,
     password VARCHAR(255) NOT NULL,
     statut ENUM('actif', 'inactif') DEFAULT 'actif',
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

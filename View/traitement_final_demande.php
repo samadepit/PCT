@@ -89,28 +89,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['modifier_type'])) {
             <?php endif; ?>
 
             <?php foreach ($data_certificate as $type => $certificates): ?>
-            <div class="section">
-                <h3>📄 <?= ucfirst($type) ?></h3>
-                <div class="certificate-container">
-                    <?php foreach ($certificates as $i => $certificate): ?>
-                    <details class="certificate-details">
-                        <summary><?= ucfirst($type) ?> #<?= (int)$i + 1 ?> - Afficher / Masquer</summary>
-                        <fieldset class="certificate-fieldset">
-                            <ul class="section-list">
-                                <?php foreach ($certificate as $cle => $val): ?>
-                                <li><strong><?= htmlspecialchars($cle) ?>:</strong> <?= htmlspecialchars($val) ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                            <form method="post" class="form-grid">
-                                <input type="hidden" name="modifier_type" value="<?= htmlspecialchars($type) ?>">
-                                <input type="hidden" name="certificate_index" value="<?= $i ?>">
-                                <button type="submit" class="btn btn-secondary">✏️ Modifier cet acte</button>
-                            </form>
-                        </fieldset>
-                    </details>
-                    <?php endforeach; ?>
+                <div class="section">
+                    <h3>📄 <?= ucfirst($type) ?></h3>
+                    
+                    <div class="scroll-container">
+                        <?php foreach ($certificates as $i => $certificate): ?>
+                            <details class="acte-details">
+                                <summary><?= ucfirst($type) ?> #<?= (int)$i + 1 ?> - Afficher / Masquer</summary>
+                                <fieldset>
+                                    <ul>
+                                        <?php foreach ($certificate as $cle => $val): ?>
+                                            <li><strong><?= htmlspecialchars($cle) ?>:</strong> <?= htmlspecialchars($val) ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </fieldset>
+                            </details>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-            </div>
             <?php endforeach; ?>
 
             <form method="post" class="form-grid">

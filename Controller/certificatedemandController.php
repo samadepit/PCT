@@ -61,6 +61,7 @@ class ActeDemandeController
             'validated' => $this->actedemandeModel->getNumbercertificateValidate(),
             'rejeted' => $this->actedemandeModel->getNumbercertificateRejeted(),
             'total_certificate'=>$this->actedemandeModel->getNumbercertificate(),
+            'signed' => $this->actedemandeModel->getNumbercertificateSigned(),
         ];
     }
 
