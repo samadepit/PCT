@@ -21,7 +21,9 @@ $requestroController = new DemandeurController();
 $emailRequestro = $requestroController->get_requestor_mail($codeDemande);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['signature'])) {
-    notifierDemandeur($emailRequestro, $codeDemande, 'signe');
+    if (!empty($emailRequestro)) {
+        notifierDemandeur($emailRequestro, $codeDemande, 'signe');
+    }
     $sSigningController->handleRequest($id);
     exit; 
 }
