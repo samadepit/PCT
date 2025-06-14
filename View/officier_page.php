@@ -1,10 +1,17 @@
 <?php
+session_start();
+
 require_once __DIR__ . '/../Controller/certificatedemandController.php';
 require_once __DIR__ . '/../service/date_convert.php';
 
+$id = $_GET['id'] ?? null;
+if (empty($id)) {
+    $_SESSION['erreur'] = "Accès invalide. Vous avez été redirigé vers la page de connexion.";
+    header("Location: login.php");
+    exit;
+}
 $actedemandeController = new ActeDemandeController();
 $demandes = $actedemandeController->getAllvalidationCertificate();
-$id = $_GET['id'] ?? null;
 $stats = $actedemandeController->getStatistics();
 
 

@@ -36,44 +36,6 @@ if (isset($_SESSION['erreur'])) {
 }
 ?>
 
-
-
-
-<div class="top-header">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCPIRahRkX8w3AK0ahlZKqhkZi22eMtSf6qg&s" alt="Logo CI" />
-    <h1>Bienvenue sur le Portail des Demande d'actes d'état civil</h1>
-    <nav>
-        <a href="dashboard.php" class="nav-btn">Accueil</a>
-        <a href="demande_etape1.php" class="nav-btn">Faire une demande</a>
-        <a href="consulter_demande.php" class="nav-btn"><span>Suivre une demande</span></a>
-    </nav>
-</div>
-
-<form method="POST" class="search-form">
-    <label for="code_demande">Code de la demande :</label>
-    <input type="text" id="code_demande" name="code_demande" required />
-    <button type="submit">🔍 Rechercher</button>
-</form>
-
-<?php if (!empty($certificates)): ?>
-    <h3>Actes trouvés :</h3>
-    <?php foreach ($certificates as $index => $certificate): ?>
-        <?php
-$status = strtolower($certificate['statut'] ?? '');
-$canPrint = (
-    isset($certificate['statut'], $certificate['est_signer']) &&
-    $status === 'valider' &&
-    $certificate['est_signer'] == 1 
-);
-
-$cssClass = 'autre'; 
-
-if ($status === 'valider') {
-    $cssClass = $canPrint ? 'valide' : 'en-attente';
-} elseif ($status === 'rejeter') {
-    $cssClass = 'rejeter';
-}
-?>
 <style>
       html, body {
         margin: 0;
@@ -290,6 +252,44 @@ if ($status === 'valider') {
         margin: 6px 0;
     }
 </style>
+
+
+<div class="top-header">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCPIRahRkX8w3AK0ahlZKqhkZi22eMtSf6qg&s" alt="Logo CI" />
+    <h1>Bienvenue sur le Portail des Demande d'actes d'état civil</h1>
+    <nav>
+        <a href="dashboard.php" class="nav-btn">Accueil</a>
+        <a href="demande_etape1.php" class="nav-btn">Faire une demande</a>
+        <a href="consulter_demande.php" class="nav-btn"><span>Suivre une demande</span></a>
+    </nav>
+</div>
+
+<form method="POST" class="search-form">
+    <label for="code_demande">Code de la demande :</label>
+    <input type="text" id="code_demande" name="code_demande" required />
+    <button type="submit">🔍 Rechercher</button>
+</form>
+
+<?php if (!empty($certificates)): ?>
+    <h3>Actes trouvés :</h3>
+    <?php foreach ($certificates as $index => $certificate): ?>
+        <?php
+$status = strtolower($certificate['statut'] ?? '');
+$canPrint = (
+    isset($certificate['statut'], $certificate['est_signer']) &&
+    $status === 'valider' &&
+    $certificate['est_signer'] == 1 
+);
+
+$cssClass = 'autre'; 
+
+if ($status === 'valider') {
+    $cssClass = $canPrint ? 'valide' : 'en-attente';
+} elseif ($status === 'rejeter') {
+    $cssClass = 'rejeter';
+}
+?>
+
 
 <div class="acte <?= $cssClass ?>">
     <div class="acte-header">

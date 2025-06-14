@@ -1,31 +1,31 @@
 <?php 
+session_start();
+
 require_once __DIR__ . '/../Controller/signingController.php';
 require_once __DIR__ . '/../service/mail_functions.php';
 require_once __DIR__ . '/../Controller/requestroController.php';
 
-if (empty($_GET['code_demande'])) {
-    die("Erreur : Code de demande requis");
+$id = $_POST['id'] ?? $_GET['id'] ?? null;
+$code_demande = $_POST['code_demande'] ?? $_GET['code_demande'] ?? null;
+
+if (empty($id) || empty($code_demande)) {
+    $_SESSION['erreur'] = "Accès invalide. Vous avez été redirigé vers la page de connexion.";
+    header("Location: login.php");
+    exit;
 }
-$id = $_GET['id'] ?? null;
 
 $codeDemande = htmlspecialchars($_GET['code_demande']);
+$id = htmlspecialchars($id);
 $sSigningController = new SigningController();
 $requestroController = new DemandeurController();
 $emailRequestro = $requestroController->get_requestor_mail($codeDemande);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['signature'])) {
     notifierDemandeur($emailRequestro, $codeDemande, 'signe');
-    $sSigningController->handleRequest();
+    $sSigningController->handleRequest($id);
     exit; 
 }
 ?>
-
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -361,8 +361,28 @@ function isCanvasEmpty() {
     const blank = document.createElement('canvas');
     blank.width = canvas.width;
     blank.height = canvas.height;
+
+    const bctx = blank.getContext('2d');
+    bctx.fillStyle = '#FFFFFF';
+    bctx.fillRect(0, 0, blank.width, blank.height);
+
     return canvas.toDataURL() === blank.toDataURL();
 }
+document.getElementById('save-btn').addEventListener('click', function() {
+    const saveBtn = this;
+
+    if (isCanvasEmpty()) {
+        alert('Veuillez ajouter votre signature avant de valider.');
+        return;
+    }
+
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Enregistrement...';
+
+    document.getElementById('signature-data').value = canvas.toDataURL();
+    document.getElementById('signature-form').submit();
+});
+
 </script>
 
 </body>

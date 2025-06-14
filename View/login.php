@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (isset($_SESSION['erreur'])) {
+    echo "<script>alert('" . $_SESSION['erreur'] . "');</script>";
+    unset($_SESSION['erreur']);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>

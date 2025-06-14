@@ -228,10 +228,10 @@ try {
 
     <div>Certifié le présent extrait conforme aux indications portées au registre.</div>
     <div class="footer">
-        Délivré à <?= htmlspecialchars($acte['localiter']) ?>, le <?= date('d/m/Y') ?><br>
+        Délivré à <?= htmlspecialchars($acte['localiter']) ?>, le <?=$dateConvertie = convertirDateEnFrancais(date('d/m/Y')) ?><br>
         L' Officier de l'Etat Civil<br><br>
-        <strong><?= htmlspecialchars($acte['officier_nom']) ?> <?= htmlspecialchars($acte['officier_prenom']) ?></strong><br>
-        <img src=<?= htmlspecialchars($acte['signature']) ?> alt="signature">
+        <strong><?= htmlspecialchars($acte['officier_nom']) ?>  <?= htmlspecialchars($acte['officier_prenom']) ?></strong> <br>
+        <img src=<?= htmlspecialchars($acte['signature']) ?> alt="signature">    
     </div>
 </div>
 
@@ -263,10 +263,10 @@ try {
     <div>Certifié le présent extrait conforme aux indications portées au registre.</div>
     
     <div class="footer">
-        Délivré à <?= htmlspecialchars($acte['localiter']) ?>, le <?= date('d/m/Y') ?><br>
+        Délivré à <?= htmlspecialchars($acte['localiter']) ?>, le <?=$dateConvertie = convertirDateEnFrancais(date('d/m/Y')) ?><br>
         L' Officier de l'Etat Civil<br><br>
-        <strong><?= htmlspecialchars($acte['officier_nom']) ?> <?= htmlspecialchars($acte['officier_prenom']) ?></strong><br>
-        <img src=<?= htmlspecialchars($acte['signature']) ?> alt="signature">
+        <strong><?= htmlspecialchars($acte['officier_nom']) ?>  <?= htmlspecialchars($acte['officier_prenom']) ?></strong> <br>
+        <img src=<?= htmlspecialchars($acte['signature']) ?> alt="signature">    
     </div>
 </div>
 <?php endif; ?>

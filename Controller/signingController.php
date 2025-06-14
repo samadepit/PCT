@@ -8,13 +8,13 @@ class SigningController {
         $this->demandeModel = new certificate_demand();
     }
     
-    public function handleRequest() {
+    public function handleRequest($id) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->processSignature();
+            $this->processSignature($id);
         }
     }
     
-    private function processSignature() {
+    private function processSignature($id) {
         try {
             $codeDemande = $_POST['code_demande'] ?? '';
             $signatureData = $_POST['signature'] ?? '';
@@ -32,7 +32,7 @@ class SigningController {
                 throw new Exception("Échec de l'enregistrement");
             }
             
-            header('Location: officier_page.php');
+            header('Location: officier_page.php?id=' . urlencode($id));
             exit;
             
         } catch (Exception $e) {

@@ -1,20 +1,20 @@
-<!-- Ton code PHP reste inchangé ici -->
 <?php
+session_start();
+
 require_once __DIR__ . '/../Controller/certificatedemandController.php';
 require_once __DIR__ . '/../Controller/demandController.php';
 require_once __DIR__ . '/../service/date_convert.php';
 require_once __DIR__ . '/../service/mail_functions.php';
 
-$actedemandeController = new ActeDemandeController();
-$demandeController = new DemandeController();
-
-if (!isset($_GET['code_demande'])) {
-    echo "ID de la demande manquant.";
+$id = $_GET['id'] ?? null;
+$code_demande =  $_GET['code_demande'] ?? null;
+if (empty($id) || empty($code_demande)) {
+    $_SESSION['erreur'] = "Accès invalide. Vous avez été redirigé vers la page de connexion.";
+    header("Location: login.php");
     exit;
 }
-
-$id = $_GET['id'] ?? null;
-$code_demande = $_GET['code_demande'];
+$actedemandeController = new ActeDemandeController();
+$demandeController = new DemandeController();
 $demande = $actedemandeController->getCertificateById($code_demande);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         notifierDemandeur($demande['email_demandeur'], $code_demande, 'rejete');
     }
 
-    header('Location: list_demand.php');
+    header('Location: list_demand.php?id=' . urlencode($id));
     exit;
 }
 ?>
@@ -394,8 +394,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </form>
         </div>
-
-       
     </div>
+    <script>
+        document.querySelector('form').addEventListener('submit', function (e) {
+        const action = e.submitter?.value;
+        const motif = document.getElementById('motif').value.trim();
+
+        if (action === 'rejeter' && !motif) {
+            alert("Veuillez entrer un motif pour rejeter la demande.");
+            e.preventDefault();
+            return;
+        }
+
+        setTimeout(() => {
+        const validerBtn = this.querySelector('.valider');
+        const rejeterBtn = this.querySelector('.rejeter');
+
+        if (validerBtn) {
+            validerBtn.disabled = true;
+            validerBtn.textContent = '⏳ Traitement...';
+        }
+
+        if (rejeterBtn) {
+            rejeterBtn.disabled = true;
+            rejeterBtn.textContent = '⏳ Traitement...';
+        }
+    }, 0);
+    });
+    </script>
 </body>
 </html>
