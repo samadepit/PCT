@@ -12,10 +12,10 @@ class DecesController
         $this->deathModel = new Deces();
     }
 
-    public function create_death_certificate(array $data,$birth_id)
+    public function create_death_certificate(array $data)
     {
         try {
-            $death_id = $this->deathModel->insert_data_death_certificate($data,$birth_id);
+            $death_id = $this->deathModel->insert_data_death_certificate($data);
             return $death_id;
         } catch (Exception $e) {
             error_log("Erreur: " . $e->getMessage());
@@ -35,4 +35,16 @@ class DecesController
             return false;
         }
     }
+
+    public function get_existing_death_id(array $data) {
+        try {
+            $death_id = $this->deathModel->get_deathcertificate_byId($data);
+            error_log("Acte de décès déjà existant pour ce défunt.");
+            return $death_id ?: null;
+        } catch (Exception $e) {
+            error_log("Erreur get_existing_death_id : " . $e->getMessage());
+            return null;
+        }
+    }
+    
 }

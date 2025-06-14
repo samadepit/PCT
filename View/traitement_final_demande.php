@@ -6,6 +6,7 @@ require_once __DIR__ . '/../Controller/deathController.php';
 require_once __DIR__ . '/../Controller/demandController.php';
 require_once __DIR__ . '/../Controller/certificatedemandController.php';
 require_once __DIR__ . '/../Controller/requestroController.php';
+require_once __DIR__ . '/../service/mail_functions.php';
 
 $birthController = new NaissanceController();
 $marriageController = new MarriageController();
@@ -26,10 +27,119 @@ foreach ($data_certificate as $type => $certificate) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmer'])) {
     try {
-        header('Location: paiement.php');
-        exit;
+        if (!empty($data_certificate)) {
+            $certificat_ids = [];
+            
+            foreach ($data_certificate as $type => $certificates) {
+                if (!is_array($certificates)) $certificates = [$certificates];
+
+                foreach ($certificates as $certificate) {
+                    $certificate_id = null;
+
+                    foreach ($certificate as $key => $value) {
+                        if (is_string($value) && file_exists(__DIR__ . '/../uploads/tmp/' . $value)) {
+                            $certificate[$key] = moveFromTmpToFinalStructured($value, $type, $key);
+                        }
+                    }
+                    $NewCertificate = false;
+                    switch ($type) {
+                        case 'naissance':
+                            $certificate_id = $birthController->get_existing_birth_id($certificate);
+                            if (!$certificate_id) {
+                                $certificate_id = $birthController->create_birth_certificate($certificate);
+                                $NewCertificate = true;
+
+                            }
+                            break;
+            
+                            case 'mariage':
+                                $certificate_id = $marriageController->get_existing_marriage_id($certificate);
+                            
+                                if (!$certificate_id) {
+                                    $certificate_id = $marriageController->create_marriage_certificate($certificate);
+                                    $NewCertificate = true;
+
+                                }
+                            
+                                $id_naissance_epoux = $birthController->get_existing_birth_id([
+                                    'nom' => $certificate['nom_epoux'],
+                                    'prenom' => $certificate['prenom_epoux'],
+                                    'date_naissance' => $certificate['date_naissance_epoux'],
+                                    'lieu_naissance' => $certificate['lieu_naissance_epoux'],
+                                    'genre' => 'masculin'
+                                ]);
+                            
+                                $id_naissance_epouse = $birthController->get_existing_birth_id([
+                                    'nom' => $certificate['nom_epouse'],
+                                    'prenom' => $certificate['prenom_epouse'],
+                                    'date_naissance' => $certificate['date_naissance_epouse'],
+                                    'lieu_naissance' => $certificate['lieu_naissance_epouse'],
+                                    'genre' => 'feminin'
+                                ]);
+                            
+                                if ($id_naissance_epoux || $id_naissance_epouse) {
+                                    $certificate['id_naissance_epoux'] = $id_naissance_epoux;
+                                    $certificate['id_naissance_epouse'] = $id_naissance_epouse;
+                            
+                                    $birthController->addMarriageInbirthcertificate($certificate);
+                                }
+                            
+                                break;
+
+                                
+                        case 'deces':
+                            $certificate_id = $deathController->get_existing_death_id($certificate);
+                            if (!$certificate_id) {
+                                $certificate_id = $deathController->create_death_certificate($certificate);
+                                $NewCertificate = true;
+
+                            }
+                            $birth_id = $birthController->get_existing_birth_id([
+                                'nom' => $certificate['nom_defunt'],
+                                'prenom' => $certificate['prenom_defunt'],
+                                'date_naissance' => $certificate['date_naissance'],
+                                'lieu_naissance' => $certificate['lieu_naissance'],
+                                'genre' => $certificate['genre'] ?? null
+                            ]);
+                            if ($birth_id) {
+                                $birthController->addDeathInbirthcertificate($certificate, $birth_id);
+                            }
+                            break;
+                    }
+            
+                    $certificat_ids[] = ['type' => $type, 'id' => $certificate_id];
+                }
+            
+                }
+                if ($NewCertificate) {
+                    $code_demand = $demandController->create_demand($_SESSION['localiter'] ?? null);
+                    $requestor_mail = $requestroController->create_requestor($code_demand, $requestor_data);
+                
+                    foreach ($certificat_ids as $certif) {
+                        $certificate_demandController->certificate_demand($code_demand, $certif['type'], $certif['id']);
+                    }
+                    notifierDemandeur($requestor_mail, $code_demand, 'cree');
+                    $_SESSION['code_demande'] = $code_demand;
+                    unset($_SESSION['demandeur'], $_SESSION['localiter'], $_SESSION['donnees_actes'], $_SESSION['code_paiement']);
+                    header('Location: code_suivie.php');
+                    exit;
+                } else {
+                    $message = "Aucun nouvel acte à enregistrer. Demande non créée.";
+                    error_log("Aucune création car tous les actes existent déjà.");
+                }
+                
+        }
+        else {
+            // $code_demand = $_SESSION['code_demande'] ?? null;
+            // if (!$code_demand) throw new Exception("Code de demande manquant pour duplicata.");
+            // $paymentcontroller->createPayment($code_demande_duplicate, $numero, $code_paiement_generate,$is_duplicate=1);
+            // unset($_SESSION['code_paiement']);
+            header('Location: dahsboard.php');
+            exit;
+        }
+
     } catch (Exception $e) {
-        $erreurs[] = $e->getMessage();
+        $message = "Erreur : " . $e->getMessage();
         error_log("Erreur traitement: " . $e->getMessage());
     }
 }
@@ -37,7 +147,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmer'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['modifier_type'])) {
     $type = $_POST['modifier_type'];
     $redirectPage = 'demande_etape1.php';
-    
     if ($redirectPage) {
         header("Location: $redirectPage");
         exit;
@@ -73,7 +182,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['modifier_type'])) {
                     <h3>🙋‍♂️ Informations sur le demandeur</h3>
                     <ul>
                         <?php foreach ($requestor_data as $cle => $val): ?>
-                            <li><strong><?= htmlspecialchars($cle) ?>:</strong> <?= htmlspecialchars($val) ?></li>
+                            <li><strong><?= htmlspecialchars($cle) ?>:</strong>
+                                <?php if (is_string($val) && preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $val)): ?>
+                                <div style="margin-top: 8px; text-align:center;">
+                                    <img src="<?= htmlspecialchars($val) ?>" alt="Image" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #ccc;">
+                                </div>
+                                <?php else: ?>
+                                    <?= htmlspecialchars($val ?? '') ?>
+                                <?php endif; ?>
+                            </li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -90,7 +207,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['modifier_type'])) {
                                 <fieldset>
                                     <ul>
                                         <?php foreach ($certificate as $cle => $val): ?>
-                                            <li><strong><?= htmlspecialchars($cle) ?>:</strong> <?= htmlspecialchars($val  ?? '') ?></li>
+                                            <li><strong><?= htmlspecialchars($cle) ?>:</strong> 
+                                            
+                                            <?php if (is_string($val) && preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $val)): ?>
+                                            <div style="margin-top: 8px; text-align:center;">
+                                                <img src="<?= htmlspecialchars($val) ?>" alt="Image" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #ccc;">
+                                            </div>
+                                            <?php else: ?>
+                                                <?= htmlspecialchars($val ?? '') ?>
+                                            <?php endif; ?>
+
+                                            </li>
                                         <?php endforeach; ?>
                                     </ul>
                                 </fieldset>

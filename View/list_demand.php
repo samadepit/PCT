@@ -1,8 +1,17 @@
 <?php
+session_start();
 require_once __DIR__ . '/../Controller/certificatedemandController.php';
-$actedemandeController = new ActeDemandeController();
-$demandes = $actedemandeController->getAllPending();
+require_once __DIR__ . '/../service/date_convert.php';
 $id = $_GET['id'] ?? null;
+if (empty($id)) {
+    $_SESSION['erreur'] = "Accès invalide. Vous avez été redirigé vers la page de connexion.";
+    header("Location: login.php");
+    exit;
+}
+$actedemandeController = new ActeDemandeController();
+
+$demandes = $actedemandeController->getAllPending();
+
 $stats = $actedemandeController->getStatistics();
 
 ?>
@@ -278,15 +287,15 @@ $stats = $actedemandeController->getStatistics();
                 <tbody>
                     <?php foreach ($demandes as $demande): ?>
                         <tr>
-                            <td><?= htmlspecialchars($demande['date_demande']) ?></td>
+                            <td><?=$dateConvertie = convertirDateEnFrancais(htmlspecialchars($demande['demande_date_creation'])) ?></td>
                             <td><?= htmlspecialchars($demande['nom_demandeur']) ?> <?= htmlspecialchars($demande['prenom_demandeur']) ?></td>
                             <td><?= htmlspecialchars($demande['type_acte']) ?></td>
                             <td>
                                 <?php if ($demande['type_acte'] === 'naissance'): ?>
                                     <?= htmlspecialchars($demande['nom_beneficiaire']) ?> <?= htmlspecialchars($demande['prenom_beneficiaire']) ?>
                                 <?php elseif ($demande['type_acte'] === 'mariage'): ?>
-                                    <?= htmlspecialchars($demande['nom_mari']) ?> <?= htmlspecialchars($demande['prenom_mari']) ?> & 
-                                    <?= htmlspecialchars($demande['nom_femme']) ?> <?= htmlspecialchars($demande['prenom_femme']) ?>
+                                    <?= htmlspecialchars($demande['nom_epoux']) ?> <?= htmlspecialchars($demande['prenom_epoux']) ?> & 
+                                    <?= htmlspecialchars($demande['nom_epouse']) ?> <?= htmlspecialchars($demande['prenom_epouse']) ?>
                                 <?php elseif ($demande['type_acte'] === 'deces'): ?>
                                     <?= htmlspecialchars($demande['nom_defunt']) ?> <?= htmlspecialchars($demande['prenom_defunt']) ?>
                                 <?php else: ?>

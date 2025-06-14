@@ -27,249 +27,345 @@ class certificate_demand
     public function get_Alldemand($code_demand) {
         $stmt = $this->con->prepare("
             SELECT 
-            ad.type_acte,
-            ad.payer,
-            ad.est_signer,
-            ad.signature,
-            dm.statut,
-            dm.date_creation,
-            dm.localiter,
-            ad.code_demande,
-            dm.motif_rejet,
+                -- Données générales de la demande
+                ad.type_acte,
+                ad.payer,
+                ad.est_signer,
+                ad.signature,
+                dm.statut,
+                dm.motif_rejet,
+                dm.localiter,
+                dm.date_creation AS demande_date_creation,
+                ad.code_demande,
 
-            -- Information de l'officier d'état civil
-            adm.nom AS officier_nom,
-            adm.prenom AS officier_prenom,
-
-            -- Naissance (si acte = naissance)
-            n.nom_beneficiaire, n.prenom_beneficiaire, n.date_naissance, n.lieu_naissance,
-            n.nom_pere, n.prenom_pere, n.profession_pere,
-            n.nom_mere, n.prenom_mere, n.profession_mere,
-            n.date_creation AS naissance_date_creation,n.heure_naissance,n.genre AS naissance_genre,
-            n.date_mariage AS naissance_date_mariage,n.lieu_mariage AS naissance_lieu_mariage,
-            n.statut_mariage AS naissance_statut_mariage,n.date_deces AS naissance_date_deces ,
-            n.lieu_deces AS naissance_lieu_deces,n.numero_registre,
-
-            -- Mariage
-            mari.date_mariage, mari.lieu_mariage, mari.date_creation AS mariage_date_creation,
-            mari.nombre_enfant,
-            homme.nom_beneficiaire AS nom_mari, homme.prenom_beneficiaire AS prenom_mari,
-            homme.date_naissance AS date_naissance_mari,femme.date_naissance AS date_naissance_femme,
-            femme.nom_beneficiaire AS nom_femme, femme.prenom_beneficiaire AS prenom_femme,
-          
-
-            -- Décès
-            defunt.nom_beneficiaire AS nom_defunt, defunt.prenom_beneficiaire AS prenom_defunt,
-            defunt.date_naissance AS defunt_date_naissance,defunt.lieu_naissance AS defunt_lieu_naissance,
-            d.lieu_deces, d.date_deces, d.cause, d.genre, d.profession,
-            d.date_creation AS deces_date_creation
-
+                 -- Information de l'officier d'état civil
+                adm.nom AS officier_nom,
+                adm.prenom AS officier_prenom,
+    
+                -- Infos Naissance (si applicable)
+                n.nom_beneficiaire, n.prenom_beneficiaire, n.date_naissance, n.heure_naissance,
+                n.lieu_naissance, n.nom_pere, n.prenom_pere, n.profession_pere,
+                n.nom_mere, n.prenom_mere, n.profession_mere,
+                n.date_mariage AS naissance_date_mariage, n.lieu_mariage AS naissance_lieu_mariage,
+                n.statut_mariage AS naissance_statut_mariage, n.date_deces AS naissance_date_deces,
+                n.lieu_deces AS naissance_lieu_deces, n.genre AS naissance_genre, n.numero_registre,
+                n.piece_identite_pere, n.piece_identite_mere, n.certificat_de_naissance,
+                n.date_creation AS naissance_date_creation,
+    
+                -- Infos Mariage (si applicable)
+                mari.nom_epoux, mari.prenom_epoux, mari.date_naissance_epoux, mari.lieu_naissance_epoux,
+                mari.nationalite_epoux, mari.situation_matrimoniale_epoux, mari.temoin_epoux, mari.profession_epoux,
+                mari.nom_epouse, mari.prenom_epouse, mari.date_naissance_epouse, mari.lieu_naissance_epouse,
+                mari.situation_matrimoniale_epouse, mari.temoin_epouse, mari.nationalite_epouse, mari.profession_epouse,
+                mari.date_mariage, mari.lieu_mariage,
+                mari.piece_identite_epoux, mari.certificat_residence_epoux,
+                mari.piece_identite_epouse, mari.certificat_residence_epouse,
+                mari.date_creation AS mariage_date_creation,
+    
+                -- Infos Décès (si applicable)
+                d.nom_defunt, d.prenom_defunt, d.date_naissance AS defunt_date_naissance,
+                d.lieu_naissance AS defunt_lieu_naissance, d.date_deces, d.lieu_deces, d.cause,
+                d.genre AS defunt_genre, d.profession AS defunt_profession,
+                d.certificat_medical_deces, d.piece_identite_defunt,
+                d.date_creation AS deces_date_creation,
+                d.genre,d.profession
+    
             FROM actes_demande ad
-            LEFT JOIN demande dm ON ad.code_demande = dm.code_demande
-
+            INNER JOIN demande dm ON ad.code_demande = dm.code_demande
             LEFT JOIN administration adm ON ad.id_officier = adm.id
-
-
-            -- Naissance uniquement si type_acte = 'naissance'
             LEFT JOIN naissance n ON ad.type_acte = 'naissance' AND ad.id_acte = n.id
-
-            -- Mariage uniquement si type_acte = 'mariage'
             LEFT JOIN mariage mari ON ad.type_acte = 'mariage' AND ad.id_acte = mari.id
-            LEFT JOIN naissance homme ON mari.id_naissance_mari = homme.id
-            LEFT JOIN naissance femme ON mari.id_naissance_femme = femme.id
-
-            -- Décès uniquement si type_acte = 'deces'
             LEFT JOIN deces d ON ad.type_acte = 'deces' AND ad.id_acte = d.id
-            LEFT JOIN naissance defunt ON d.id_naissance = defunt.id
-
-            WHERE ad.code_demande = :code_demande;
-
-            ");
+    
+            WHERE ad.code_demande = :code_demande
+        ");
+    
         $stmt->execute([':code_demande' => $code_demand]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return [$stmt->fetch(PDO::FETCH_ASSOC)];
     }
+    
 
     public function getAllPendingActeDemandes()
     {
         $query = "
             SELECT 
-            ad.id, ad.type_acte, ad.id_acte, ad.code_demande, d.statut,
-            d.date_creation AS date_demande,
-            dm.nom AS nom_demandeur, dm.prenom AS prenom_demandeur, dm.relation_avec_beneficiaire,
-
-            -- Données naissance directe
-            n.nom_beneficiaire, n.prenom_beneficiaire, n.date_naissance, n.lieu_naissance,
-
-            -- Données mariage (via naissance)
-            mari.date_mariage, mari.lieu_mariage,
-            mari.numero_registre AS registre_mariage,
-            mari.date_creation AS mariage_date_creation,
-            homme.nom_beneficiaire AS nom_mari,
-            homme.prenom_beneficiaire AS prenom_mari,
-            femme.nom_beneficiaire AS nom_femme,
-            femme.prenom_beneficiaire AS prenom_femme,
-
-            -- Données décès (via naissance)
-            dc.date_deces, dc.lieu_deces,
-            def.nom_beneficiaire AS nom_defunt,
-            def.prenom_beneficiaire AS prenom_defunt
-
+                -- Données générales
+                ad.id, ad.type_acte, ad.id_acte, ad.code_demande, ad.payer, ad.est_signer, ad.signature,
+                d.statut, d.motif_rejet, d.localiter, d.date_creation AS demande_date_creation,
+    
+                -- Demandeur
+                dm.nom AS nom_demandeur, dm.prenom AS prenom_demandeur, dm.relation_avec_beneficiaire,
+    
+                -- Infos Naissance
+                n.nom_beneficiaire, n.prenom_beneficiaire, n.date_naissance, n.heure_naissance,
+                n.lieu_naissance, n.nom_pere, n.prenom_pere, n.profession_pere,
+                n.nom_mere, n.prenom_mere, n.profession_mere,
+                n.date_mariage AS naissance_date_mariage, n.lieu_mariage AS naissance_lieu_mariage,
+                n.statut_mariage AS naissance_statut_mariage, n.date_deces AS naissance_date_deces,
+                n.lieu_deces AS naissance_lieu_deces, n.genre AS naissance_genre, n.numero_registre,
+                n.piece_identite_pere, n.piece_identite_mere, n.certificat_de_naissance,
+                n.date_creation AS naissance_date_creation,
+    
+                -- Infos Mariage
+                mari.nom_epoux, mari.prenom_epoux, mari.date_naissance_epoux, mari.lieu_naissance_epoux,
+                mari.nationalite_epoux, mari.situation_matrimoniale_epoux, mari.temoin_epoux, mari.profession_epoux,
+                mari.nom_epouse, mari.prenom_epouse, mari.date_naissance_epouse, mari.lieu_naissance_epouse,
+                mari.situation_matrimoniale_epouse, mari.temoin_epouse, mari.nationalite_epouse, mari.profession_epouse,
+                mari.date_mariage, mari.lieu_mariage,
+                mari.piece_identite_epoux, mari.certificat_residence_epoux,
+                mari.piece_identite_epouse, mari.certificat_residence_epouse,
+                mari.date_creation AS mariage_date_creation,
+    
+                -- Infos Décès
+                dc.nom_defunt, dc.prenom_defunt, dc.date_naissance AS defunt_date_naissance,
+                dc.lieu_naissance AS defunt_lieu_naissance, dc.date_deces, dc.lieu_deces, dc.cause,
+                dc.genre AS defunt_genre, dc.profession AS defunt_profession,
+                dc.certificat_medical_deces, dc.piece_identite_defunt,
+                dc.date_creation AS deces_date_creation
+    
             FROM actes_demande ad
-
             INNER JOIN demande d ON ad.code_demande = d.code_demande
             INNER JOIN demandeur dm ON d.code_demande = dm.code_demande
-
-            -- Cas naissance direct
+    
+            -- Jointures conditionnelles selon type d'acte
             LEFT JOIN naissance n ON ad.type_acte = 'naissance' AND ad.id_acte = n.id
-
-            -- Cas mariage
             LEFT JOIN mariage mari ON ad.type_acte = 'mariage' AND ad.id_acte = mari.id
-            LEFT JOIN naissance homme ON mari.id_naissance_mari = homme.id
-            LEFT JOIN naissance femme ON mari.id_naissance_femme = femme.id
-
-            -- Cas décès
             LEFT JOIN deces dc ON ad.type_acte = 'deces' AND ad.id_acte = dc.id
-            LEFT JOIN naissance def ON dc.id_naissance = def.id
-
-            WHERE  d.statut='en_attente' and ad.payer=1;
-
+    
+            WHERE d.statut = 'en_attente';
         ";
+    
         $stmt = $this->con->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
+    
     public function getOneCertificateById($id_certificate) {
         $query = "
-            SELECT 
-                ad.id, ad.type_acte, ad.id_acte, ad.code_demande,
-                d.date_creation AS date_demande,
-                dm.nom AS nom_demandeur, dm.prenom AS prenom_demandeur, dm.relation_avec_beneficiaire,
-                dm.numero_telephone AS numero_demandeur, dm.email AS email_demandeur,
-
-                n.nom_beneficiaire, n.prenom_beneficiaire, n.date_naissance, n.lieu_naissance,
-                n.heure_naissance, n.nom_pere, n.prenom_pere, n.profession_pere,
-                n.nom_mere, n.prenom_mere, n.profession_mere,
-                mari.date_mariage, mari.lieu_mariage,
-                mari.numero_registre AS registre_mariage,
-                mari.date_creation AS mariage_date_creation,
-                homme.nom_beneficiaire AS nom_mari,
-                homme.prenom_beneficiaire AS prenom_mari,
-                homme.date_naissance as age_homme,
-                femme.date_naissance as age_femme,
-                femme.nom_beneficiaire AS nom_femme,
-                femme.prenom_beneficiaire AS prenom_femme,
-
-                dc.date_deces, dc.lieu_deces,
-                def.nom_beneficiaire AS nom_defunt,
-                def.prenom_beneficiaire AS prenom_defunt
-
-            FROM actes_demande ad
-
-            INNER JOIN demande d ON ad.code_demande = d.code_demande
-            INNER JOIN demandeur dm ON d.code_demande = dm.code_demande
-
-            LEFT JOIN naissance n ON ad.type_acte = 'naissance' AND ad.id_acte = n.id
-            LEFT JOIN mariage mari ON ad.type_acte = 'mariage' AND ad.id_acte = mari.id
-            LEFT JOIN naissance homme ON mari.id_naissance_mari = homme.id
-            LEFT JOIN naissance femme ON mari.id_naissance_femme = femme.id
-            LEFT JOIN deces dc ON ad.type_acte = 'deces' AND ad.id_acte = dc.id
-            LEFT JOIN naissance def ON dc.id_naissance = def.id
-
-            WHERE ad.code_demande = ?
+           SELECT 
+            ad.id,
+            ad.type_acte,
+            ad.id_acte,
+            ad.code_demande,
+            d.localiter,
+            d.date_creation AS date_demande,
+            ad.payer,
+            ad.est_signer,
+            ad.signature,
+    
+            -- Demandeur
+            dm.nom AS nom_demandeur,
+            dm.prenom AS prenom_demandeur,
+            dm.lieu_residence,
+            dm.numero_telephone AS numero_demandeur,
+            dm.email AS email_demandeur,
+            dm.relation_avec_beneficiaire,
+            dm.piece_identite_demandeur,
+    
+            -- Naissance
+            n.nom_beneficiaire,
+            n.prenom_beneficiaire,
+            n.date_naissance,
+            n.lieu_naissance,
+            n.heure_naissance,
+            n.nom_pere,
+            n.prenom_pere,
+            n.profession_pere,
+            n.nom_mere,
+            n.prenom_mere,
+            n.profession_mere,
+            n.genre AS naissance_genre,
+            n.numero_registre,
+            n.piece_identite_pere,
+            n.piece_identite_mere,
+            n.certificat_de_naissance,
+    
+            -- Mariage
+            mari.nom_epoux,
+            mari.prenom_epoux,
+            mari.date_naissance_epoux,
+            mari.lieu_naissance_epoux,
+            mari.nationalite_epoux,
+            mari.situation_matrimoniale_epoux,
+            mari.temoin_epoux,
+            mari.profession_epoux,
+            mari.nom_epouse,
+            mari.prenom_epouse,
+            mari.date_naissance_epouse,
+            mari.lieu_naissance_epouse,
+            mari.nationalite_epouse,
+            mari.situation_matrimoniale_epouse,
+            mari.temoin_epouse,
+            mari.profession_epouse,
+            mari.date_mariage,
+            mari.lieu_mariage,
+            mari.piece_identite_epoux,
+            mari.piece_identite_epouse,
+            mari.certificat_residence_epoux,
+            mari.certificat_residence_epouse,
+            mari.date_creation,
+    
+            -- Décès
+            dc.nom_defunt,
+            dc.prenom_defunt,
+            dc.date_naissance AS date_naissance_defunt,
+            dc.lieu_naissance AS lieu_naissance_defunt,
+            dc.date_deces,
+            dc.lieu_deces,
+            dc.cause,
+            dc.genre AS defunt_genre,
+            dc.profession AS defunt_profession,
+            dc.certificat_medical_deces,
+            dc.piece_identite_defunt
+    
+        FROM actes_demande ad
+        JOIN demande d ON ad.code_demande = d.code_demande
+        LEFT JOIN demandeur dm ON dm.code_demande = d.code_demande
+        LEFT JOIN naissance n ON ad.type_acte = 'naissance' AND ad.id_acte = n.id
+        LEFT JOIN mariage mari ON ad.type_acte = 'mariage' AND ad.id_acte = mari.id
+        LEFT JOIN deces dc ON ad.type_acte = 'deces' AND ad.id_acte = dc.id
+    
+        WHERE ad.code_demande = ?;
         ";
-
+    
         $stmt = $this->con->prepare($query);
         $stmt->execute([$id_certificate]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    
+
+
     public function getAllvalidationCertificateDemandes() {
         $query = "
             SELECT 
-                ad.id, ad.type_acte, ad.id_acte, ad.code_demande,
-                d.date_creation AS date_demande,
-                dm.nom AS nom_demandeur, dm.prenom AS prenom_demandeur, dm.relation_avec_beneficiaire,
-                dm.numero_telephone AS numero_demandeur, dm.email AS email_demandeur,
-
-                n.nom_beneficiaire, n.prenom_beneficiaire, n.date_naissance, n.lieu_naissance,
-                n.heure_naissance, n.nom_pere, n.prenom_pere, n.profession_pere,
-                n.nom_mere, n.prenom_mere, n.profession_mere,
-                mari.date_mariage, mari.lieu_mariage,
-                mari.numero_registre AS registre_mariage,
-                mari.date_creation AS mariage_date_creation,
-                homme.nom_beneficiaire AS nom_mari,
-                homme.prenom_beneficiaire AS prenom_mari,
-                homme.date_naissance as age_homme,
-                femme.date_naissance as age_femme,
-                femme.nom_beneficiaire AS nom_femme,
-                femme.prenom_beneficiaire AS prenom_femme,
-
-                dc.date_deces, dc.lieu_deces,
-                def.nom_beneficiaire AS nom_defunt,
-                def.prenom_beneficiaire AS prenom_defunt
-
-            FROM actes_demande ad
-
-            INNER JOIN demande d ON ad.code_demande = d.code_demande
-            INNER JOIN demandeur dm ON d.code_demande = dm.code_demande
-
-            LEFT JOIN naissance n ON ad.type_acte = 'naissance' AND ad.id_acte = n.id
-            LEFT JOIN mariage mari ON ad.type_acte = 'mariage' AND ad.id_acte = mari.id
-            LEFT JOIN naissance homme ON mari.id_naissance_mari = homme.id
-            LEFT JOIN naissance femme ON mari.id_naissance_femme = femme.id
-            LEFT JOIN deces dc ON ad.type_acte = 'deces' AND ad.id_acte = dc.id
-            LEFT JOIN naissance def ON dc.id_naissance = def.id
-            WHERE d.statut='valider'  and est_signer= FALSE;
+            ad.id,
+            ad.type_acte,
+            ad.id_acte,
+            ad.code_demande,
+            ad.date_creation AS date_demande,
+            d.localiter,
+            ad.payer,
+            ad.est_signer,
+    
+            -- Demandeur
+            dm.nom AS nom_demandeur,
+            dm.prenom AS prenom_demandeur,
+            dm.relation_avec_beneficiaire,
+            dm.numero_telephone AS numero_demandeur,
+            dm.email AS email_demandeur,
+    
+            -- Naissance
+            n.nom_beneficiaire,
+            n.prenom_beneficiaire,
+            n.date_naissance,
+            n.lieu_naissance,
+            n.nom_pere,
+            n.nom_mere,
+    
+            -- Mariage
+            mari.nom_epoux,
+            mari.prenom_epoux,
+            mari.nom_epouse,
+            mari.prenom_epouse,
+            mari.date_mariage,
+            mari.lieu_mariage,
+    
+            -- Décès
+            dc.nom_defunt,
+            dc.prenom_defunt,
+            dc.date_deces,
+            dc.lieu_deces
+    
+        FROM actes_demande ad
+        JOIN demande d ON ad.code_demande = d.code_demande
+        LEFT JOIN demandeur dm ON d.code_demande = dm.code_demande
+        LEFT JOIN naissance n ON ad.type_acte = 'naissance' AND ad.id_acte = n.id
+        LEFT JOIN mariage mari ON ad.type_acte = 'mariage' AND ad.id_acte = mari.id
+        LEFT JOIN deces dc ON ad.type_acte = 'deces' AND ad.id_acte = dc.id
+    
+        WHERE d.statut = 'valider'
+        AND ad.est_signer = 0;
         ";
-
+    
         $stmt = $this->con->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
     public function getOnevalidationcetificateByID($id_certificate) {
         $query = "
-            SELECT 
-                ad.id, ad.type_acte, ad.id_acte, ad.code_demande,
-                d.date_creation AS date_demande,
-                dm.nom AS nom_demandeur, dm.prenom AS prenom_demandeur, dm.relation_avec_beneficiaire,
-                dm.numero_telephone AS numero_demandeur, dm.email AS email_demandeur,
-
-                n.nom_beneficiaire, n.prenom_beneficiaire, n.date_naissance, n.lieu_naissance,
-                n.heure_naissance, n.nom_pere, n.prenom_pere, n.profession_pere,
-                n.nom_mere, n.prenom_mere, n.profession_mere,
-                mari.date_mariage, mari.lieu_mariage,
-                mari.numero_registre AS registre_mariage,
-                mari.date_creation AS mariage_date_creation,
-                homme.nom_beneficiaire AS nom_mari,
-                homme.prenom_beneficiaire AS prenom_mari,
-                homme.date_naissance as age_homme,
-                femme.date_naissance as age_femme,
-                femme.nom_beneficiaire AS nom_femme,
-                femme.prenom_beneficiaire AS prenom_femme,
-
-                dc.date_deces, dc.lieu_deces,
-                def.nom_beneficiaire AS nom_defunt,
-                def.prenom_beneficiaire AS prenom_defunt
-
-            FROM actes_demande ad
-
-            INNER JOIN demande d ON ad.code_demande = d.code_demande
-            INNER JOIN demandeur dm ON d.code_demande = dm.code_demande
-
-            LEFT JOIN naissance n ON ad.type_acte = 'naissance' AND ad.id_acte = n.id
-            LEFT JOIN mariage mari ON ad.type_acte = 'mariage' AND ad.id_acte = mari.id
-            LEFT JOIN naissance homme ON mari.id_naissance_mari = homme.id
-            LEFT JOIN naissance femme ON mari.id_naissance_femme = femme.id
-            LEFT JOIN deces dc ON ad.type_acte = 'deces' AND ad.id_acte = dc.id
-            LEFT JOIN naissance def ON dc.id_naissance = def.id
-
-            WHERE d.statut='valider' and ad.est_signer=0 and   ad.code_demande = :code_demande;
+           SELECT 
+            ad.id,
+            ad.type_acte,
+            ad.id_acte,
+            ad.code_demande,
+            d.date_creation AS date_demande,
+            d.localiter,
+            ad.payer,
+            ad.est_signer,
+    
+            -- Demandeur
+            dm.nom AS nom_demandeur,
+            dm.prenom AS prenom_demandeur,
+            dm.relation_avec_beneficiaire,
+            dm.numero_telephone AS numero_demandeur,
+            dm.email AS email_demandeur,
+    
+            -- Naissance
+            n.nom_beneficiaire,
+            n.prenom_beneficiaire,
+            n.date_naissance,
+            n.lieu_naissance,
+            n.heure_naissance,
+            n.nom_pere,
+            n.prenom_pere,
+            n.profession_pere,
+            n.nom_mere,
+            n.prenom_mere,
+            n.profession_mere,
+    
+            -- Mariage
+            mari.nom_epoux,
+            mari.prenom_epoux,
+            mari.date_naissance_epoux,
+            mari.lieu_naissance_epoux,
+            mari.nom_epouse,
+            mari.prenom_epouse,
+            mari.date_naissance_epouse,
+            mari.lieu_naissance_epouse,
+            mari.date_mariage,
+            mari.lieu_mariage,
+            mari.date_creation AS mariage_date_creation,
+    
+            -- Décès
+            dc.nom_defunt,
+            dc.prenom_defunt,
+            dc.date_naissance AS date_naissance_defunt,
+            dc.lieu_naissance AS lieu_naissance_defunt,
+            dc.date_deces,
+            dc.lieu_deces,
+            dc.cause,
+            dc.genre AS defunt_genre,
+            dc.profession AS defunt_profession
+    
+        FROM actes_demande ad
+        JOIN demande d ON ad.code_demande = d.code_demande
+        LEFT JOIN demandeur dm ON d.code_demande = dm.code_demande
+        LEFT JOIN naissance n ON ad.type_acte = 'naissance' AND ad.id_acte = n.id
+        LEFT JOIN mariage mari ON ad.type_acte = 'mariage' AND ad.id_acte = mari.id
+        LEFT JOIN deces dc ON ad.type_acte = 'deces' AND ad.id_acte = dc.id
+    
+        WHERE d.statut = 'valider'
+        AND ad.est_signer = 0
+        AND ad.code_demande = :code_demande;
         ";
-
+    
         $stmt = $this->con->prepare($query);
-        $stmt->execute([$id_certificate]);
+        $stmt->execute([':code_demande' => $id_certificate]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    
 
     public function AddSigning($code_demande, $cheminSignature) {
         $stmt = $this->con->prepare("
@@ -341,7 +437,7 @@ class certificate_demand
             SELECT COUNT(*) AS total_pending
             FROM demande d
             INNER JOIN actes_demande ad on d.code_demande = ad.code_demande
-            WHERE statut = 'en_attente' and payer=1
+            WHERE statut = 'en_attente' 
         ");
         $stmt->execute();
         return (int)$stmt->fetchColumn();
@@ -352,7 +448,7 @@ class certificate_demand
             SELECT COUNT(*) AS total_validate
             FROM demande d
             INNER JOIN actes_demande ad on d.code_demande = ad.code_demande
-            WHERE statut = 'valider' and payer=1
+            WHERE statut = 'valider'
         ");
         $stmt->execute();
         return (int)$stmt->fetchColumn();
@@ -363,7 +459,7 @@ class certificate_demand
             SELECT COUNT(*) AS total_rejeted
             FROM demande d
             INNER JOIN actes_demande ad on d.code_demande = ad.code_demande
-            WHERE statut = 'rejeter' and payer=1
+            WHERE statut = 'rejeter'
         ");
         $stmt->execute();
         return (int)$stmt->fetchColumn();
@@ -385,11 +481,13 @@ class certificate_demand
             SELECT COUNT(*) AS total_certificate_signed
             FROM demande d
             INNER JOIN actes_demande ad on d.code_demande = ad.code_demande
-            WHERE  statut = 'valider' and payer=1 and est_signer=1
+            WHERE  statut = 'valider'  and est_signer=1
         ");
         $stmt->execute();
         return (int)$stmt->fetchColumn();
     }
+
+   
 
 }
 

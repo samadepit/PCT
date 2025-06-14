@@ -35,6 +35,16 @@ class MarriageController
             return false;
         }
     }
-
+    
+    public function get_existing_marriage_id(array $data) {
+        try {
+            $birth_id = $this->marriageModel->get_marriagecertificate_byId($data);
+            error_log("Acte de mariage déjà existant pour ce couple.");
+            return $birth_id ?: null;
+        } catch (Exception $e) {
+            error_log("Erreur get_existing_death_id : " . $e->getMessage());
+            return null;
+        }
+    }
 
 }

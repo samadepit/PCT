@@ -1,16 +1,28 @@
 <?php 
-require_once __DIR__ . '/../Controller/signingController.php';
+session_start();
 
-if (empty($_GET['code_demande'])) {
-    die("Erreur : Code de demande requis");
+require_once __DIR__ . '/../Controller/signingController.php';
+require_once __DIR__ . '/../service/mail_functions.php';
+require_once __DIR__ . '/../Controller/requestroController.php';
+
+$id = $_POST['id'] ?? $_GET['id'] ?? null;
+$code_demande = $_POST['code_demande'] ?? $_GET['code_demande'] ?? null;
+
+if (empty($id) || empty($code_demande)) {
+    $_SESSION['erreur'] = "Accès invalide. Vous avez été redirigé vers la page de connexion.";
+    header("Location: login.php");
+    exit;
 }
-$id = $_GET['id'] ?? null;
 
 $codeDemande = htmlspecialchars($_GET['code_demande']);
+$id = htmlspecialchars($id);
 $sSigningController = new SigningController();
+$requestroController = new DemandeurController();
+$emailRequestro = $requestroController->get_requestor_mail($codeDemande);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['signature'])) {
-    $sSigningController->handleRequest();
+    notifierDemandeur($emailRequestro, $codeDemande, 'signe');
+    $sSigningController->handleRequest($id);
     exit; 
 }
 ?>
@@ -252,79 +264,125 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['signature'])) {
     </div>
 
 <script>
-    const canvas = document.getElementById('signature-pad');
-    const ctx = canvas.getContext('2d');
-    let isDrawing = false;
+const canvas = document.getElementById('signature-pad');
+const ctx = canvas.getContext('2d');
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
 
+function resizeCanvas() {
+    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+    canvas.width = canvas.offsetWidth * ratio;
+    canvas.height = canvas.offsetHeight * ratio;
+    canvas.style.width = canvas.offsetWidth + 'px';
+    canvas.style.height = canvas.offsetHeight + 'px';
+    ctx.scale(ratio, ratio);
+    clearCanvas();
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function clearCanvas() {
     ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
     ctx.strokeStyle = '#000';
+}
 
-    function getCursorPosition(e) {
-        const rect = canvas.getBoundingClientRect();
-        return {
-            x: (e.clientX || e.touches[0].clientX) - rect.left,
-            y: (e.clientY || e.touches[0].clientY) - rect.top
-        };
+function getCursorPosition(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    const clientX = e.clientX || (e.touches ? e.touches[0].clientX : 0);
+    const clientY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+    
+    return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+    };
+}
+
+function startDrawing(e) {
+    isDrawing = true;
+    const pos = getCursorPosition(e);
+    lastX = pos.x;
+    lastY = pos.y;
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+}
+
+function draw(e) {
+    if (!isDrawing) return;
+    
+    e.preventDefault();
+    const pos = getCursorPosition(e);
+    
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+    
+    lastX = pos.x;
+    lastY = pos.y;
+}
+
+function stopDrawing() {
+    isDrawing = false;
+}
+
+canvas.addEventListener('mousedown', startDrawing);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', stopDrawing);
+canvas.addEventListener('mouseout', stopDrawing);
+
+canvas.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    startDrawing(e.touches[0]);
+});
+canvas.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    draw(e.touches[0]);
+}, { passive: false });
+canvas.addEventListener('touchend', stopDrawing);
+
+document.getElementById('clear-btn').addEventListener('click', clearCanvas);
+document.getElementById('save-btn').addEventListener('click', function() {
+    if (isCanvasEmpty()) {
+        alert('Veuillez ajouter votre signature avant de valider.');
+        return;
+    }
+    document.getElementById('signature-data').value = canvas.toDataURL();
+    document.getElementById('signature-form').submit();
+});
+
+function isCanvasEmpty() {
+    const blank = document.createElement('canvas');
+    blank.width = canvas.width;
+    blank.height = canvas.height;
+
+    const bctx = blank.getContext('2d');
+    bctx.fillStyle = '#FFFFFF';
+    bctx.fillRect(0, 0, blank.width, blank.height);
+
+    return canvas.toDataURL() === blank.toDataURL();
+}
+document.getElementById('save-btn').addEventListener('click', function() {
+    const saveBtn = this;
+
+    if (isCanvasEmpty()) {
+        alert('Veuillez ajouter votre signature avant de valider.');
+        return;
     }
 
-    function startDrawing(e) {
-        isDrawing = true;
-        const { x, y } = getCursorPosition(e);
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-    }
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Enregistrement...';
 
-    function draw(e) {
-        if (!isDrawing) return;
-        e.preventDefault();
-        const { x, y } = getCursorPosition(e);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-    }
+    document.getElementById('signature-data').value = canvas.toDataURL();
+    document.getElementById('signature-form').submit();
+});
 
-    function stopDrawing() {
-        isDrawing = false;
-        ctx.beginPath();
-    }
-
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('mouseout', stopDrawing);
-
-    canvas.addEventListener('touchstart', startDrawing);
-    canvas.addEventListener('touchmove', draw);
-    canvas.addEventListener('touchend', stopDrawing);
-
-    document.getElementById('clear-btn').addEventListener('click', () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-    });
-
-    document.getElementById('save-btn').addEventListener('click', () => {
-        if (isCanvasEmpty()) {
-            alert('Veuillez ajouter votre signature avant de valider.');
-            return;
-        }
-        document.getElementById('signature-data').value = canvas.toDataURL();
-        document.getElementById('signature-form').submit();
-    });
-
-    function isCanvasEmpty() {
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = canvas.width;
-        tempCanvas.height = canvas.height;
-        const tempCtx = tempCanvas.getContext('2d');
-        tempCtx.fillStyle = '#f8f8f8';
-        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-        return canvas.toDataURL() === tempCanvas.toDataURL();
-    }
 </script>
 
 </body>

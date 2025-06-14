@@ -1,8 +1,7 @@
-<?php
+<?php 
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validation serveur simple (exemple : nom ou prénom vide malgré le required HTML)
     if (empty($_POST['nom_defunt']) || empty($_POST['prenom_defunt'])) {
         $_SESSION['error'] = "Le nom et le prénom du défunt sont requis.";
         header("Location: " . $_SERVER['PHP_SELF']);
@@ -10,16 +9,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $_SESSION['donnees_actes']['deces'] = [
-        'nom' => $_POST['nom_defunt'],
-        'prenom' => $_POST['prenom_defunt'],
+        'nom_defunt' => $_POST['nom_defunt'],
+        'prenom_defunt' => $_POST['prenom_defunt'],
         'date_naissance' => $_POST['date_naissance'],
         'lieu_naissance' => $_POST['lieu_naissance'],
         'genre' => $_POST['genre'],
+        'profession' => $_POST['profession'],
         'date_deces' => $_POST['date_deces'],
         'lieu_deces' => $_POST['lieu_deces'],
-        'cause' => $_POST['cause'],
-        'profession' => $_POST['profession']
+        'cause' => $_POST['cause']
     ];
+
+    function saveTempFile($file, $folder = 'uploads/tmp') {
+        if ($file && $file['error'] === UPLOAD_ERR_OK) {
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = uniqid('temp_') . '.' . $ext;
+            if (!is_dir($folder)) mkdir($folder, 0755, true);
+            $destination = $folder . '/' . $filename;
+            move_uploaded_file($file['tmp_name'], $destination);
+            return $destination;
+        }
+        return null;
+    }
+
+    $_SESSION['donnees_actes']['deces']['certificat_medical_deces'] = saveTempFile($_FILES['certificat_medical_deces']);
+    $_SESSION['donnees_actes']['deces']['piece_identite_defunt'] = saveTempFile($_FILES['piece_identite_defunt']);
 
     if (!empty($_SESSION['actes_restants'])) {
         $acte_suivant = array_shift($_SESSION['actes_restants']);
@@ -35,7 +49,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: traitement_final_demande.php');
     exit;
 }
+
+// echo "<pre>Données à insérer :";
+// print_r([
+//     'date_naissance' => $_POST['date_naissance'],
+//     'lieu_naissance' => $_POST['lieu_naissance']
+// ]);
+// echo "</pre>";
+// exit;
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -152,6 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-bottom: 6px;
         }
 
+        input[type="file"],
         input[type="text"],
         input[type="date"],
         select {
@@ -238,7 +262,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <div class="container">
     <h2>Acte de Décès</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <h3>Informations sur le défunt</h3>
 
         <div class="row">
@@ -287,7 +311,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="col form-group">
                 <label>Lieu de décès</label>
-                <input type="text" name="lieu_deces" required>
+                <input type="text" name="lieu_deces" value="Ouangolodougou" readonly required>
             </div>
             <div class="col form-group">
                 <label>Cause du décès</label>
@@ -295,7 +319,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-        <button type="submit">Soumettre la demande</button>
+        <div class="row"> 
+            <div class="col form-group">
+                <label>Certificat médical de décès (PDF/JPEG/PNG max 5MB) :</label>
+                <input type="file" name="certificat_medical_deces" accept="application/pdf,image/jpeg,image/png">
+            </div>
+            <div class="col form-group"> 
+                <label>Pièce d'identité du défunt (PDF/JPEG/PNG max 5MB) :</label>
+                <input type="file" name="piece_identite_defunt" accept="application/pdf,image/jpeg,image/png">
+            </div>
+        </div>
+    
+        <button type="submit">Soumettre</button>
         <a href="demande_etape2.php"><button type="button" class="back-button">← Retour</button></a>
     </form>
 </div>

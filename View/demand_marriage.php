@@ -10,43 +10,51 @@ $demandeController = new DemandeController();
 $traitementController = new ActeDemandeController();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $husband_info = [
-        'nom' => $_POST['husband_lastname'],
-        'prenom' => $_POST['husband_firstname'],
-        'lieu_naissance' => $_POST['husband_birth_place'],
-        'date_naissance' => $_POST['husband_birth_date'],
-        'genre' => 'Masculin'
+    $_SESSION['donnees_actes']['mariage'] = [
+        'nom_epoux' => $_POST['nom_epoux'] ?? '',
+        'prenom_epoux' => $_POST['prenom_epoux'] ?? '',
+        'date_naissance_epoux' => $_POST['date_naissance_epoux'] ?? '',
+        'lieu_naissance_epoux' => $_POST['lieu_naissance_epoux'] ?? '',
+        'nationalite_epoux' => $_POST['nationalite_epoux'] ?? '',
+        'situation_matrimoniale_epoux' => $_POST['situation_matrimoniale_epoux'] ?? '',
+        'temoin_epoux' => $_POST['temoin_epoux'] ?? '',
+        'profession_epoux' => $_POST['profession_epoux'] ?? '',
+        'piece_identite_epoux' => $_POST['piece_identite_epoux'] ?? '',
+        'certificat_residence_epoux' => $_POST['certificat_residence_epoux'] ?? '',
+
+        'nom_epouse' => $_POST['nom_epouse'] ?? '',
+        'prenom_epouse' => $_POST['prenom_epouse'] ?? '',
+        'date_naissance_epouse' => $_POST['date_naissance_epouse'] ?? '',
+        'lieu_naissance_epouse' => $_POST['lieu_naissance_epouse'] ?? '',
+        'nationalite_epouse' => $_POST['nationalite_epouse'] ?? '',
+        'situation_matrimoniale_epouse' => $_POST['situation_matrimoniale_epouse'] ?? '',
+        'temoin_epouse' => $_POST['temoin_epouse'] ?? '',
+        'profession_epouse' => $_POST['profession_epouse'] ?? '',
+        'piece_identite_epouse'=> $_POST['piece_identite_epouse'] ?? '',
+        'certificat_residence_epouse'=> $_POST['certificat_residence_epouse'] ?? '',
+
+        'date_mariage' => $_POST['date_mariage'] ?? '',
+        'lieu_mariage' => $_POST['lieu_mariage'] ?? ''
     ];
 
-    $wife_info = [
-        'nom' => $_POST['wife_lastname'],
-        'prenom' => $_POST['wife_firstname'],
-        'lieu_naissance' => $_POST['wife_birth_place'],
-        'date_naissance' => $_POST['wife_birth_date'],
-        'genre' => 'Féminin'
-    ];
 
-    $husband_birth_id = $naissanceController->get_existing_birth_id($husband_info);
-    $wife_birth_id = $naissanceController->get_existing_birth_id($wife_info);
-
-    if ($husband_birth_id && $wife_birth_id) {
-        $_SESSION['donnees_actes']['mariage'] = [
-            'husband_birth_id' => $husband_birth_id,
-            'wife_birth_id' => $wife_birth_id,
-            'marriage_date' => $_POST['marriage_date'],
-            'marriage_place' => $_POST['marriage_place'],
-            'number_children' => $_POST['number_children'],
-            'statut_marriage' => $_POST['statut_marriage']
-        ];
-    } else {
-        if (!$husband_birth_id || !$wife_birth_id) {
-            $_SESSION['error'] = !$husband_birth_id 
-                ? "Acte de naissance du mari introuvable" 
-                : "Acte de naissance de la femme introuvable";
-            header('Location: ' . $_SERVER['PHP_SELF']);
-            exit;
+    function saveTempFile($file, $folder = 'uploads/tmp') {
+        if ($file && $file['error'] === UPLOAD_ERR_OK) {
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = uniqid('temp_') . '.' . $ext;
+            if (!is_dir($folder)) mkdir($folder, 0755, true);
+            $destination = $folder . '/' . $filename;
+            move_uploaded_file($file['tmp_name'], $destination);
+            return $destination;
         }
+        return null;
     }
+
+    $_SESSION['donnees_actes']['mariage']['piece_identite_epoux'] = saveTempFile($_FILES['piece_identite_epoux']);
+    $_SESSION['donnees_actes']['mariage']['certificat_residence_epoux'] = saveTempFile($_FILES['certificat_residence_epoux']);
+    $_SESSION['donnees_actes']['mariage']['piece_identite_epouse'] = saveTempFile($_FILES['piece_identite_epouse']);
+    $_SESSION['donnees_actes']['mariage']['certificat_residence_epouse'] = saveTempFile($_FILES['certificat_residence_epouse']);
+
 
     if (!empty($_SESSION['actes_restants'])) {
         $acte_suivant = array_shift($_SESSION['actes_restants']);
@@ -180,6 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-bottom: 6px;
         }
 
+        input[type="file"],
         input[type="text"],
         input[type="number"],
         input[type="date"] {
@@ -192,6 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #333;
         }
 
+        select:focus,
         input:focus {
             outline: none;
             border-color: #ff9500;
@@ -236,6 +246,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: #777;
         }
 
+        select {
+            width: 53%; 
+            padding: 10px 34px;  
+            border: 2px solid #ff8008;
+            border-radius: 8px;
+            background-color: #fff;
+            font-size: 0.95rem; 
+            margin-top: 5px;
+            color: #333;
+        }
+
         @media (max-width: 768px) {
             h2 {
                 font-size: 1.6rem;
@@ -260,85 +281,137 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <div class="container">
     <h2>Acte de Mariage</h2>
-    <form method="post">
-        <h3>Informations sur le mari</h3>
-        <div class="row">
-            <div class="col form-group">
-                <label>Nom</label>
-                <input type="text" name="husband_lastname" required>
-            </div>
-            <div class="col form-group">
-                <label>Prénom</label>
-                <input type="text" name="husband_firstname" required>
-            </div>
+    <form method="post" enctype="multipart/form-data">
+    <h3>Informations sur le conjoint</h3>
+    <div class="row">
+        <div class="col form-group">
+            <label>Nom</label>
+            <input type="text" name="nom_epoux" required>
         </div>
-
-        <div class="row">
-            <div class="col form-group">
-                <label>Date de naissance</label>
-                <input type="date" name="husband_birth_date" required>
-            </div>
-            <div class="col form-group">
-                <label>Lieu de naissance</label>
-                <input type="text" name="husband_birth_place" required>
-            </div>
+        <div class="col form-group">
+            <label>Prénom</label>
+            <input type="text" name="prenom_epoux" required>
         </div>
-
-        <h3>Informations sur la femme</h3>
-        <div class="row">
-            <div class="col form-group">
-                <label>Nom</label>
-                <input type="text" name="wife_lastname" required>
-            </div>
-            <div class="col form-group">
-                <label>Prénom</label>
-                <input type="text" name="wife_firstname" required>
-            </div>
+    </div>
+    <div class="row">
+        <div class="col form-group">
+            <label>Date de naissance</label>
+            <input type="date" name="date_naissance_epoux" required>
         </div>
-
-        <div class="row">
-            <div class="col form-group">
-                <label>Date de naissance</label>
-                <input type="date" name="wife_birth_date" required>
-            </div>
-            <div class="col form-group">
-                <label>Lieu de naissance</label>
-                <input type="text" name="wife_birth_place" required>
-            </div>
+        <div class="col form-group">
+            <label>Lieu de naissance</label>
+            <input type="text" name="lieu_naissance_epoux" required>
         </div>
-
-        <h3>Détails du mariage</h3>
-        <div class="row">
-            <div class="col form-group">
-                <label>Date du mariage</label>
-                <input type="date" name="marriage_date" required>
-            </div>
-            <div class="col form-group">
-                <label>Lieu du mariage</label>
-                <input type="text" name="marriage_place" required>
-            </div>
-            <div class="col form-group">
-                <label>Statut du mariage</label>
-                <input type="text" name="statut_marriage" required>
-            </div>
-            <div class="col form-group">
-                <label>Nombre d'enfants</label>
-                <input type="number" name="number_children" min="1" required>
-                <script>
-                    document.querySelector('form').addEventListener('submit', function (e) {
-                        const nb = document.querySelector('input[name="number_children"]').value;
-                        if (nb <= 0 || !Number.isInteger(Number(nb))) {
-                            e.preventDefault();
-                            alert("Le nombre d'enfants doit être un entier strictement supérieur à 0.");
-                        }
-                    });
-                </script>
-            </div>
+    </div>
+    <div class="row">
+        <div class="col form-group">
+            <label>Nationalité</label>
+            <input type="text" name="nationalite_epoux" required>
         </div>
+        <div class="col form-group">
+            <label>Situation matrimoniale</label>
+            <select name="situation_matrimoniale_epoux" id="relation" required>
+                <option value="">-- Sélectionner --</option>
+                <option value="celibataire">Celibataire</option>
+                <option value="veuf">Veuf</option>
+                <option value="divorcé">Divorcé</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col form-group">
+            <label>Profession</label>
+            <input type="text" name="profession_epoux" required>
+        </div>
+        <div class="col form-group">
+            <label>Témoin</label>
+            <input type="text" name="temoin_epoux" required>
+        </div>
+    </div>
+    <div class="row"> 
+            <div class="col form-group">
+                <label>Pièce d'identité de l'epoux (PDF/JPEG/PNG max 5MB) :</label>
+                <input type="file" name="piece_identite_epoux" accept="application/pdf,image/jpeg,image/png" required>
+            </div>
+            <div class="col form-group"> 
+                <label>certificat de residence de l'epoux  (PDF/JPEG/PNG max 5MB) :</label>
+                <input type="file" name="certificat_residence_epoux" accept="application/pdf,image/jpeg,image/png" required>
+            </div>
+     </div>
 
-        <button type="submit">Soumettre la demande</button>
-        <a href="demande_etape2.php"><button type="button" class="back-button">← Retour</button></a>
-    </form>
+    <h3>Informations sur la conjointe</h3>
+    <div class="row">
+        <div class="col form-group">
+            <label>Nom</label>
+            <input type="text" name="nom_epouse" required>
+        </div>
+        <div class="col form-group">
+            <label>Prénom</label>
+            <input type="text" name="prenom_epouse" required>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col form-group">
+            <label>Date de naissance</label>
+            <input type="date" name="date_naissance_epouse" required>
+        </div>
+        <div class="col form-group">
+            <label>Lieu de naissance</label>
+            <input type="text" name="lieu_naissance_epouse" required>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col form-group">
+            <label>Nationalité</label>
+            <input type="text" name="nationalite_epouse" required>
+        </div>
+        <div class="col form-group">
+            <label>Situation matrimoniale</label>
+            <select name="situation_matrimoniale_epouse" id="relation" required>
+                <option value="">-- Sélectionner --</option>
+                <option value="celibataire">Celibataire</option>
+                <option value="veuf">Veuf</option>
+                <option value="divorcé">Divorcé</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col form-group">
+            <label>Profession</label>
+            <input type="text" name="profession_epouse" required>
+        </div>
+        <div class="col form-group">
+            <label>Témoin</label>
+            <input type="text" name="temoin_epouse" required>
+        </div>
+    </div>
+    <div class="row"> 
+            <div class="col form-group">
+                <label>Pièce d'identité de l'epouse (PDF/JPEG/PNG max 5MB) :</label>
+                <input type="file" name="piece_identite_epouse" accept="application/pdf,image/jpeg,image/png" required>
+            </div>
+            <div class="col form-group"> 
+                <label>certificat de residence de l'epoux (PDF/JPEG/PNG max 5MB) :</label>
+                <input type="file" name="certificat_residence_epouse" accept="application/pdf,image/jpeg,image/png" required>
+            </div>
+     </div>
+
+    <h3>Détails du mariage</h3>
+    <div class="row">
+        <div class="col form-group">
+            <label>Date du mariage</label>
+            <input type="date" name="date_mariage" required>
+        </div>
+        <div class="col form-group">
+            <label>Lieu du mariage</label>
+            <input type="text" name="lieu_mariage" value="Ouangolodougou" readonly required>
+        </div>
+    </div>
+
+    <button type="submit">Soumettre la demande</button>
+    <a href="demande_etape2.php"><button type="button" class="back-button">← Retour</button></a>
+</form>
+
 </div>
 <?php if (!empty($_SESSION['error'])): ?>
 <script>
