@@ -130,5 +130,31 @@ class Deces
             return false;
         }
     }
+
+    public function getAllDeath(){
+        $stmt = $this->con->prepare("
+        SELECT 
+            d.code_demande,
+            d.statut AS statut_demande,
+            a.est_signer,
+            a.payer,
+            a.date_signature,
+            a.type_acte,
+            ag.nom AS agent_nom,
+            ag.prenom AS agent_prenom,
+            ofc.nom AS officier_nom,
+            ofc.prenom AS officier_prenom,
+            dc.*
+        FROM actes_demande a
+        JOIN demande d ON d.code_demande = a.code_demande
+        LEFT JOIN administration ag ON ag.id = a.id_agent
+        LEFT JOIN administration ofc ON ofc.id = a.id_officier
+        LEFT JOIN deces dc ON dc.id = a.id_acte
+        WHERE a.type_acte = 'deces'
+        ");
+        
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     
 }

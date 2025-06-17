@@ -296,9 +296,15 @@ if ($status === 'valider') {
         <div class="acte-header-item"><strong>Type d'acte :</strong> <?= htmlspecialchars($certificate['type_acte']) ?></div>
         <div class="acte-header-item">
             <strong>Statut de la demande :</strong>
-            <span><?= htmlspecialchars($certificate['statut']) ?></span>
-            <?php if ($status === 'rejeter' && !empty($certificate['motif_rejet'])): ?>
+            <?php if($certificate['statut']==='valider' && $certificate['est_signer']===1) :?>
+                <span><?= htmlspecialchars($certificate['statut']) ?> et signé</span>
+            <?php elseif($certificate['statut']==='valider'):?>
+                <span><?= htmlspecialchars($certificate['statut']) ?></span>
+            <?php elseif ($status === 'rejeter' && !empty($certificate['motif_rejet'])): ?>
+                <span><?= htmlspecialchars($certificate['statut']) ?></span>
                 <p style="color: red; margin: 5px 0 0;"><strong>Motif :</strong> <?= htmlspecialchars($certificate['motif_rejet']) ?></p>
+            <?php else :?>
+                    <span><?= htmlspecialchars($certificate['statut']) ?>
             <?php endif; ?>
         </div>
     </div>

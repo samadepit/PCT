@@ -487,6 +487,17 @@ class certificate_demand
         return (int)$stmt->fetchColumn();
     }
 
+    public function getActeEvolutionParDate(){
+        $stmt = $this->con->prepare("
+            SELECT DATE(date_creation) as date, type_acte, COUNT(*) as total
+            FROM actes_demande
+            GROUP BY DATE(date_creation), type_acte
+            ORDER BY DATE(date_creation)
+        ");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
    
 
 }

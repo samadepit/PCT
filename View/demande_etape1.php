@@ -183,15 +183,23 @@ session_start();
     </form>
 
     <script>
-        // Vérifie qu'au moins un acte est sélectionné
-        document.querySelector("form").addEventListener("submit", function(e) {
-            const select = document.getElementById("actes");
-            const selected = Array.from(select.options).filter(option => option.selected).length;
-            if (selected === 0) {
-                e.preventDefault();
-                alert("Veuillez sélectionner au moins un acte.");
-            }
-        });
-    </script>
+    const select = document.getElementById("actes");
+    select.addEventListener("mousedown", function(e) {
+        e.preventDefault(); 
+        const option = e.target;
+        if (option.tagName.toLowerCase() === "option") {
+            Array.from(select.options).forEach(opt => opt.selected = false);
+            option.selected = true;
+        }
+    });
+    document.querySelector("form").addEventListener("submit", function(e) {
+        const selected = Array.from(select.options).filter(option => option.selected).length;
+        if (selected === 0) {
+            e.preventDefault();
+            alert("Veuillez sélectionner au moins un acte.");
+        }
+    });
+</script>
+
 </body>
 </html>

@@ -118,7 +118,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmer'])) {
                     foreach ($certificat_ids as $certif) {
                         $certificate_demandController->certificate_demand($code_demand, $certif['type'], $certif['id']);
                     }
-                    notifierDemandeur($requestor_mail, $code_demand, 'cree');
+                    if (!empty($requestor_mail)) {
+                        notifierDemandeur($requestor_mail, $code_demand, 'cree');
+                    }
                     $_SESSION['code_demande'] = $code_demand;
                     unset($_SESSION['demandeur'], $_SESSION['localiter'], $_SESSION['donnees_actes'], $_SESSION['code_paiement']);
                     header('Location: code_suivie.php');
@@ -154,88 +156,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['modifier_type'])) {
 }
 ?>
 
-<?php if (!empty($data_certificate)): ?>
-    <div class="top-header">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCPIRahRkX8w3AK0ahlZKqhkZi22eMtSf6qg&s" alt="Logo CI" />
-        <h1>Bienvenue sur le Portail des Demande d'actes d'état civil</h1>
-        <nav>
-            <a href="dashboard.php" class="nav-btn">Accueil</a>
-            <a href="demande_etape1.php" class="nav-btn"><span>Faire une demande</span></a>
-            <a href="consulter_demande.php" class="nav-btn">Suivre une demande</a>
-        </nav>
-    </div>
-    <div class="wrapper">
-        <div class="card">
-            <h2>🧾 Vérification des informations</h2>
-
-            <?php if (!empty($_SESSION['localiter'])): ?>
-                <div class="section">
-                    <h3>📍 Localité</h3>
-                    <p style="text-align:center; font-weight:bold;">
-                        <?= htmlspecialchars($_SESSION['localiter']) ?>
-                    </p>
-                </div>
-            <?php endif; ?>
-
-            <?php if (!empty($requestor_data)): ?>
-                <div class="section">
-                    <h3>🙋‍♂️ Informations sur le demandeur</h3>
-                    <ul>
-                        <?php foreach ($requestor_data as $cle => $val): ?>
-                            <li><strong><?= htmlspecialchars($cle) ?>:</strong>
-                                <?php if (is_string($val) && preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $val)): ?>
-                                <div style="margin-top: 8px; text-align:center;">
-                                    <img src="<?= htmlspecialchars($val) ?>" alt="Image" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #ccc;">
-                                </div>
-                                <?php else: ?>
-                                    <?= htmlspecialchars($val ?? '') ?>
-                                <?php endif; ?>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            <?php endif; ?>
-
-            <?php foreach ($data_certificate as $type => $certificates): ?>
-                <div class="section">
-                    <h3>📄 <?= ucfirst($type) ?></h3>
-                    
-                    <div class="scroll-container">
-                        <?php foreach ($certificates as $i => $certificate): ?>
-                            <details class="acte-details">
-                                <summary><?= ucfirst($type) ?> #<?= (int)$i + 1 ?> - Afficher / Masquer</summary>
-                                <fieldset>
-                                    <ul>
-                                        <?php foreach ($certificate as $cle => $val): ?>
-                                            <li><strong><?= htmlspecialchars($cle) ?>:</strong> 
-                                            
-                                            <?php if (is_string($val) && preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $val)): ?>
-                                            <div style="margin-top: 8px; text-align:center;">
-                                                <img src="<?= htmlspecialchars($val) ?>" alt="Image" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #ccc;">
-                                            </div>
-                                            <?php else: ?>
-                                                <?= htmlspecialchars($val ?? '') ?>
-                                            <?php endif; ?>
-
-                                            </li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                </fieldset>
-                            </details>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-            <form method="post">
-                <button type="submit" name="confirmer">✅ Confirmer et payer</button>
-            </form>
-            <form method="post" style="margin-top: 15px;">
-                <input type="hidden" name="modifier_type" value="<?= htmlspecialchars($type) ?>">
-                <button type="submit" class="modifier-btn" id="modifier_btn">✏️ Modifier cet acte</button>
-            </form>
-        </div>
-    </div>
-<?php endif; ?>
 
 <style>
         html, body {
@@ -441,3 +361,90 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['modifier_type'])) {
 }
 
 </style>
+
+
+
+<?php if (!empty($data_certificate)): ?>
+    <div class="top-header">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCPIRahRkX8w3AK0ahlZKqhkZi22eMtSf6qg&s" alt="Logo CI" />
+        <h1>Bienvenue sur le Portail des Demande d'actes d'état civil</h1>
+        <nav>
+            <a href="dashboard.php" class="nav-btn">Accueil</a>
+            <a href="demande_etape1.php" class="nav-btn"><span>Faire une demande</span></a>
+            <a href="consulter_demande.php" class="nav-btn">Suivre une demande</a>
+        </nav>
+    </div>
+    <div class="wrapper">
+        <div class="card">
+            <h2>🧾 Vérification des informations</h2>
+
+            <?php if (!empty($_SESSION['localiter'])): ?>
+                <div class="section">
+                    <h3>📍 Localité</h3>
+                    <p style="text-align:center; font-weight:bold;">
+                        <?= htmlspecialchars($_SESSION['localiter']) ?>
+                    </p>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!empty($requestor_data)): ?>
+                <div class="section">
+                    <h3>🙋‍♂️ Informations sur le demandeur</h3>
+                    <ul>
+                        <?php foreach ($requestor_data as $cle => $val): ?>
+                            <li><strong><?= htmlspecialchars($cle) ?>:</strong>
+                                <?php if (is_string($val) && preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $val)): ?>
+                                <div style="margin-top: 8px; text-align:center;">
+                                    <img src="<?= htmlspecialchars($val) ?>" alt="Image" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #ccc;">
+                                </div>
+                                <?php else: ?>
+                                    <?= htmlspecialchars($val ?? '') ?>
+                                <?php endif; ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+
+            <?php foreach ($data_certificate as $type => $certificates): ?>
+                <div class="section">
+                    <h3>📄 <?= ucfirst($type) ?></h3>
+                    
+                    <div class="scroll-container">
+                        <?php foreach ($certificates as $i => $certificate): ?>
+                            <details class="acte-details">
+                                <summary><?= ucfirst($type) ?> #<?= (int)$i + 1 ?> - Afficher / Masquer</summary>
+                                <fieldset>
+                                    <ul>
+                                        <?php foreach ($certificate as $cle => $val): ?>
+                                            <li><strong><?= htmlspecialchars($cle) ?>:</strong> 
+                                            
+                                            <?php if (is_string($val) && preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $val)): ?>
+                                            <div style="margin-top: 8px; text-align:center;">
+                                                <img src="<?= htmlspecialchars($val) ?>" alt="Image" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #ccc;">
+                                            </div>
+                                            <?php else: ?>
+                                                <?= htmlspecialchars($val ?? '') ?>
+                                            <?php endif; ?>
+
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </fieldset>
+                            </details>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+            <form method="post">
+                <button type="submit" name="confirmer">✅ Confirmer</button>
+            </form>
+            <form method="post" style="margin-top: 15px;">
+                <input type="hidden" name="modifier_type" value="<?= htmlspecialchars($type) ?>">
+                <button type="submit" class="modifier-btn" id="modifier_btn">✏️ Modifier cet acte</button>
+            </form>
+        </div>
+    </div>
+<?php endif; ?>
+
+

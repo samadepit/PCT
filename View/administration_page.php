@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../Controller/certificatedemandController.php';
 require_once __DIR__ . '/../Controller/UserController.php';
+require_once __DIR__ . '/../Controller/birthController.php';
+require_once __DIR__ . '/../Controller/deathController.php';
+require_once __DIR__ . '/../Controller/marriageController.php';
 $actedemandeController = new ActeDemandeController();
 $userController= new UserController();
 $demandes = $actedemandeController->getAllvalidationCertificate();
@@ -8,6 +11,12 @@ $id = $_GET['id'] ?? null;
 $stats = $actedemandeController->getStatistics();
 $userstats=$userController->getStatisticsAdministration();
 $usersadministration=$userController->getAllAdministration();
+$birthcontroller= new NaissanceController;
+$marriagecontroller= new MarriageController;
+$deathcontroller= new DecesController;
+$birth=$birthcontroller->getBirth();
+$death=$deathcontroller->getDeath();
+$marriage=$marriagecontroller->getMarriage();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['action'])) {
     $userId = (int) $_POST['user_id'];
     $action = $_POST['action'];
@@ -205,6 +214,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ac
             background-color: #2563eb;
         }
 
+        .tab-bar {
+        display: flex;
+        border-bottom: 2px solid #ddd;
+        margin-bottom: 20px;
+        background-color: #fff;
+        flex-wrap: wrap;
+        }
+
+        .tab-bar button {
+            background: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 20px;
+            color: #555;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tab-bar button:hover {
+            color:rgb(45, 163, 16);
+        }
+
+        .tab-bar button.active {
+            color: #ea580c;
+            border-color: #ea580c;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         @media screen and (max-width: 768px) {
         .top-header {
             flex-direction: column;
@@ -280,98 +326,375 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ac
     <div class="container">
         <!-- KPI -->
         <div class="kpi-container">
-        <div class="kpi">
-                <h3>Actes</h3>
-                <p><?= $stats['total_certificate'] ?></p>
+            <div class="kpi">
+                <canvas id="chartType" class="chart-canvas"></canvas>
             </div>
             <div class="kpi">
-                <h3>Naissances</h3>
-                <p><?= $stats['birth'] ?></p>
+                <canvas id="chartSignStatus" class="chart-canvas"></canvas>
+            </div>
+            <div class="kpi ">
+                <canvas id="chartValidationStatus" class="chart-canvas" style="display: block; box-sizing: border-box; height: 180px; width: 180px;"></canvas>
             </div>
             <div class="kpi">
-                <h3>Décès</h3>
-                <p><?= $stats['death'] ?></p>
-            </div>
-            <div class="kpi">
-                <h3>Mariages</h3>
-                <p><?= $stats['marriage'] ?></p>
-            </div>
-            <div class="kpi">
-                <h3>En attente</h3>
-                <p><?= $stats['pending'] ?></p>
-            </div>
-            <div class="kpi">
-                <h3>Validés</h3>
-                <p><?= $stats['validated'] ?></p>
-            </div>
-            <div class="kpi">
-                <h3>Rejetés</h3>
-                <p><?= $stats['rejeted'] ?></p>
-            </div>
-            <div class="kpi">
-                <h3>Signés</h3>
-                <p><?= $stats['signed'] ?></p>
-            </div>
-            <div class="kpi">
-                <h3>Agent</h3>
-                <p><?= $userstats['agent'] ?></p>
-            </div>
-            <div class="kpi">
-                <h3>Officier</h3>
-                <p><?= $userstats['officer'] ?></p>
+                <canvas id="chartEvolution" class="chart-canvas" 
+                style="display: block; box-sizing: border-box; height: 180px; width: 180px;"></canvas>
             </div>
         </div>
 
-        <!-- Tableau des demandes -->
+        <!-- Tableau des demandes card etait ici claass la hun-->
+        <!-- Onglets -->
         <div class="card">
-        <div style="text-align: right; margin-bottom: 15px;">
-            <a href="create_user.php" class="btn btn-green">➕ Ajouter un utilisateur</a>
-        </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Prenom</th>
-                        <th>Telephone</th>
-                        <th>Profession</th>
-                        <th>Rôle</th>
-                        <th>Statut</th>
-                        <th>Email</th>
-                        <th>date_creation</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($usersadministration as $user): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($user['nom']) ?></td>
-                            <td><?= htmlspecialchars($user['prenom']) ?></td>
-                            <td><?= htmlspecialchars($user['numero_telephone']) ?></td>
-                            <td><?= htmlspecialchars($user['profession']) ?></td>
-                            <td><?= htmlspecialchars($user['role']) ?></td>
-                            <td><?= htmlspecialchars($user['statut']) ?></td>
-                            <td><?= htmlspecialchars($user['email']) ?></td>
-                            <td><?= htmlspecialchars($user['date_creation']) ?></td>
-                            <td style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                <form method="POST">
-                                    <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-                                    <input type="hidden" name="action" value="update_statut">
-                                    <button type="submit" class="btn-action btn-green">Changer statut</button>
-                                </form>
+            <div class="tab-container">
+                <!-- Barre d'onglets -->
+                <div class="tab-bar">
+                    <button class="tab-btn active" data-tab="naissance">Naissances</button>
+                    <button class="tab-btn" data-tab="mariage">Mariages</button>
+                    <button class="tab-btn" data-tab="deces">Décès</button>
+                    <button class="tab-btn" data-tab="admin">Administration</button>
+                </div>
 
-                                <form method="POST">
-                                    <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-                                    <input type="hidden" name="action" value="update_role">
-                                    <button type="submit" class="btn-action btn-blue">Changer rôle</button>
-                                </form>
-                                <a href="certificate_signing.php?id=<?= urlencode($user['id']) ?>" class="btn-action btn-orange">Éditer</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
+                <!-- Contenu des onglets -->
+                <div id="tab-naissance" class="tab-content active">
+                <table>
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Date de naissance</th>
+                                    <th>Lieu de naissance</th>
+                                    <th>Genre</th>
+                                    <th>analyser par</th>
+                                    <th>Signer par</th>
+                                    <th>Signer le</th>
+                                    <th>Date création</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($birth as $user): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($user['nom_beneficiaire']) ?></td>
+                                        <td><?= htmlspecialchars($user['prenom_beneficiaire']) ?></td>
+                                        <td><?= htmlspecialchars($user['date_naissance']) ?></td>
+                                        <td><?= htmlspecialchars($user['lieu_naissance']) ?></td>
+                                        <td><?= htmlspecialchars($user['genre']) ?></td>
+                                        <td><?= htmlspecialchars($user['agent_nom']) ?> <?= htmlspecialchars($user['agent_prenom']) ?></td>
+                                        <td><?= htmlspecialchars($user['officier_nom']) ?> <?= htmlspecialchars($user['officier_prenom']) ?></td>
+                                        <td><?= htmlspecialchars($user['date_signature']) ?></td>
+                                        <td><?= htmlspecialchars($user['date_creation']) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                </div>
 
-            </table>
+                <div id="tab-mariage" class="tab-content">
+                <table>
+                            <thead>
+                                <tr>
+                                    <th>Nom et prenom du conjoint</th>
+                                    <th>Nom et prenom de la conjointe</th>
+                                    <th>Date de mariage</th>
+                                    <th>Lieu de mariage</th>
+                                    <th>analyser par</th>
+                                    <th>Signer par</th>
+                                    <th>Signer le</th>
+                                    <th>Date création</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($marriage as $user): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($user['nom_epoux']) ?> <?= htmlspecialchars($user['prenom_epoux']) ?></td>
+                                        <td><?= htmlspecialchars($user['nom_epouse']) ?> <?= htmlspecialchars($user['prenom_epouse']) ?></td>
+                                        <td><?= htmlspecialchars($user['date_mariage']) ?></td>
+                                        <td><?= htmlspecialchars($user['lieu_mariage']) ?></td>
+                                        <td><?= htmlspecialchars($user['agent_nom']) ?> <?= htmlspecialchars($user['agent_prenom']) ?></td>
+                                        <td><?= htmlspecialchars($user['officier_nom']) ?> <?= htmlspecialchars($user['officier_prenom']) ?></td>
+                                        <td><?= htmlspecialchars($user['date_signature']) ?></td>
+                                        <td><?= htmlspecialchars($user['date_creation']) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                </div>
+
+                <div id="tab-admin" class="tab-content">
+                    <!-- ⬇️ Ici tu colles ton tableau HTML/PHP -->
+                        <div style="text-align: right; margin-bottom: 15px;">
+                            <a href="create_user.php?id=<?= urlencode($id) ?>" class="btn btn-green">➕ Ajouter un utilisateur</a>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Téléphone</th>
+                                    <th>Profession</th>
+                                    <th>Rôle</th>
+                                    <th>Statut</th>
+                                    <th>Email</th>
+                                    <th>Date création</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($usersadministration as $user): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($user['nom']) ?></td>
+                                        <td><?= htmlspecialchars($user['prenom']) ?></td>
+                                        <td><?= htmlspecialchars($user['numero_telephone']) ?></td>
+                                        <td><?= htmlspecialchars($user['profession']) ?></td>
+                                        <td><?= htmlspecialchars($user['role']) ?></td>
+                                        <td><?= htmlspecialchars($user['statut']) ?></td>
+                                        <td><?= htmlspecialchars($user['email']) ?></td>
+                                        <td><?= htmlspecialchars($user['date_creation']) ?></td>
+                                        <td style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                            <form method="POST">
+                                                <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                                                <input type="hidden" name="action" value="update_statut">
+                                                <button type="submit" class="btn-action btn-green">Changer statut</button>
+                                            </form>
+                                            <form method="POST">
+                                                <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                                                <input type="hidden" name="action" value="update_role">
+                                                <button type="submit" class="btn-action btn-blue">Changer rôle</button>
+                                            </form>
+                                            <a href="certificate_signing.php?id=<?= urlencode($user['id']) ?>" class="btn-action btn-orange">Éditer</a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                </div>
+
+                <div id="tab-deces" class="tab-content">
+                <table>
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Date de deces</th>
+                                    <th>Lieu de deces</th>
+                                    <th>cause du deces</th>
+                                    <th>Genre</th>
+                                    <th>analyser par</th>
+                                    <th>Signer par</th>
+                                    <th>Signer le</th>
+                                    <th>Date création</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($death as $user): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($user['nom_defunt']) ?></td>
+                                        <td><?= htmlspecialchars($user['prenom_defunt']) ?></td>
+                                        <td><?= htmlspecialchars($user['date_deces']) ?></td>
+                                        <td><?= htmlspecialchars($user['lieu_deces']) ?></td>
+                                        <td><?= htmlspecialchars($user['cause']) ?></td>
+                                        <td><?= htmlspecialchars($user['genre']) ?></td>
+                                        <td><?= htmlspecialchars($user['agent_nom']) ?> <?= htmlspecialchars($user['agent_prenom']) ?></td>
+                                        <td><?= htmlspecialchars($user['officier_nom']) ?> <?= htmlspecialchars($user['officier_prenom']) ?></td>
+                                        <td><?= htmlspecialchars($user['date_signature']) ?></td>
+                                        <td><?= htmlspecialchars($user['date_creation']) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                </div>
+
+                <div id="tab-admin" class="tab-content">
+                    <!-- ⬇️ Ici tu colles ton tableau HTML/PHP -->
+                        <div style="text-align: right; margin-bottom: 15px;">
+                            <a href="create_user.php?id=<?= urlencode($id) ?>" class="btn btn-green">➕ Ajouter un utilisateur</a>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Téléphone</th>
+                                    <th>Profession</th>
+                                    <th>Rôle</th>
+                                    <th>Statut</th>
+                                    <th>Email</th>
+                                    <th>Date création</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($usersadministration as $user): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($user['nom']) ?></td>
+                                        <td><?= htmlspecialchars($user['prenom']) ?></td>
+                                        <td><?= htmlspecialchars($user['numero_telephone']) ?></td>
+                                        <td><?= htmlspecialchars($user['profession']) ?></td>
+                                        <td><?= htmlspecialchars($user['role']) ?></td>
+                                        <td><?= htmlspecialchars($user['statut']) ?></td>
+                                        <td><?= htmlspecialchars($user['email']) ?></td>
+                                        <td><?= htmlspecialchars($user['date_creation']) ?></td>
+                                        <td style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                            <form method="POST">
+                                                <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                                                <input type="hidden" name="action" value="update_statut">
+                                                <button type="submit" class="btn-action btn-green">Changer statut</button>
+                                            </form>
+                                            <form method="POST">
+                                                <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                                                <input type="hidden" name="action" value="update_role">
+                                                <button type="submit" class="btn-action btn-blue">Changer rôle</button>
+                                            </form>
+                                            <a href="certificate_signing.php?id=<?= urlencode($user['id']) ?>" class="btn-action btn-orange">Éditer</a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                </div>
+            </div>
         </div>
+
+
+        </div>
+        
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    const stats = {
+        birth: <?= $stats['birth'] ?>,
+        marriage: <?= $stats['marriage'] ?>,
+        death: <?= $stats['death'] ?>,
+        signed: <?= $stats['signed'] ?>,
+        pending: <?= $stats['pending'] ?>,
+        validated: <?= $stats['validated'] ?>,
+        rejeted: <?= $stats['rejeted'] ?>,
+        total: <?= $stats['total_certificate'] ?>
+    };
+
+    // 1. Répartition des types d'actes
+    new Chart(document.getElementById('chartType'), {
+        type: 'pie',
+        data: {
+            labels: ['Naissances', 'Mariages', 'Décès'],
+            datasets: [{
+                data: [stats.birth, stats.marriage, stats.death],
+                backgroundColor: ['#60a5fa', '#f97316', '#f43f5e']
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Répartition par type d'acte"
+                }
+            }
+        }
+    });
+
+    // 2. Actes signés vs en attente
+    new Chart(document.getElementById('chartSignStatus'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Signés', 'En attente'],
+            datasets: [{
+                data: [stats.signed, stats.pending],
+                backgroundColor: ['#10b981', '#fbbf24']
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Statut de signature"
+                }
+            }
+        }
+    });
+
+    // 3. Validés vs Rejetés
+    new Chart(document.getElementById('chartValidationStatus'), {
+        type: 'bar',
+        data: {
+            labels: ['Validés', 'Rejetés'],
+            datasets: [{
+                label: 'Nombre',
+                data: [stats.validated, stats.rejeted],
+                backgroundColor: ['#4ade80', '#ef4444']
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Validations des actes"
+                }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // 4. Line chart : évolution simulée
+    const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'];
+    const evolNaissance = months.map((_, i) => Math.floor(stats.birth * (0.6 + 0.07 * i)));
+    const evolMariage = months.map((_, i) => Math.floor(stats.marriage * (0.5 + 0.1 * i)));
+    const evolDécès = months.map((_, i) => Math.floor(stats.death * (0.4 + 0.08 * i)));
+
+    new Chart(document.getElementById('chartEvolution'), {
+        type: 'line',
+        data: {
+            labels: months,
+            datasets: [
+                {
+                    label: 'Naissances',
+                    data: evolNaissance,
+                    borderColor: '#60a5fa',
+                    fill: false,
+                    tension: 0.3
+                },
+                {
+                    label: 'Mariages',
+                    data: evolMariage,
+                    borderColor: '#f97316',
+                    fill: false,
+                    tension: 0.3
+                },
+                {
+                    label: 'Décès',
+                    data: evolDécès,
+                    borderColor: '#f43f5e',
+                    fill: false,
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Évolution mensuelle des actes "
+                }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Réinitialiser tous les boutons
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Masquer tous les contenus
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            // Afficher l'onglet actif
+            const tabId = 'tab-' + btn.getAttribute('data-tab');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+</script>
+
 </body>
 </html>

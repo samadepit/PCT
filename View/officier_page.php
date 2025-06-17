@@ -1,6 +1,7 @@
 <?php
-session_start();
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once __DIR__ . '/../Controller/certificatedemandController.php';
 require_once __DIR__ . '/../service/date_convert.php';
 
@@ -16,7 +17,21 @@ $stats = $actedemandeController->getStatistics();
 
 
 ?>
-
+<?php if (isset($_SESSION['alert'])): ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        <?php if ($_SESSION['alert'] === 'signer'): ?>
+            Swal.fire({
+                icon: 'success',
+                title: 'Acte signé',
+                text: "L'acte a été signé avec succès !",
+                confirmButtonColor: '#10b981'
+            });
+        <?php endif; ?>
+    });
+</script>
+<?php unset($_SESSION['alert']); endif; ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>

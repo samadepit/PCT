@@ -1,6 +1,7 @@
 <?php 
-session_start();
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once __DIR__ . '/../Controller/signingController.php';
 require_once __DIR__ . '/../service/mail_functions.php';
 require_once __DIR__ . '/../Controller/requestroController.php';
@@ -21,7 +22,10 @@ $requestroController = new DemandeurController();
 $emailRequestro = $requestroController->get_requestor_mail($codeDemande);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['signature'])) {
-    notifierDemandeur($emailRequestro, $codeDemande, 'signe');
+    if (!empty($emailRequestro)) {
+        notifierDemandeur($emailRequestro, $codeDemande, 'signe');
+    }
+    $_SESSION['alert'] = 'signer';
     $sSigningController->handleRequest($id);
     exit; 
 }

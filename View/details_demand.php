@@ -1,6 +1,7 @@
 <?php
-session_start();
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once __DIR__ . '/../Controller/certificatedemandController.php';
 require_once __DIR__ . '/../Controller/demandController.php';
 require_once __DIR__ . '/../service/date_convert.php';
@@ -24,11 +25,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'valider') {
         $demandeController->updateStatut($code_demande, 'valider');
         $actedemandeController->ValidateByAgent($id, $code_demande);
-        notifierDemandeur($demande['email_demandeur'], $code_demande, 'valide');
-
+        if (!empty($demande['email_demandeur'])) {
+            notifierDemandeur($demande['email_demandeur'], $code_demande, 'valide');
+        }
+        $_SESSION['alert'] = 'valide';
     } elseif ($action === 'rejeter') {
         $demandeController->updateStatut($code_demande, 'rejeter', $motif);
-        notifierDemandeur($demande['email_demandeur'], $code_demande, 'rejete');
+        if (!empty($demande['email_demandeur'])) {
+            notifierDemandeur($demande['email_demandeur'], $code_demande, 'rejete');
+        }
+        $_SESSION['alert'] = 'rejete';
+        
     }
 
     header('Location: list_demand.php?id=' . urlencode($id));
