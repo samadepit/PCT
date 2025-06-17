@@ -1,7 +1,8 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
-}require_once __DIR__ . '/../Controller/certificatedemandController.php';
+}
+require_once __DIR__ . '/../Controller/certificatedemandController.php';
 require_once __DIR__ . '/../service/date_convert.php';
 $id = $_GET['id'] ?? null;
 if (empty($id)) {

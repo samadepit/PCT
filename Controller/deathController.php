@@ -46,5 +46,18 @@ class DecesController
             return null;
         }
     }
+
+    public function getDeath() {
+        try {
+            $death = $this->deathModel->getAllDeath();
+            if (!$death) {
+                throw new Exception("Erreur de récupérations des actes  de deces");
+            }
+            return $death;
+        } catch (Exception $e) {
+            error_log("Erreur : " . $e->getMessage());
+            return false;
+        }
+    }
     
 }

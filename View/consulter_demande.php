@@ -303,6 +303,8 @@ if ($status === 'valider') {
             <?php elseif ($status === 'rejeter' && !empty($certificate['motif_rejet'])): ?>
                 <span><?= htmlspecialchars($certificate['statut']) ?></span>
                 <p style="color: red; margin: 5px 0 0;"><strong>Motif :</strong> <?= htmlspecialchars($certificate['motif_rejet']) ?></p>
+            <?php else :?>
+                    <span><?= htmlspecialchars($certificate['statut']) ?>
             <?php endif; ?>
         </div>
     </div>
