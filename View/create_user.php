@@ -2,7 +2,11 @@
 require_once __DIR__ . '/../Controller/UserController.php';
 $userController = new UserController();
 $id = $_GET['id'] ?? null;
-
+if (empty($id)) {
+    $_SESSION['erreur'] = "Accès invalide. Vous avez été redirigé vers la page de connexion.";
+    header("Location: login.php");
+    exit;
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = [
         'nom' => $_POST['nom'] ?? '',
@@ -18,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $userController->createAdministrationUser($data);  
 
-    header('Location: administration_page.php');
+    header('Location: administration_page.php?id=' . urlencode($id));
     exit();
 }
 ?>
@@ -198,8 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <button type="submit" class="btn-submit">Créer l'utilisateur</button>
     </form>
-    <a href="administration_page.php" class="btn-back">← Retour à la page d'acceuil</a>
-
+    <a href="administration_page.php?id=<?php echo urlencode($id); ?>" class="btn-back">← Retour à la page d'accueil</a>
 </div>
 
 </body>

@@ -36,7 +36,14 @@ class UserController
         $result=$this->userModel->InsertAdministrationUser($data);
         return $result;
     }
-    
-    
+
+    public function getUserById($id){
+        return $this->userModel->getUserById($id);
+    }
+
+    public function updateUserById($data) {
+        $result = $this->userModel->updateUserById($data);
+        return $result;
+    }
 
 }
