@@ -10,15 +10,24 @@ class AuthController
     }
 
     public function authenticate()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'] ?? '';
-            $password = $_POST['password'] ?? '';
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $email = $_POST['email'] ?? '';
+        $password = $_POST['password'] ?? '';
 
-            $userModel = new User();
-            $user = $userModel->findByEmail($email);
+        $userModel = new User();
+        $user = $userModel->findByEmail($email);
 
-            if ($user && $password === $user['password']) {
+        if ($user) {
+            $isPasswordValid = false;
+
+            if (strpos($user['password'], '$') === 0) {
+                $isPasswordValid = password_verify($password, $user['password']);
+            } else {
+                $isPasswordValid = ($password === $user['password']);
+            }
+
+            if ($isPasswordValid) {
                 $_SESSION['user'] = $user;
                 $userId = $user['id'];
 
@@ -28,22 +37,26 @@ class AuthController
                         'agent' => 'dashboardAgent',
                         'admin' => 'dashboardAdministrator'
                     ];
-                
+
                     if (isset($dashboards[$user['role']])) {
                         $page = $dashboards[$user['role']];
                         header("Location: index.php?page={$page}&id=$userId");
                         exit;
                     }
-                } else{
-                    $error = "Identifiants invalides vous n'êtes plus autorisé";
-                    require_once __DIR__ . '/../View/login.php';
+                } else {
+                    $error = "Identifiants invalides : vous n'êtes plus autorisé.";
                 }
             } else {
-                $error = "Identifiants invalides";
-                require_once __DIR__ . '/../View/login.php';
+                $error = "Identifiants invalides.";
             }
+        } else {
+            $error = "Identifiants invalides.";
         }
+
+        require_once __DIR__ . '/../View/login.php';
     }
+}
+
 
     public function dashboard()
     {
