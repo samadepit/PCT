@@ -4,202 +4,116 @@ session_start();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
-    <div class="top-header">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCPIRahRkX8w3AK0ahlZKqhkZi22eMtSf6qg&s" alt="Logo CI" />
-        <h1>Bienvenue sur le Portail des Demande d'actes d'état civil</h1>
-        <nav>
-            <a href="dashboard.php" class="nav-btn">Accueil</a>
-            <a href="demande_etape1.php" class="nav-btn"><span>Faire une demande</span></a>
-            <a href="consulter_demande.php" class="nav-btn">Suivre une demande</a>
-        </nav>
-    </div>
+
     <title>Demande - Étape 1</title>
-    <style>
-         html, body {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f5f7fa;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 80px; /* espace pour le header fixe */
-    }
-
-    .top-header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 80px;
-        width: 100%;
-        background-color: white;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 40px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        color: #1f2937;
-        z-index: 1000;
-        box-sizing: border-box;
-    }
-
-    .top-header img {
-        height: 50px;
-    }
-
-    .top-header h1 {
-        font-size: 20px;
-        font-weight: bold;
-        flex: 1;
-        text-align: center;
-        margin: 0;
-        color: #1f2937;
-    }
-
-    .top-header nav {
-        display: flex;
-        gap: 20px;
-        font-weight: 600;
-        font-size: 16px;
-    }
-
-    .top-header nav span {
-        color: #f97316; /* orange pour la page active */
-    }
-
-    .top-header nav a {
-        text-decoration: none;
-        color: #1f2937;
-    }
-
-        form {
-            background: #fff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            width: 100%;
-            max-width: 600px;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #ff8008;
-            font-size: 2rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            color: #333;
-        }
-
-        select, input[type="text"] {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #ff8008;
-            border-radius: 8px;
-            background-color: #fff;
-            font-size: 1rem;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        select option {
-            padding: 10px;
-        }
-
-        select:focus, input[type="text"]:focus {
-            outline: none;
-            border-color: #ff9500;
-            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
-        }
-
-        button {
-            background: #ff8008;
-            color: white;
-            border: none;
-            padding: 14px 20px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.3s ease;
-        }
-
-        button:hover {
-            background: #e67600;
-        }
-
-        @media (max-width: 768px) {
-            form {
-                padding: 20px;
-            }
-
-            h2 {
-                font-size: 1.6rem;
-            }
-
-            select, input[type="text"], button {
-                font-size: 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h2 {
-                font-size: 1.4rem;
-            }
-
-            button {
-                padding: 12px;
-            }
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/etapes.css">
+   
 </head>
+
 <body>
-    <form method="post" action="demande_etape2.php">
-        <h2>Étape 1 : Choix des actes et localité</h2>
 
-        <label for="localiter">Localité :</label>
-        <input type="text" name="localiter" id="localiter" value="Ouangolodougou" readonly>
+    <?php
+       require_once './partials/header.php'
+     ?>
 
-        <label for="actes">Choisissez les actes à demander :</label>
-        <select name="actes[]" id="actes" multiple required>
-            <option value="naissance">Acte de naissance</option>
-            <option value="mariage">Acte de mariage</option>
-            <option value="deces">Acte de décès</option>
-        </select>
 
-        <button type="submit">Suivant</button>
-    </form>
+    <div class="form-page-wrapper">
+        <div class="form-container">
+            <!-- En-tête officiel -->
 
-    <script>
-    const select = document.getElementById("actes");
-    select.addEventListener("mousedown", function(e) {
-        e.preventDefault(); 
-        const option = e.target;
-        if (option.tagName.toLowerCase() === "option") {
-            Array.from(select.options).forEach(opt => opt.selected = false);
-            option.selected = true;
+
+            <form method="post" action="demande_etape2.php" onsubmit="handleSubmit(event)">
+                
+
+                <h2>Choix des actes et localité</h2>
+
+                <div class="form-group">
+                    <label for="localiter">Localité de délivrance :</label>
+                    <input type="text" name="localiter" id="localiter" value="Ouangolodougou" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="actes">Type(s) d'acte(s) demandé(s) :</label>
+                    <select name="actes[]" id="actes" multiple required>
+                        <option value="naissance">📋 Acte de naissance</option>
+                        <option value="mariage">💒 Acte de mariage</option>
+                        <option value="deces">⚰️ Acte de décès</option>
+                    </select>
+                    
+                </div>
+
+                <button type="submit" id="submitBtn">
+                    <span>Étape suivante</span>
+                </button>
+            </form>
+
+
+        </div>
+
+        <script>
+        function handleSubmit(event) {
+            const button = document.getElementById('submitBtn');
+            const span = button.querySelector('span');
+
+            // Vérification de la sélection
+            const select = document.getElementById('actes');
+            if (select.selectedOptions.length === 0) {
+                alert('Veuillez sélectionner au moins un type d\'acte.');
+                event.preventDefault();
+                return;
+            }
+
+            // Animation de chargement
+            button.classList.add('loading');
+            span.style.opacity = '0';
+
+            // Simulation du traitement
+            setTimeout(() => {
+                button.classList.remove('loading');
+                span.style.opacity = '1';
+            }, 1500);
         }
-    });
-    document.querySelector("form").addEventListener("submit", function(e) {
-        const selected = Array.from(select.options).filter(option => option.selected).length;
-        if (selected === 0) {
-            e.preventDefault();
-            alert("Veuillez sélectionner au moins un acte.");
-        }
-    });
-</script>
 
+        // Amélioration de l'expérience utilisateur
+        document.querySelectorAll('input, select').forEach(element => {
+            element.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.01)';
+                this.parentElement.style.transition = 'transform 0.2s ease';
+            });
+
+            element.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // Indication visuelle de la sélection multiple
+        const selectElement = document.getElementById('actes');
+        selectElement.addEventListener('change', function() {
+            const selectedCount = this.selectedOptions.length;
+            const infoDiv = document.querySelector('.select-info');
+
+            if (selectedCount > 0) {
+                infoDiv.innerHTML = `✅ ${selectedCount} type(s) d'acte(s) sélectionné(s)`;
+                infoDiv.style.background = '#f0f9ff';
+                infoDiv.style.borderLeftColor = '#059669';
+            } else {
+                infoDiv.innerHTML =
+                    'Maintenez la touche Ctrl (Windows) ou Cmd (Mac) enfoncée pour sélectionner plusieurs types d\'actes';
+                infoDiv.style.background = '#f8fafc';
+                infoDiv.style.borderLeftColor = '#3b82f6';
+            }
+        });
+        </script>
+
+      
+    </div>  
+      <?php
+       require_once './partials/footer.php'
+         ?>   
 </body>
+
 </html>
