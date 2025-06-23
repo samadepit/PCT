@@ -8,6 +8,11 @@ $actedemandeController = new ActeDemandeController();
 $userController= new UserController();
 $demandes = $actedemandeController->getAllvalidationCertificate();
 $id = $_GET['id'] ?? null;
+if (empty($id)) {
+    $_SESSION['erreur'] = "Accès invalide. Vous avez été redirigé vers la page de connexion.";
+    header("Location: login.php");
+    exit;
+}
 $stats = $actedemandeController->getStatistics();
 $userstats=$userController->getStatisticsAdministration();
 $usersadministration=$userController->getAllAdministration();
@@ -28,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ac
         $userController->UpdateRoleAdministration($userId);
     }
 
-    header('Location: administration_page.php');
+    header('Location: administration_page.php?id=' . urlencode($id));
     exit();
 }
 ?>
@@ -347,10 +352,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ac
             <div class="tab-container">
                 <!-- Barre d'onglets -->
                 <div class="tab-bar">
+                    <button class="tab-btn" data-tab="admin">Administration</button>
                     <button class="tab-btn active" data-tab="naissance">Naissances</button>
                     <button class="tab-btn" data-tab="mariage">Mariages</button>
                     <button class="tab-btn" data-tab="deces">Décès</button>
-                    <button class="tab-btn" data-tab="admin">Administration</button>
                 </div>
 
                 <!-- Contenu des onglets -->
@@ -459,7 +464,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ac
                                                 <input type="hidden" name="action" value="update_role">
                                                 <button type="submit" class="btn-action btn-blue">Changer rôle</button>
                                             </form>
-                                            <a href="certificate_signing.php?id=<?= urlencode($user['id']) ?>" class="btn-action btn-orange">Éditer</a>
+                                            <a href="editer_user.php?id=<?= urlencode($user['id']) ?>" class="btn-action btn-orange">Éditer</a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -543,7 +548,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ac
                                                 <input type="hidden" name="action" value="update_role">
                                                 <button type="submit" class="btn-action btn-blue">Changer rôle</button>
                                             </form>
-                                            <a href="certificate_signing.php?id=<?= urlencode($user['id']) ?>" class="btn-action btn-orange">Éditer</a>
+                                            <a href="editer_user.php?id=<?=$id ?>&id_user=<?= urlencode($user['id']) ?>" class="btn-action btn-orange">Éditer</a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
