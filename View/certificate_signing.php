@@ -80,8 +80,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['signature'])) {
             background-color: #ea580c;
         }
 
-        .btn-effacer {
-        background-color: #ef4444;
+        #clear-btn {
+        background-color: gray;
+        }
+
+        #save-btn{
+            background-color: #f97316;
         }
 
         .btn-effacer:hover {
@@ -107,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['signature'])) {
 
         .container {
             max-width: 700px;
-            margin: 30px auto;
+            margin:  auto;
             padding: 0 15px;
         }
 
@@ -140,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['signature'])) {
         }
 
         .btn-effacer {
-            background-color: #ef4444;
+            background-color: gray;
         }
 
         .btn-effacer:hover {
@@ -234,11 +238,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['signature'])) {
     </style>
 </head>
 <body>
-    <div class="top-header">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCPIRahRkX8w3AK0ahlZKqhkZi22eMtSf6qg&s" alt="Logo CI">
-        <h1>Portail des Officiers de l'état civil</h1>
-        <a href="index.php?page=logout" class="logout-btn">Déconnexion</a>
-    </div>
+    
+     <?php
+       require_once './partials/header.php';
+    ?>
 
     <!-- <div class="top-header">
         <img src="../Public/img/logo.png" alt="Logo">
@@ -388,6 +391,10 @@ document.getElementById('save-btn').addEventListener('click', function() {
 });
 
 </script>
+
+ <?php
+      require_once './partials/footer.php';
+       ?>
 
 </body>
 </html>

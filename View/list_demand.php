@@ -55,14 +55,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
     <?php
        require_once './partials/header.php';
-?>
+    ?>
 
-    <div class="container">
-
+     <div class="container">
 
         <div class="top-header fade-in">
-            <h1> Tableau de Bord - de Gestion d 'Actes des agents</h1>
-            <a href="./login.php" class="logout-btn"> Déconnexion</a>
+            <h1>Tableau de Bord - de Gestion d'Actes des agents</h1>
+            <a href="./login.php" class="logout-btn">Déconnexion</a>
         </div>
 
         <!-- KPI -->
@@ -91,7 +90,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 <h3>Validés</h3>
                 <p><?php echo $stats['validated']; ?></p>
             </div>
-
             <div class="kpi">
                 <h3>Rejetés</h3>
                 <p><?php echo $stats['rejeted']; ?></p>
@@ -99,8 +97,7 @@ window.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <div class="card-content slide-up">
-
-            <div>
+            <div class="table-header">
                 <h2>Demandes en attente</h2>
             </div>
 
@@ -119,31 +116,23 @@ window.addEventListener('DOMContentLoaded', () => {
                     <tbody>
                         <?php foreach ($demandes as $demande) { ?>
                         <tr>
-                            <td><?php echo $dateConvertie = convertirDateEnFrancais(htmlspecialchars($demande['demande_date_creation'])); ?>
-                            </td>
-                            <td><?php echo htmlspecialchars($demande['nom_demandeur']); ?>
-                                <?php echo htmlspecialchars($demande['prenom_demandeur']); ?></td>
+                            <td><?php echo $dateConvertie = convertirDateEnFrancais(htmlspecialchars($demande['demande_date_creation'])); ?></td>
+                            <td><?php echo htmlspecialchars($demande['nom_demandeur']); ?> <?php echo htmlspecialchars($demande['prenom_demandeur']); ?></td>
                             <td><?php echo htmlspecialchars($demande['type_acte']); ?></td>
                             <td>
                                 <?php if ($demande['type_acte'] === 'naissance') { ?>
-                                <?php echo htmlspecialchars($demande['nom_beneficiaire']); ?>
-                                <?php echo htmlspecialchars($demande['prenom_beneficiaire']); ?>
+                                <?php echo htmlspecialchars($demande['nom_beneficiaire']); ?> <?php echo htmlspecialchars($demande['prenom_beneficiaire']); ?>
                                 <?php } elseif ($demande['type_acte'] === 'mariage') { ?>
-                                <?php echo htmlspecialchars($demande['nom_epoux']); ?>
-                                <?php echo htmlspecialchars($demande['prenom_epoux']); ?> &
-                                <?php echo htmlspecialchars($demande['nom_epouse']); ?>
-                                <?php echo htmlspecialchars($demande['prenom_epouse']); ?>
+                                <?php echo htmlspecialchars($demande['nom_epoux']); ?> <?php echo htmlspecialchars($demande['prenom_epoux']); ?> & <?php echo htmlspecialchars($demande['nom_epouse']); ?> <?php echo htmlspecialchars($demande['prenom_epouse']); ?>
                                 <?php } elseif ($demande['type_acte'] === 'deces') { ?>
-                                <?php echo htmlspecialchars($demande['nom_defunt']); ?>
-                                <?php echo htmlspecialchars($demande['prenom_defunt']); ?>
+                                <?php echo htmlspecialchars($demande['nom_defunt']); ?> <?php echo htmlspecialchars($demande['prenom_defunt']); ?>
                                 <?php } else { ?>
                                 -
                                 <?php } ?>
                             </td>
                             <td><?php echo htmlspecialchars($demande['relation_avec_beneficiaire']); ?></td>
                             <td>
-                                <a href="details_demand.php?code_demande=<?php echo urlencode($demande['code_demande']); ?>&id=<?php echo urlencode($id); ?>"
-                                    class="btn">Voir</a>
+                                <a href="details_demand.php?code_demande=<?php echo urlencode($demande['code_demande']); ?>&id=<?php echo urlencode($id); ?>" class="btn btn-dark text-white">Voir</a>
                             </td>
                         </tr>
                         <?php } ?>
@@ -171,8 +160,6 @@ window.addEventListener('DOMContentLoaded', () => {
             const buttons = document.querySelectorAll('.btn');
             buttons.forEach(button => {
                 button.addEventListener('click', function(e) {
-                    e.preventDefault();
-
                     // Create ripple effect
                     const ripple = document.createElement('span');
                     const rect = this.getBoundingClientRect();
@@ -203,23 +190,12 @@ window.addEventListener('DOMContentLoaded', () => {
                 });
             });
         });
-
-        // Add ripple animation CSS
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                to {
-                    transform: scale(4);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
         </script>
 
+    </div>
         <?php
       require_once './partials/footer.php';
-?>
+       ?>
 </body>
 
 </html>

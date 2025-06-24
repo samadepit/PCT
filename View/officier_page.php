@@ -134,7 +134,7 @@ window.addEventListener('DOMContentLoaded', () => {
                             <td><?php echo htmlspecialchars($demande['relation_avec_beneficiaire']); ?></td>
                             <td>
                                 <a href="certificate_signing.php?code_demande=<?php echo urlencode($demande['code_demande']); ?>&id=<?php echo urlencode($id); ?>"
-                                    class="btn"
+                                    class="btn btn-dark"
                                     onclick="event.preventDefault(); document.getElementById('form-<?php echo $demande['code_demande']; ?>').submit();">
                                      Voir
                                 </a>

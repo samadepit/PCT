@@ -48,21 +48,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code_paiement'])) {
     <style>
         body {
             background-color: #f1f1f1;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: Arial, sans-serif; 
         }
 
-        .container {
-            background-color: white;
-            padding: 30px 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            text-align: center;
-            width: 100%;
-            max-width: 400px;
+        .container-kpi {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+
         }
 
         input[type="text"] {
@@ -76,17 +70,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code_paiement'])) {
         }
 
         button {
-            background-color: #3498db;
+            background-color: #f97316;
+           
             color: white;
             padding: 12px 20px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
+            width: 100%;
         }
 
         button:hover {
-            background-color: #2980b9;
+            background-color: #f97316;
         }
 
         .message {
@@ -104,7 +100,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code_paiement'])) {
     </style>
 </head>
 <body>
-    <div class="container">
+     <?php
+       require_once './partials/header.php';
+    ?>
+    <div class="container-kpi">
         <h2>Entrez le code de paiement de paiement ci-dessous</h2>
         <i><?=$code_paiement_generate?></i>
         <form method="POST" action="">
@@ -117,5 +116,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code_paiement'])) {
             </div>
         <?php endif; ?>
     </div>
+    <?php
+      require_once './partials/footer.php';
+       ?>
 </body>
 </html>
