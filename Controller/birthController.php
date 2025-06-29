@@ -75,4 +75,17 @@ class NaissanceController
         }
     }
 
+    public function getBirth() {
+        try {
+            $birth = $this->naissanceModel->getAllBirth();
+            if (!$birth) {
+                throw new Exception("Erreur de récupérations des actes de naissance");
+            }
+            return $birth;
+        } catch (Exception $e) {
+            error_log("Erreur : " . $e->getMessage());
+            return false;
+        }
+    }
+
 }

@@ -40,7 +40,6 @@ class User
         if (!$current) return 0;
     
         $newStatut = ($current['statut'] === 'actif') ? 'inactif' : 'actif';
-    
         $updateQuery = "UPDATE administration SET statut = :newStatut WHERE id = :id";
         $updateStmt = $this->con->prepare($updateQuery);
         $updateStmt->execute([
@@ -65,7 +64,6 @@ class User
             ':newRole' => $newRole,
             ':id' => $id,
         ]);
-    
         return $updateStmt->rowCount();
     }
 
@@ -114,4 +112,53 @@ class User
             return false;
         }
     }
+
+    public function getUserById($id) {
+        $query = "
+            SELECT *
+            FROM administration
+            WHERE id = :id
+        ";
+        $stmt = $this->con->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updateUserById($data) {
+        $baseQuery = "
+            UPDATE administration
+            SET nom = :nom,
+                prenom = :prenom,
+                numero_telephone = :numero_telephone,
+                profession = :profession,
+                email = :email,
+                role = :role,
+                statut = :statut
+        ";
+    
+        $params = [
+            ':id' => $data['id'],
+            ':nom' => $data['nom'],
+            ':prenom' => $data['prenom'],
+            ':numero_telephone' => $data['numero_telephone'],
+            ':profession' => $data['profession'],
+            ':email' => $data['email'],
+            ':role' => $data['role'],
+            ':statut' => $data['statut'],
+        ];
+    
+        if (!empty($data['password'])) {
+            $baseQuery .= ", password = :password";
+            $params[':password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        }
+    
+        $baseQuery .= " WHERE id = :id";
+    
+        $stmt = $this->con->prepare($baseQuery);
+        return $stmt->execute($params);
+    }
+    
+
 }

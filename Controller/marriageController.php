@@ -47,4 +47,17 @@ class MarriageController
         }
     }
 
+    public function getMarriage() {
+        try {
+            $marriages = $this->marriageModel->getAllMarriage();
+            if (!$marriages) {
+                throw new Exception("Erreur de récupérations des actes  de naissance");
+            }
+            return $marriages;
+        } catch (Exception $e) {
+            error_log("Erreur : " . $e->getMessage());
+            return false;
+        }
+    }
+
 }

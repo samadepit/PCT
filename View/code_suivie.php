@@ -65,6 +65,21 @@ $messagePrincipal = "Merci ! Votre demande a été enregistrée.";
             cursor: pointer;
             border-radius: 4px;
         }
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        #print-zone, #print-zone * {
+            visibility: visible;
+        }
+        #print-zone {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+    }
+
     </style>
 </head>
 <body>
@@ -74,6 +89,7 @@ $messagePrincipal = "Merci ! Votre demande a été enregistrée.";
 
     <main>
         <?php if ($code_demande): ?>
+            <div id="print-zone">
             <div class="card">
                 <h2>Votre code de suivi :</h2>
                 <p class="code"><?= htmlspecialchars($code_demande) ?></p>
@@ -97,7 +113,7 @@ $messagePrincipal = "Merci ! Votre demande a été enregistrée.";
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
-
+        </div>
                 <button class="print-button" onclick="window.print()">Imprimer cette confirmation</button>
                 <form action="dashboard.php" method="get" style="margin-top: 1rem;">
                     <button type="submit" class="print-button">🏠 Retour à l’accueil</button>
