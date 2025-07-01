@@ -13,7 +13,7 @@
     <header>
         <div class="bg-orange  justify-content-center p-2 mb-2" style="height: 70px;">
             <div class="container text-start text-white d-flex align-items-center  justify-content-between">
-                <p class="m-0  fancy-text">La marie connectée </p>
+                <p class="m-0  fancy-text">Le numérique au service de tous les citoyens. </p>
                 <div class="social-icons ">
                     <a title='facebook CVAN' href="#" class="text-white me-2"><i class="bi bi-facebook"></i></a>
                     <a title='X CVAN' href="#" class="text-white me-2"><i class="bi bi-twitter"></i></a>
@@ -23,7 +23,7 @@
             </div>
 
         </div>
-        <div class="bg-dark text-dark">
+        <div class="bg-dark text-dark mb-2 ">
             <nav class="navbar navbar-expand-lg navbar-dark bg-light">
                 <div class="container">
 
