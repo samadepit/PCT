@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-row">
                     <div class="form-group full-width">
-                        <label for="certificat_de_naissance">Certificat de naissance * (PDF/JPEG/PNG max 5MB)</label>
+                        <label for="certificat_de_naissance">Certificat de naissance * ( JPEG/PNG max 5MB)</label>
                         <input type="file" id="certificat_de_naissance" name="certificat_de_naissance" accept="application/pdf,image/jpeg,image/png" required>
                     </div>
                 </div>
@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-row">
                     <div class="form-group full-width">
-                        <label for="piece_identite_pere">Pièce d'identité du père * (PDF/JPEG/PNG max 5MB)</label>
+                        <label for="piece_identite_pere">Pièce d'identité du père * ( JPEG/PNG max 5MB)</label>
                         <input type="file" id="piece_identite_pere" name="piece_identite_pere" accept="application/pdf,image/jpeg,image/png" required>
                     </div>
                 </div>
@@ -173,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-row">
                     <div class="form-group full-width">
-                        <label for="piece_identite_mere">Pièce d'identité de la mère * (PDF/JPEG/PNG max 5MB)</label>
+                        <label for="piece_identite_mere">Pièce d'identité de la mère * ( JPEG/PNG max 5MB)</label>
                         <input type="file" id="piece_identite_mere" name="piece_identite_mere" accept="application/pdf,image/jpeg,image/png" required>
                     </div>
                 </div>

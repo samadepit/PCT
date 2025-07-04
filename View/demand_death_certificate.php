@@ -146,12 +146,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="file-section">
                     <div class="form-group">
-                        <label>Certificat médical de décès (PDF/JPEG/PNG max 5MB)</label>
-                        <input type="file" name="certificat_medical_deces" accept="application/pdf,image/jpeg,image/png">
+                        <label>Certificat médical de décès ( JPEG/PNG max 5MB)</label>
+                        <input type="file" name="certificat_medical_deces" accept="application/pdf,image/jpeg,image/png" required>
                     </div>
                     <div class="form-group">
-                        <label>Pièce d'identité du défunt (PDF/JPEG/PNG max 5MB)</label>
-                        <input type="file" name="piece_identite_defunt" accept="application/pdf,image/jpeg,image/png">
+                        <label>Pièce d'identité du défunt ( JPEG/PNG max 5MB)</label>
+                        <input type="file" name="piece_identite_defunt" accept="application/pdf,image/jpeg,image/png" required>
                     </div>
                 </div>
 

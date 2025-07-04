@@ -98,9 +98,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     <div class="form-row">
                         <div class="form-group full-width">
-                            <label for="file">Pièce d'identité (PDF/JPEG/PNG max 5MB) :</label>
+                            <label for="file">Pièce d'identité ( JPEG/PNG max 5MB) :</label>
                             <input type="file" name="piece_identite_demandeur" id="file" 
-                                accept="application/pdf,image/jpeg,image/png">
+                                accept="application/pdf,image/jpeg,image/png" required>
                         </div>
                     </div>
 

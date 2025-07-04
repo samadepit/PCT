@@ -153,11 +153,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="piece_identite_epoux">Pièce d'identité de l'époux * (PDF/JPEG/PNG max 5MB)</label>
+                            <label for="piece_identite_epoux">Pièce d'identité de l'époux * ( JPEG/PNG max 5MB)</label>
                             <input type="file" id="piece_identite_epoux" name="piece_identite_epoux" accept="application/pdf,image/jpeg,image/png" required>
                         </div>
                         <div class="form-group">
-                            <label for="certificat_residence_epoux">Certificat de résidence de l'époux * (PDF/JPEG/PNG max 5MB)</label>
+                            <label for="certificat_residence_epoux">Certificat de résidence de l'époux * ( JPEG/PNG max 5MB)</label>
                             <input type="file" id="certificat_residence_epoux" name="certificat_residence_epoux" accept="application/pdf,image/jpeg,image/png" required>
                         </div>
                     </div>
@@ -197,7 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <select id="situation_matrimoniale_epouse" name="situation_matrimoniale_epouse" required>
                                 <option value="">-- Sélectionner --</option>
                                 <option value="celibataire">Célibataire</option>
-                                <option value="veuf">Veuf</option>
+                                <option value="veuf">Veuve</option>
                                 <option value="divorcé">Divorcé</option>
                             </select>
                         </div>
@@ -216,11 +216,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="piece_identite_epouse">Pièce d'identité de l'épouse * (PDF/JPEG/PNG max 5MB)</label>
+                            <label for="piece_identite_epouse">Pièce d'identité de l'épouse * ( JPEG/PNG max 5MB)</label>
                             <input type="file" id="piece_identite_epouse" name="piece_identite_epouse" accept="application/pdf,image/jpeg,image/png" required>
                         </div>
                         <div class="form-group">
-                            <label for="certificat_residence_epouse">Certificat de résidence de l'épouse * (PDF/JPEG/PNG max 5MB)</label>
+                            <label for="certificat_residence_epouse">Certificat de résidence de l'épouse * ( JPEG/PNG max 5MB)</label>
                             <input type="file" id="certificat_residence_epouse" name="certificat_residence_epouse" accept="application/pdf,image/jpeg,image/png" required>
                         </div>
                     </div>

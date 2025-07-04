@@ -113,15 +113,14 @@ class Naissance
 
         $stmt=$this->con->prepare("
          UPDATE naissance 
-         SET date_mariage = :date_mariage, lieu_mariage = :lieu_mariage, statut_mariage= :statut_mariage
+         SET date_mariage = :date_mariage, lieu_mariage = :lieu_mariage
          WHERE id = :id_naissance_mari or id = :id_naissance_femme;
                 ");
         $params=[
-            'date_mariage' => $data['marriage_date'],
-            'lieu_mariage' => $data['marriage_place'],
-            'statut_mariage' => $data['statut_marriage'],
-            ':id_naissance_mari' => $data['husband_birth_id'] ,
-            ':id_naissance_femme' => $data['wife_birth_id'] ,
+            'date_mariage' => $data['date_mariage'],
+            'lieu_mariage' => $data['lieu_mariage'],
+            ':id_naissance_mari' => $data['id_naissance_epoux'] ,
+            ':id_naissance_femme' => $data['id_naissance_epouse'] ,
         ];
 
         try {

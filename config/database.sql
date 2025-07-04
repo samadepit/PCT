@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS demande (
     id INT AUTO_INCREMENT PRIMARY KEY,
     code_demande VARCHAR(50) UNIQUE NOT NULL,
     statut ENUM('en_attente','valider','rejeter','signer') DEFAULT 'en_attente' NOT NULL,
-    localiter VARCHAR(100) NOT NULL,
+    localite VARCHAR(100) NOT NULL, -- correction : "localiter" → "localite"
     motif_rejet VARCHAR(255) DEFAULT NULL,
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -92,8 +92,9 @@ CREATE TABLE IF NOT EXISTS demandeur (
     email VARCHAR(100),
     relation_avec_beneficiaire VARCHAR(255),
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    piece_identite_demandeur VARCHAR(255) DEFAULT NULL
+    piece_identite_demandeur VARCHAR(255) DEFAULT NULL,
     CONSTRAINT fk_demandeur_demande FOREIGN KEY (code_demande) REFERENCES demande(code_demande) ON DELETE SET NULL
+    -- correction : ajout de virgule avant CONSTRAINT
 );
 
 CREATE TABLE IF NOT EXISTS administration (
