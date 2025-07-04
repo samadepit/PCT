@@ -122,37 +122,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                <div class="form-row">
-                    <div class="form-group full-width">
-                        <label for="certificat_de_naissance">Certificat de naissance * (PDF/JPEG/PNG max 5MB)</label>
-                        <input type="file" id="certificat_de_naissance" name="certificat_de_naissance" accept="application/pdf,image/jpeg,image/png" required>
-                    </div>
-                </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="certificat_de_naissance">Certificat de naissance * (PDF/JPEG/PNG max
+                                    5MB)</label>
+                                <input type="file" id="certificat_de_naissance" name="certificat_de_naissance"
+                                    accept="application/pdf,image/jpeg,image/png" required>
+                            </div>
+                        </div>
 
-                <!-- Informations du père -->
-                <h3 class="section-title">Informations du père</h3>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="nom_pere">Nom *</label>
-                        <input type="text" id="nom_pere" name="nom_pere" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="prenom_pere">Prénom *</label>
-                        <input type="text" id="prenom_pere" name="prenom_pere" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="profession_pere">Profession *</label>
-                        <input type="text" id="profession_pere" name="profession_pere" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
-                    </div>
-                </div>
+                        <!-- Informations du père -->
+                        <h3 class="section-title">Informations du père</h3>
 
-                <div class="form-row">
-                    <div class="form-group full-width">
-                        <label for="piece_identite_pere">Pièce d'identité du père * (PDF/JPEG/PNG max 5MB)</label>
-                        <input type="file" id="piece_identite_pere" name="piece_identite_pere" accept="application/pdf,image/jpeg,image/png" required>
-                    </div>
-                </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nom_pere">Nom *</label>
+                                <input type="text" id="nom_pere" name="nom_pere" pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prenom_pere">Prénom *</label>
+                                <input type="text" id="prenom_pere" name="prenom_pere" pattern="^[A-Za-zÀ-ÿ\s\-]+$"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profession_pere">Profession *</label>
+                                <input type="text" id="profession_pere" name="profession_pere"
+                                    pattern="^[A-Za-zÀ-ÿ\s\-]+$" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="piece_identite_pere">Pièce d'identité du père * (PDF/JPEG/PNG max
+                                    5MB)</label>
+                                <input type="file" id="piece_identite_pere" name="piece_identite_pere"
+                                    accept="application/pdf,image/jpeg,image/png" required>
+                            </div>
+                        </div>
 
 
 
@@ -180,12 +186,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                <div class="form-row">
-                    <div class="form-group full-width">
-                        <label for="piece_identite_mere">Pièce d'identité de la mère * (PDF/JPEG/PNG max 5MB)</label>
-                        <input type="file" id="piece_identite_mere" name="piece_identite_mere" accept="application/pdf,image/jpeg,image/png" required>
-                    </div>
-                </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="piece_identite_mere">Pièce d'identité de la mère * (PDF/JPEG/PNG max
+                                    5MB)</label>
+                                <input type="file" id="piece_identite_mere" name="piece_identite_mere"
+                                    accept="application/pdf,image/jpeg,image/png" required>
+                            </div>
+                        </div>
 
                     </div>
 
