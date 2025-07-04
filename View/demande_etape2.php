@@ -26,98 +26,113 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php
        require_once './partials/header.php'
-     ?>
+    ?>
 
-     <div class="kep">
+    <div class="kep-content">
         <div class="container">
             <!-- Header avec bouton retour -->
             <div class="header-etape">
-                
+
                 <h2>Étape 2 : Informations sur le demandeur</h2>
             </div>
 
             <div class="form-container">
                 <form method="post" action="demande_etape3.php" enctype="multipart/form-data">
-                    
-                    <!-- Section Informations personnelles -->
-                    <div class="section-title">Informations personnelles</div>
-                    
-                    <div class="form-row form-row-2">
-                        <div class="form-group">
-                            <label for="nom">Nom :</label>
-                            <input type="text" name="nom" id="nom" pattern="[A-Za-zÀ-ÿ\s\-']{2,50}" required
-                                placeholder="Entrez votre nom">
+
+                    <div class="color-head">
+
+                        <!-- Section Informations personnelles -->
+                        <div class="section-title">Informations personnelles</div>
+
+                        <div class="form-row form-row-2">
+                            <div class="form-group">
+                                <label for="nom">Nom :</label>
+                                <input type="text" name="nom" id="nom" pattern="[A-Za-zÀ-ÿ\s\-']{2,50}" required
+                                    placeholder="Entrez votre nom">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prenom">Prénom :</label>
+                                <input type="text" name="prenom" id="prenom" pattern="[A-Za-zÀ-ÿ\s\-']{2,50}" required
+                                    placeholder="Entrez votre prénom">
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="prenom">Prénom :</label>
-                            <input type="text" name="prenom" id="prenom" pattern="[A-Za-zÀ-ÿ\s\-']{2,50}" required
-                                placeholder="Entrez votre prénom">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="relation">Relation avec le bénéficiaire :</label>
+                                <select name="relation_avec_beneficiaire" id="relation" required>
+                                    <option value="">-- Sélectionner --</option>
+                                    <option value="parent">Parent</option>
+                                    <option value="conjoint">Conjoint</option>
+                                    <option value="tuteur">Tuteur</option>
+                                    <option value="demandeur">Moi-même</option>
+                                    <option value="autre">Autre</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lieu_residence">Lieu de résidence :</label>
+                                <input type="text" name="lieu_residence" id="lieu_residence"
+                                    pattern="[A-Za-zÀ-ÿ0-9\s\-']{2,100}" required placeholder="Votre lieu de résidence">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="color-head">
+
+                        <!-- Section Contact -->
+                        <div class="section-title">Informations de contact</div>
+
+                        <div class="form-row form-row-2">
+                            <div class="form-group">
+                                <label for="numero_telephone">Téléphone :</label>
+                                <input type="tel" name="numero_telephone" id="numero_telephone" pattern="^\d{10,15}$"
+                                    title="Entrez un numéro de téléphone valide (10 à 15 chiffres)" required
+                                    placeholder="Ex: 0123456789">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email :</label>
+                                <input type="email" name="email" id="email" placeholder="votre.email@exemple.com"
+                                    required>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="color-head">
+                        <!-- Section Documents -->
+                        <div class="section-title">Documents requis</div>
+
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="file">Pièce d'identité (PDF/JPEG/PNG max 5MB) :</label>
+                                <input type="file" name="piece_identite_demandeur" id="file"
+                                    accept="application/pdf,image/jpeg,image/png">
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="relation">Relation avec le bénéficiaire :</label>
-                            <select name="relation_avec_beneficiaire" id="relation" required>
-                                <option value="">-- Sélectionner --</option>
-                                <option value="parent">Parent</option>
-                                <option value="conjoint">Conjoint</option>
-                                <option value="tuteur">Tuteur</option>
-                                <option value="demandeur">Moi-même</option>
-                                <option value="autre">Autre</option>
-                            </select>
-                        </div>
 
-                        <div class="form-group">
-                            <label for="lieu_residence">Lieu de résidence :</label>
-                            <input type="text" name="lieu_residence" id="lieu_residence" pattern="[A-Za-zÀ-ÿ0-9\s\-']{2,100}"
-                                required placeholder="Votre lieu de résidence">
-                        </div>
-                    </div>
+                    <div class="color-footer">
 
-                    <!-- Section Contact -->
-                    <div class="section-title">Informations de contact</div>
-                    
-                    <div class="form-row form-row-2">
-                        <div class="form-group">
-                            <label for="numero_telephone">Téléphone :</label>
-                            <input type="tel" name="numero_telephone" id="numero_telephone" pattern="^\d{10,15}$"
-                                title="Entrez un numéro de téléphone valide (10 à 15 chiffres)" required
-                                placeholder="Ex: 0123456789">
-                        </div>
+                        <!-- Exemple avec plusieurs sections pour un formulaire plus complexe -->
+                        <div class="section-title">Informations complémentaires (optionnel)</div>
 
-                        <div class="form-group">
-                            <label for="email">Email :</label>
-                            <input type="email" name="email" id="email" placeholder="votre.email@exemple.com" required>
-                        </div>
-                    </div>
+                        <div class="file-section">
+                            <div class="form-group">
+                                <label for="justificatif_domicile">Justificatif de domicile :</label>
+                                <input type="file" name="justificatif_domicile" id="justificatif_domicile"
+                                    accept="application/pdf,image/jpeg,image/png">
+                            </div>
 
-                    <!-- Section Documents -->
-                    <div class="section-title">Documents requis</div>
-                    
-                    <div class="form-row">
-                        <div class="form-group full-width">
-                            <label for="file">Pièce d'identité (PDF/JPEG/PNG max 5MB) :</label>
-                            <input type="file" name="piece_identite_demandeur" id="file" 
-                                accept="application/pdf,image/jpeg,image/png">
-                        </div>
-                    </div>
-
-                    <!-- Exemple avec plusieurs sections pour un formulaire plus complexe -->
-                    <div class="section-title">Informations complémentaires (optionnel)</div>
-                    
-                    <div class="file-section">
-                        <div class="form-group">
-                            <label for="justificatif_domicile">Justificatif de domicile :</label>
-                            <input type="file" name="justificatif_domicile" id="justificatif_domicile" 
-                                accept="application/pdf,image/jpeg,image/png">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="autre_document">Autre document :</label>
-                            <input type="file" name="autre_document" id="autre_document" 
-                                accept="application/pdf,image/jpeg,image/png">
+                            <div class="form-group">
+                                <label for="autre_document">Autre document :</label>
+                                <input type="file" name="autre_document" id="autre_document"
+                                    accept="application/pdf,image/jpeg,image/png">
+                            </div>
                         </div>
                     </div>
 

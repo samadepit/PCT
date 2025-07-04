@@ -48,18 +48,8 @@ if (isset($_SESSION['erreur'])) {
 
     <!-- SweetAlert2 -->
     <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="../assets/css/consulterDemande.css">
 
-    <style>
-    body {
-        background-color: #f5f7fa;
-
-    }
-
-    .btn-primary {
-        background: #ff8008 !important;
-        border: #ff8008 !important;
-    }
-    </style>
 </head>
 
 <body>
@@ -82,7 +72,7 @@ if (isset($_SESSION['erreur'])) {
                             <input type="text" class="form-control" id="code_demande" name="code_demande" required>
                         </div>
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">🔍 Rechercher</button>
+                            <button type="submit" class="btn btn-primary rounded-0">🔍 Rechercher</button>
                         </div>
                     </form>
                 </div>

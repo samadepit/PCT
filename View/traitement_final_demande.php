@@ -157,6 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Vérification des actes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/traitementFinal.css">
     <style> 
         .btn-success{
             background: #ff8008 !important;
@@ -170,21 +171,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="container my-5">
     <?php if (!empty($data_certificate)): ?>
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h2 class="card-title mb-4 text-center">🧾 Vérification des informations</h2>
+        <div class=" shadow-sm">
+            <div class="">
+                <div class='header' >
+                    <h2 class="card-title">🧾 Vérification des informations</h2>
+                </div>
+                
 
                 <?php if (!empty($_SESSION['localiter'])): ?>
-                    <div class="mb-4 text-center">
-                        <h5>📍 Localité</h5>
-                        <p class="fw-bold"><?= htmlspecialchars($_SESSION['localiter']) ?></p>
+                    <div class="mb-4 text-start mt-4">
+                        <h5><strong>📍 Localité :</strong> <?= htmlspecialchars($_SESSION['localiter']) ?></h5>
+                        <p class="fw-bold"></p>
                     </div>
                 <?php endif; ?>
 
                 <?php if (!empty($requestor_data)): ?>
                     <div class="mb-4">
-                        <h5>🙋‍♂️ Informations sur le demandeur</h5>
-                        <ul class="list-group">
+                        <h3>🙋‍♂️ Informations sur le demandeur</h3>
+                        <ul class="list-group p-3">
                             <?php foreach ($requestor_data as $cle => $val): ?>
                                 <li class="list-group-item d-flex align-items-center">
                                     <strong class="me-2"><?= htmlspecialchars($cle) ?>:</strong>
@@ -202,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php foreach ($data_certificate as $type => $certificates): ?>
                     <div class="mb-4">
                         <h5>📄 <?= ucfirst($type) ?></h5>
-                        <div class="accordion" id="accordion<?= htmlspecialchars($type) ?>">
+                        <div class="accordion p-4" id="accordion<?= htmlspecialchars($type) ?>">
                             <?php foreach ($certificates as $i => $certificate): ?>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="heading<?= htmlspecialchars($type . $i) ?>">
@@ -234,13 +238,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 <?php endforeach; ?>
 
-                <div class="d-flex gap-3 justify-content-start mt-4">
-                    <form method="post" class="m-0">
-                        <button type="submit" name="confirmer" class="btn btn-success">✅ Confirmer</button>
+                <div class="d-flex gap-3 justify-content-start mt-2 p-4">
+                    <form method="post" class="m-0 mb-4 ">
+                        <input type="hidden" name="modifier_type" value="<?= htmlspecialchars($type) ?>">
+                        <button type="submit" class="back-btn">✏️ Modifier cet acte</button>
                     </form>
                     <form method="post" class="m-0">
-                        <input type="hidden" name="modifier_type" value="<?= htmlspecialchars($type) ?>">
-                        <button type="submit" class="btn btn-warning">✏️ Modifier cet acte</button>
+                        <button type="submit" name="confirmer" class="submit-btn">✅ Confirmer</button>
                     </form>
                 </div>
 

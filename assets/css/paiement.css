@@ -1,0 +1,80 @@
+.content {
+  margin: 20px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.price {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.agregateurs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.agregateurs input[type="radio"] {
+  display: none;
+}
+
+.agregateurs label {
+  border: 3px solid transparent;
+  border-radius: 10px;
+  padding: 5px;
+  transition: border 0.3s ease;
+}
+
+.agregateurs img {
+  width: 80px;
+  height: auto;
+  transition: transform 0.3s ease;
+  border-radius: 8px;
+}
+
+.agregateurs label:hover img {
+  transform: scale(1.05);
+}
+
+/* Bordure personnalisée selon l'agrégateur */
+input[type="radio"][value="wave"]:checked + img {
+  border: 3px solid #007bff;
+  /* Bleu */
+}
+
+input[type="radio"][value="orange"]:checked + img {
+  border: 3px solid #ffa500;
+  /* Orange */
+}
+
+input[type="tel"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+button {
+  width: 200px;
+  padding: 12px;
+  background-color: #ffa500;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #ffa500;
+}
