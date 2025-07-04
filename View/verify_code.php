@@ -46,57 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['code_paiement'])) {
 <head>
     <meta charset="UTF-8">
     <title>Vérification du paiement</title>
-    <style>
-    
-
-    .container-kpi {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        
-
-
-    }
-
-    input[type="text"] {
-        padding: 10px;
-        width: 100%;
-        margin-top: 15px;
-        margin-bottom: 20px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        font-size: 16px;
-    }
-
-    button {
-        background-color: #f97316;
-
-        color: white;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 16px;
-        width: 100%;
-    }
-
-    button:hover {
-        background-color: #f97316;
-    }
-
-    .message {
-        margin-top: 15px;
-        font-weight: bold;
-    }
-
-    .message.success {
-        color: green;
-    }
-
-    .message.error {
-        color: red;
-    }
-    </style>
+    <link rel="stylesheet" href="../assets/css/verify_code.css">
 </head>
 
 <body>
