@@ -99,12 +99,15 @@ class User
             ':numero_telephone' => $data['numero_telephone'],
             ':profession' => $data['profession'],
             ':email' => $data['email'],
-            ':password' => $data['password'],
             ':role' => $data['role'],
             ':statut' => $data['statut'],
         ];
 
         try {
+            if (!empty($data['password'])) {
+            $baseQuery .= ", password = :password";
+            $params[':password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+             }
             $stmt->execute($params);
             return $this->con->lastInsertId();
         } catch (Exception $e) {

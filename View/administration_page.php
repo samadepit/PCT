@@ -575,7 +575,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ac
         total: <?= $stats['total_certificate'] ?>
     };
 
-    // 1. Répartition des types d'actes
     new Chart(document.getElementById('chartType'), {
         type: 'pie',
         data: {
@@ -595,7 +594,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ac
         }
     });
 
-    // 2. Actes signés vs en attente
     new Chart(document.getElementById('chartSignStatus'), {
         type: 'doughnut',
         data: {
@@ -615,7 +613,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ac
         }
     });
 
-    // 3. Validés vs Rejetés
     new Chart(document.getElementById('chartValidationStatus'), {
         type: 'bar',
         data: {
@@ -639,7 +636,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ac
         }
     });
 
-    // 4. Line chart : évolution simulée
     const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'];
     const evolNaissance = months.map((_, i) => Math.floor(stats.birth * (0.6 + 0.07 * i)));
     const evolMariage = months.map((_, i) => Math.floor(stats.marriage * (0.5 + 0.1 * i)));
@@ -687,14 +683,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ac
     });
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            // Réinitialiser tous les boutons
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // Masquer tous les contenus
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
-            // Afficher l'onglet actif
             const tabId = 'tab-' + btn.getAttribute('data-tab');
             document.getElementById(tabId).classList.add('active');
         });

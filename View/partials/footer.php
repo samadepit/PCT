@@ -16,12 +16,12 @@
         <div class="footer-content">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-4 mb-4">
+                    <div class="col-md-4 mb-2">
                         <h4 class="footer-title">Mairie</h4>
                         <div class="contact-info">
-                            <p><i class="fas fa-map-marker-alt"></i> Hôtel de Ville - X rue XXXXX - XXXXX</p>
-                            <p><i class="fas fa-phone"></i> XX XX XX XX XX</p>
-                            <p><i class="fas fa-envelope"></i> contact@mairie.fr</p>
+                            <p><i class="bi bi-map"></i> Hôtel de Ville - X rue XXXXX - XXXXX</p>
+                            <p><i class="bi bi-phone"></i> 22222222222</p>
+                            <p><i class="bi bi-envelope"></i> contact@mairie.ci</p>
                         </div>
                     </div>
                     

@@ -13,7 +13,7 @@
        require_once './partials/header.php'
      ?>
 
-    <div class="section-demande">
+    <div class="section-demande mb-2">
     <h1>Section Demande</h1>
     <div class="button-container">
         <a href="./demande_etape1.php" class="button">Faire une demande</a>
