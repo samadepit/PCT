@@ -3,9 +3,10 @@ require_once __DIR__ . '/../Controller/UserController.php';
 $userController = new UserController();
 
 $id = $_GET['id'] ?? null;
-if (!$id) {
-    header('Location: administration_page.php');
-    exit();
+if (empty($id)) {
+    $_SESSION['erreur'] = "Accès invalide. Vous avez été redirigé vers la page de connexion.";
+    header("Location: login.php");
+    exit;
 }
 
 $user = $userController->getUserById($id);
@@ -21,8 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'role' => $_POST['role'],
         'statut' => $_POST['statut'],
     ];
+    if (!empty($_POST['password'])) {
+        $data['password'] = $_POST['password']; 
+    }
     $userController->updateUserById($data);
-    header('Location: administration_page.php');
+    header('Location: administration_page.php?id=' . urlencode($id));
     exit();
 }
 ?>
@@ -177,6 +181,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
         </div>
         <div class="form-group">
+            <label>Mot de passe (laisser vide pour ne pas changer)</label>
+            <input type="password" name="password">
+        </div>
+        <div class="form-group">
             <label>Rôle</label>
             <select name="role" required>
                 <option value="agent" <?= $user['role'] === 'agent' ? 'selected' : '' ?>>Agent</option>
@@ -193,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit" class="btn-submit">Enregistrer les modifications</button>
     </form>
 
-    <a href="administration_page.php" class="btn-back">← Retour à l'administration</a>
+    <a href="administration_page.php?id=<?php echo urlencode($id); ?>" class="btn-back">← Retour à l'administration</a>
 </div>
 
 </body>

@@ -37,14 +37,16 @@ class Naissance
                 nom_pere, prenom_pere, profession_pere,
                 nom_mere, prenom_mere, profession_mere,
                 date_mariage, lieu_mariage, statut_mariage,
-                date_deces, lieu_deces, date_creation
+                date_deces, lieu_deces, date_creation ,piece_identite_pere,
+                piece_identite_mere ,certificat_de_naissance
             ) VALUES (
                 :nom_beneficiaire, :prenom_beneficiaire, :date_naissance,
                 :lieu_naissance,:heure_naissance,:genre,
                 :nom_pere, :prenom_pere, :profession_pere,
                 :nom_mere, :prenom_mere, :profession_mere,
                 :date_mariage, :lieu_mariage, :statut_mariage,
-                :date_deces, :lieu_deces, NOW()
+                :date_deces, :lieu_deces, NOW(), :piece_identite_pere,
+                :piece_identite_mere,:certificat_de_naissance
             )
         ");
         $params = [
@@ -64,7 +66,10 @@ class Naissance
             'lieu_mariage' => $data['lieu_mariage'] ?? null,
             'statut_mariage' => $data['statut_mariage'] ?? null,
             'date_deces' => $data['date_deces'] ?? null,
-            'lieu_deces' => $data['lieu_deces'] ?? null
+            'lieu_deces' => $data['lieu_deces'] ?? null,
+            'piece_identite_pere' => $data['piece_identite_pere'] ?? null,
+            'piece_identite_mere' => $data['piece_identite_mere'] ?? null,
+            'certificat_de_naissance' => $data['certificat_de_naissance'] ?? null
         ];
 
         try {
@@ -179,6 +184,32 @@ class Naissance
             error_log("Erreur dans le duplicata naissance : " . $e->getMessage());
             return false;
         }
+    }
+
+    public function getAllBirth(){
+        $stmt = $this->con->prepare("
+        SELECT 
+            d.code_demande,
+            d.statut AS statut_demande,
+            a.est_signer,
+            a.payer,
+            a.type_acte,
+            a.date_signature,
+            ag.nom AS agent_nom,
+            ag.prenom AS agent_prenom,
+            ofc.nom AS officier_nom,
+            ofc.prenom AS officier_prenom,
+            n.*
+        FROM actes_demande a
+        JOIN demande d ON d.code_demande = a.code_demande
+        LEFT JOIN administration ag ON ag.id = a.id_agent
+        LEFT JOIN administration ofc ON ofc.id = a.id_officier
+        LEFT JOIN naissance n ON n.id = a.id_acte
+        WHERE a.type_acte = 'naissance';
+        ");
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }

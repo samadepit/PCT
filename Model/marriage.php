@@ -34,7 +34,11 @@ class Marriage
     
                 date_mariage,
                 lieu_mariage,
-                date_creation
+                date_creation,
+                piece_identite_epouse,
+                certificat_residence_epouse,
+                piece_identite_epoux,
+                certificat_residence_epoux
             )
             VALUES (
                 :nom_epoux,
@@ -57,7 +61,11 @@ class Marriage
     
                 :date_mariage,
                 :lieu_mariage,
-                NOW()
+                NOW(),
+                :piece_identite_epouse,
+                :certificat_residence_epouse,
+                :piece_identite_epoux,
+                :certificat_residence_epoux
             )
         ");
     
@@ -81,7 +89,11 @@ class Marriage
             ':profession_epouse' => $data['profession_epouse'],
     
             ':date_mariage' => $data['date_mariage'],
-            ':lieu_mariage' => $data['lieu_mariage']
+            ':lieu_mariage' => $data['lieu_mariage'],
+            ':piece_identite_epouse'=> $data['piece_identite_epouse'],
+            ':certificat_residence_epouse'=> $data['certificat_residence_epouse'],
+            ':piece_identite_epoux'=> $data['piece_identite_epoux'],
+            ':certificat_residence_epoux'=> $data['certificat_residence_epoux']
         ];
     
         try {
@@ -166,6 +178,31 @@ class Marriage
             error_log("Erreur récupération id_mariage : " . $e->getMessage());
             return false;
         }
+    }
+
+    public function getAllMarriage(){
+        $stmt = $this->con->prepare("
+        SELECT 
+            d.code_demande,
+            d.statut AS statut_demande,
+            a.est_signer,
+            a.payer,
+            a.date_signature,
+            a.type_acte,
+            ag.nom AS agent_nom,
+            ag.prenom AS agent_prenom,
+            ofc.nom AS officier_nom,
+            ofc.prenom AS officier_prenom,
+            m.*
+            FROM actes_demande a
+            JOIN demande d ON d.code_demande = a.code_demande
+            LEFT JOIN administration ag ON ag.id = a.id_agent
+            LEFT JOIN administration ofc ON ofc.id = a.id_officier
+            LEFT JOIN mariage m ON m.id = a.id_acte
+            WHERE a.type_acte = 'mariage'
+        ");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
 }

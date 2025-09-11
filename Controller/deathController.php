@@ -38,13 +38,24 @@ class DecesController
 
     public function get_existing_death_id(array $data) {
         try {
-            $birth_id = $this->deathModel->get_deathcertificate_byId($data);
-            if (!$birth_id) {
-                throw new Exception("Aucun acte de deces trouvé pour le défunt");
-            }
-            return $birth_id;
+            $death_id = $this->deathModel->get_deathcertificate_byId($data);
+            error_log("Acte de décès déjà existant pour ce défunt.");
+            return $death_id ?: null;
         } catch (Exception $e) {
             error_log("Erreur get_existing_death_id : " . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function getDeath() {
+        try {
+            $death = $this->deathModel->getAllDeath();
+            if (!$death) {
+                throw new Exception("Erreur de récupérations des actes  de deces");
+            }
+            return $death;
+        } catch (Exception $e) {
+            error_log("Erreur : " . $e->getMessage());
             return false;
         }
     }

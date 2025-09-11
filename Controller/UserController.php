@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once __DIR__ . '/../Model/User.php';
 
 class UserController
@@ -34,7 +36,14 @@ class UserController
         $result=$this->userModel->InsertAdministrationUser($data);
         return $result;
     }
-    
-    
+
+    public function getUserById($id){
+        return $this->userModel->getUserById($id);
+    }
+
+    public function updateUserById($data) {
+        $result = $this->userModel->updateUserById($data);
+        return $result;
+    }
 
 }
