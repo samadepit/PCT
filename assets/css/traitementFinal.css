@@ -1,0 +1,74 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.header {
+  background: rgba(128, 128, 128, 0.756);
+  padding: 30px;
+  text-align: start;
+  color: white;
+}
+
+.header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #ff8008, #ffc837);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 200px;
+  box-shadow: 0 4px 15px rgba(255, 128, 8, 0.3);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 128, 8, 0.4);
+}
+
+.back-btn {
+  background: linear-gradient(135deg, #1a1a1a, #2e2e2e);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+}
+
+.back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+  background: linear-gradient(135deg, #5a6268, #7a828a);
+}
+
+.submit-btn:active,
+.back-btn:active {
+  transform: translateY(0);
+}
+
+.info-resume{
+    box-sizing: border-box;
+    padding: .5rem 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 3px;
+    margin-bottom: 5px;
+    
+}

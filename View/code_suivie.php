@@ -83,6 +83,7 @@ $messagePrincipal = "Merci ! Votre demande a été enregistrée.";
     </style>
 </head>
 <body>
+    
     <header>
         <h1><?= htmlspecialchars($messagePrincipal) ?></h1>
     </header>

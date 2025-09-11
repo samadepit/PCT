@@ -1,0 +1,12 @@
+body {
+  background-color: #f5f7fa;
+}
+
+.btn-primary {
+  background: #ff8008 !important;
+  border: #ff8008 !important;
+  padding: 15px 40px !important;
+  box-shadow: 0 4px 15px rgba(255, 128, 8, 0.3) !important;
+  margin: auto;
+  
+}

@@ -470,7 +470,6 @@ class certificate_demand
             SELECT COUNT(*) AS total_certificate
             FROM demande d
             INNER JOIN actes_demande ad on d.code_demande = ad.code_demande
-            WHERE  payer=1
         ");
         $stmt->execute();
         return (int)$stmt->fetchColumn();
